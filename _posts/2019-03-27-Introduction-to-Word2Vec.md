@@ -26,4 +26,6 @@ CBOW包含三层：
 $$
 L = \sum\limits_{w\in C}\log \mathrm{P}(w|\mathrm{context}(w))
 $$
+
+![](http://latex.codecogs.com/gif.latex?\\frac{1}{1+sin(x)})
 ### Hierarchical Softmax
