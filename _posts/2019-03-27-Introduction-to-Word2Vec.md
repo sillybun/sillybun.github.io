@@ -9,6 +9,17 @@ catalog: true
 tags:
     - iOS
 ---
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
 
 # Introduction to Word2Vec
 
@@ -26,5 +37,4 @@ $$
 L = \sum\limits_{w\in C}\log \mathrm{P}(w|\mathrm{context}(w))
 $$
 
-![](http://latex.codecogs.com/gif.latex?\\frac{1}{1+sin(x)})
 ### Hierarchical Softmax
