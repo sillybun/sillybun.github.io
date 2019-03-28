@@ -1,14 +1,3 @@
----
-layout:     post
-title:      Introduction to Word2Vec
-subtitle:   NLP 入门
-date:       2019-03-27
-author:     Eric, Zhang
-header-img: img/post-bg-cook.jpg
-catalog: true
-tags:
-    - iOS
----
 <head>
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
     <script type="text/x-mathjax-config">
@@ -20,6 +9,18 @@ tags:
         });
     </script>
 </head>
+
+---
+layout:     post
+title:      Introduction to Word2Vec
+subtitle:   NLP 入门
+date:       2019-03-27
+author:     Eric, Zhang
+header-img: img/post-bg-cook.jpg
+catalog: true
+tags:
+    - iOS
+---
 
 # Introduction to Word2Vec
 
