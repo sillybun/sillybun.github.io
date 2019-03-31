@@ -1,94 +1,209 @@
-
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  张翼腾的博客
   
-  
-  
-
   </title>
-  <meta name="author" content="">
-  <meta name="description" content="">
-
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="atom.xml" rel="alternate" title="" type="application/atom+xml">
-  <script src="asset/js/modernizr-2.0.js"></script>
-  <script src="asset/js/jquery.min.js"></script>
+  
+  <link href="atom.xml" rel="alternate" title="张翼腾的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
   <script src="asset/highlightjs/highlight.pack.js"></script>
-  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script>hljs.initHighlightingOnLoad();</script>
-
-  <style type="text/css">
-  .cat-children-p{ padding: 6px 0px;}
-  .hljs{background: none;}
-  </style>
-  <script type="text/javascript">
-  var isAddSildbar = true;
-  </script>
-  <script src="asset/js/octopress.js" type="text/javascript"></script>
-</head>
 <script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
-  });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
+  function before_search(){
+    var searchVal = 'site: ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
 </script>
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="index.html"></a></h1>
-  
-    <h2></h2>
-  
-</hgroup>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
 </form>
-  
-<ul class="main-navigation">
-
-  <li id=""><a target="self" href="index.html">Home</a></li>
-
-  <li id=""><a target="_self" href="archives.html">Archives</a></li>
-
-</ul>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
 
 </nav>
-  <div id="main">
-    <div id="content"> 
-<div class="blog-index">
 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="15540295441807.html">Huffman树</a></h1>
-			<p class="meta"><time datetime="2019-03-31T18:52:24+08:00" 
-			pubdate data-updated="true">2019/3/31</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h2 id="toc_0">问题</h2>
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 张翼腾的博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
+</script>
+<div class="row">
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="15540423884690.html">
+                
+                  <h1>Word2Vec入门</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">Background</h2>
+
+<p>@todo</p>
+
+<h2 id="toc_1">Model Introduction</h2>
+
+<p>在Word2Vec中，Mikolov提出了两个模型 — Continuous Bag-of-Words（CBOW）模型和Skip-gram（SG）模型。两个模型都有三层：输入层，投影层和输出层。对于CBOW模型，输入上下文预测单词；对于SG模型，通过单词预测上下文。目前来看，一般认为SG的效果好于CBOW模型。</p>
+
+<h3 id="toc_2">CBOW Model</h3>
+
+<p>CBOW包含三层：</p>
+
+<ol>
+<li>输入层，包含了context(w)中的2n个单词：\(e(w_{-n}), e(w_{-n+1}), \dots, e(w_n)\)</li>
+<li>投影层：投影层是输入层的求和，即：\(x_w = \sum\limits_{i=-n}^{n}e(w_i)\)</li>
+<li>输出层：有两种方法：一种是多层的softmax，一种是negative sampling<br/>
+优化的函数是：<br/>
+\[<br/>
+L = \sum\limits_{w\in C}\log \mathrm{P}(w|\mathrm{context}(w))<br/>
+\]</li>
+</ol>
+
+<h3 id="toc_3">Hierarchical Softmax</h3>
+
+<p>由于如果对词典中的每个单词使用softmax的计算量非常的大，Word2Vec使用了多层的Softmax方法。我们根据词频建立的<a href="15540295441807.html">Huffman树</a>，这棵树包含了\(|D|\)个叶子和\(|D|-1\)个内点，每个叶子结点对应着词典中的一个单词，出现频率比较高的单词深度会比较的浅，因此到达它的路径会更短。由于到叶子的平均深度为\(\log_2|D|\)，所以对于每一个\((w, \mathrm{w})\)，需要训练的向量的个数的数学期望为：\(\log_2|D|\)。<br/>
+到每个叶子结点的路径是唯一的，我们做如下的约定：令p为从根到叶子结点w的路径，令\(n(w, j)\)是p上的第j个结点，\(L(w)\)是p的长度，则\(n(w,1)=\mathrm{root}\)，\(n(w, L(w))=w\)。对于任何的内点n，我们令\(ch(n)\)为n的任何一个选定的子节点，不是一般性的我们可以令它为n的左子节点。令\([x]\)为1，如果x为真，否则为-1，那么我们可以根据如下公式定义\(p(w_O|w_I)\)：<br/>
+\[<br/>
+p(w|w_I) = \prod\limits_{j=1}^{L(w)-1}\sigma([n(w, j+1)=ch(n(w,j))]\cdot v_{n(w,j)}&#39;^T v_{w_I})<br/>
+\]<br/>
+我们下面证明：<br/>
+引理1：\(\sum\limits_{w\in C} p(w|w_I) = 1\)<br/>
+证明：<br/>
+令T是C构成的Huffman二叉树，根据Huffman树的性质是我们可以令x和y为T中深度最深的两个兄弟，我们在T中去掉x和y，并且把它们的父亲结点命名为z，得到的新的词表称为\(C’\)(\(C’ = C - {x,y} + {z}\))，对应的完全二叉树命名为\(T’\)。我们下面证明：<br/>
+\[<br/>
+\sum\limits_{w\in C} p(w|w_I) = \sum\limits_{w\in C’} p’(w|w_I)\<br/>
+\]<br/>
+事实上：<br/>
+\[<br/>
+\begin{split}<br/>
+\sum\limits_{w\in C} p(w|w_I) - \sum\limits_{w\in C’} p’(w|w_I) &amp;= p(x|w_I) +p(y|w_I) - p(z|w_I)\\<br/>
+&amp;=\prod\limits_{j=1}^{L(x)-1}\sigma([n(x, j+1)=ch(n(x,j))]\cdot v_{n(x,j)}&#39;^T v_{w_I})\\<br/>
+&amp;~~~~+\prod\limits_{j=1}^{L(y)-1}\sigma([n(y, j+1)=ch(n(y,j))]\cdot v_{n(y,j)}&#39;^T v_{w_I})\\<br/>
+&amp;~~~~-\prod\limits_{j=1}^{L(z)-1}\sigma([n(z, j+1)=ch(n(z,j))]\cdot v_{n(z,j)}&#39;^T v_{w_I})\\<br/>
+\end{split}<br/>
+\]<br/>
+显然有这些关系：<br/>
+\[<br/>
+\begin{align*}<br/>
+L(x)=L(y)=L(z)+1\\<br/>
+n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
+\end{align*}<br/>
+\]<br/>
+因此<br/>
+\[<br/>
+\begin{split}<br/>
+&amp;\sum\limits_{w\in C} p(w|w_I) - \sum\limits_{w\in C’} p’(w|w_I)\\<br/>
+&amp;= \prod\limits_{j = 1}^{L(z)-1}\sigma([n(z,j+1)=ch(n(z,j))]\cdot v_{n(z,j)}&#39;^Tv_{w_I})\\<br/>
+&amp;(\sigma([x=ch(n(z,L(z)))]v_{n(z,L(z))}&#39;^T v_{w_I}) + \sigma([y=ch(n(z, L(z)))]v_{n(z,L(z))}&#39;^T v_{w_I}) -1)\\<br/>
+&amp;=0<br/>
+\end{split}<br/>
+\]<br/>
+最后一个等式是因为：\(\sigma(x) + \sigma(-x) = 1, \forall x\in\mathbf{R}\)。</p>
+
+<p>这样我们通过不断合并最深的两个兄弟节点，就可以最终把Huffman树合并成只有一个根的树，这样我们就证明了引理1的正确性。</p>
+
+<hr/>
+
+<p>根据引理1，我们通过（1）式定义的是一个概率测度。我们可以通过最最大似然法来进行参数估计。</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/3/31</span>
+                    
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="15540295441807.html">
+                
+                  <h1>Huffman树</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">问题</h2>
 
 <p>Huffman树是为了解决这样的问题：给一段文字，能不能给出一个编码方式使得这段文字长度最短。</p>
 
@@ -119,7 +234,7 @@ B(T) = \sum\limits_{c\in C}c.freq \cdot d_T(c)<br/>
 建立Huffman树的伪代码如下所示：</li>
 </ol>
 
-<pre><code class="language-python">Huffman(C)
+<pre class="line-numbers"><code class="language-python">Huffman(C)
 N = |C|
 Q = C
 for i = 1 to n-1
@@ -176,57 +291,148 @@ B(T’’’) &amp;= B(T’’) - x.freq - y.freq\\<br/>
 
 <p>根据引理一和引理二我们可以得到Huffman算法的正确性。</p>
 
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/3/31</span>
+                    
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
+
+
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
 		</div>
+	</div><!-- large 8 -->
 
-		
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>张翼腾的博客</h1>
+                <div class="site-des">主要关注点在于自然语言处理领域，作者在学习的过程中分享自己学到的新的内容。</div>
+                <div class="social">
 
-	</article>
-  
-	<div class="pagination">
-	
-<a href="archives.html">Blog Archives</a>
-	 
-	    
-	</div>
-</div>
- <aside class="sidebar"> 
 
-	<section>
-	  <h1>Categories</h1>
-	  <ul id="recent_posts">
-	  
-	        
-	      </li>
-	   
-	  </ul>
-	</section>
-	<section>
-	  <h1>Recent Posts</h1>
-	  <ul id="recent_posts">
-	  
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
 	      
-		      <li class="post">
-		        <a href="15540295441807.html">Huffman树</a>
-		      </li>
-	     
-	   
-	  </ul>
-	</section>
-	
-</aside> </div></div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 -  -
-  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
-</p>
+		      
+			      <li class="post">
+			        <a href="15540423884690.html">Word2Vec入门</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15540295441807.html">Huffman树</a>
+			      </li>
+		     
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
 
-</footer>
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
 
   
     
 
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
 
+    
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
-</body>
+
+  </body>
 </html>
