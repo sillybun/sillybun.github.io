@@ -136,21 +136,21 @@
 <li>输出层：有两种方法：一种是多层的softmax，一种是negative sampling<br/>
 优化的函数是：<br/>
 \[<br/>
-L = \sum\limits_{w\in C}\log \mathrm{P}(w|\mathrm{context}(w))<br/>
+L = \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))<br/>
 \]</li>
 </ol>
 
 <h3 id="toc_3">Hierarchical Softmax</h3>
 
-<p>由于如果对词典中的每个单词使用softmax的计算量非常的大，Word2Vec使用了多层的Softmax方法。我们根据词频建立的<a href="15540295441807.html">Huffman树</a>，这棵树包含了\(|D|\)个叶子和\(|D|-1\)个内点，每个叶子节点对应着词典中的一个单词，出现频率比较高的单词深度会比较的浅，因此到达它的路径会更短。由于到叶子的平均深度为\(\log_2|D|\)，所以对于每一个\((w, \mathrm{w})\)，需要训练的向量的个数的数学期望为：\(\log_2|D|\)。<br/>
-到每个叶子节点的路径是唯一的，我们做如下的约定：令p为从根到叶子节点w的路径，令\(n(w, j)\)是p上的第j个节点，\(L(w)\)是p的长度，则\(n(w,1)=\mathrm{root}\)，\(n(w, L(w))=w\)。对于任何的内点n，我们令\(ch(n)\)为n的任何一个选定的子节点，不是一般性的我们可以令它为n的左子节点。令\([x]\)为1，如果x为真，否则为-1，那么我们可以根据如下公式定义\(p(w_O|w_I)\)：<br/>
+<p>由于如果对词典中的每个单词使用softmax的计算量非常的大，Word2Vec使用了多层的Softmax方法。我们根据词频建立的<a href="15540295441807.html">Huffman树</a>，这棵树包含了\(|D|\)个叶子和\(|D|-1\)个内点，每个叶子节点对应着词典中的一个单词，出现频率比较高的单词深度会比较的浅，因此到达它的路径会更短。由于到叶子的平均深度为\(\log_2|D|\)，所以对于每一个\((w, \mathrm{context}(w))\)，需要训练的向量的个数的数学期望为：\(\log_2|D|\)。<br/>
+到每个叶子节点的路径是唯一的，我们做如下的约定：令p为从根到叶子节点w的路径，令\(n(w, j)\)是p上的第j个节点，\(L(w)\)是p的长度，则\(n(w,1)=\mathrm{root}\)，\(n(w, L(w))=w\)。对于任何的内点n，我们令\(ch(n)\)为n的任何一个选定的子节点，不失一般性的我们可以令它为n的左子节点。令\([\![x]\!]\)为1，如果x为真，否则为-1，那么我们可以根据如下公式定义\(p(w_O|w_I)\)：<br/>
 \[<br/>
-p(w|w_I) = \prod\limits_{j=1}^{L(w)-1}\sigma([n(w, j+1)=ch(n(w,j))]\cdot v_{n(w,j)}&#39;^T v_{w_I})<br/>
+p(w|w_I) = \prod\limits_{j=1}^{L(w)-1}\sigma([\![n(w, j+1)=ch(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T v_{w_I})<br/>
 \]<br/>
 我们下面证明：<br/>
 引理1：\(\sum\limits_{w\in C} p(w|w_I) = 1\)<br/>
 证明：<br/>
-令T是C构成的Huffman二叉树，根据Huffman树的性质是我们可以令x和y为T中深度最深的两个兄弟，我们在T中去掉x和y，并且把它们的父亲节点命名为z，得到的新的词表称为\(C’\)(\(C’ = C - {x,y} + {z}\))，对应的完全二叉树命名为\(T’\)。我们下面证明：<br/>
+令T是C构成的Huffman二叉树，根据Huffman树的性质是我们可以令x和y为T中深度最深的两个兄弟，我们在T中去掉x和y，并且把它们的父亲节点命名为z，得到的新的词表称为\(C’\)(\(C’ = C - \{x,y\} + \{z\}\))，对应的完全二叉树命名为\(T’\)。我们下面证明：<br/>
 \[<br/>
 \sum\limits_{w\in C} p(w|w_I) = \sum\limits_{w\in C’} p’(w|w_I)\<br/>
 \]<br/>
@@ -158,9 +158,9 @@ p(w|w_I) = \prod\limits_{j=1}^{L(w)-1}\sigma([n(w, j+1)=ch(n(w,j))]\cdot v_{n(w,
 \[<br/>
 \begin{split}<br/>
 \sum\limits_{w\in C} p(w|w_I) - \sum\limits_{w\in C’} p’(w|w_I) &amp;= p(x|w_I) +p(y|w_I) - p(z|w_I)\\<br/>
-&amp;=\prod\limits_{j=1}^{L(x)-1}\sigma([n(x, j+1)=ch(n(x,j))]\cdot v_{n(x,j)}&#39;^T v_{w_I})\\<br/>
-&amp;~~~~+\prod\limits_{j=1}^{L(y)-1}\sigma([n(y, j+1)=ch(n(y,j))]\cdot v_{n(y,j)}&#39;^T v_{w_I})\\<br/>
-&amp;~~~~-\prod\limits_{j=1}^{L(z)-1}\sigma([n(z, j+1)=ch(n(z,j))]\cdot v_{n(z,j)}&#39;^T v_{w_I})\\<br/>
+&amp;=\prod\limits_{j=1}^{L(x)-1}\sigma([\![n(x, j+1)=ch(n(x,j))]\!]\cdot v_{n(x,j)}&#39;^T v_{w_I})\\<br/>
+&amp;~~~~+\prod\limits_{j=1}^{L(y)-1}\sigma([\![n(y, j+1)=ch(n(y,j))]\!]\cdot v_{n(y,j)}&#39;^T v_{w_I})\\<br/>
+&amp;~~~~-\prod\limits_{j=1}^{L(z)-1}\sigma([\![n(z, j+1)=ch(n(z,j))]\!]\cdot v_{n(z,j)}&#39;^T v_{w_I})\\<br/>
 \end{split}<br/>
 \]<br/>
 显然有这些关系：<br/>
@@ -174,8 +174,8 @@ n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
 \[<br/>
 \begin{split}<br/>
 &amp;\sum\limits_{w\in C} p(w|w_I) - \sum\limits_{w\in C’} p’(w|w_I)\\<br/>
-&amp;= \prod\limits_{j = 1}^{L(z)-1}\sigma([n(z,j+1)=ch(n(z,j))]\cdot v_{n(z,j)}&#39;^Tv_{w_I})\\<br/>
-&amp;(\sigma([x=ch(n(z,L(z)))]v_{n(z,L(z))}&#39;^T v_{w_I}) + \sigma([y=ch(n(z, L(z)))]v_{n(z,L(z))}&#39;^T v_{w_I}) -1)\\<br/>
+&amp;= \prod\limits_{j = 1}^{L(z)-1}\sigma([\![n(z,j+1)=ch(n(z,j))]\!]\cdot v_{n(z,j)}&#39;^Tv_{w_I})\\<br/>
+&amp;(\sigma([\![x=ch(n(z,L(z))) ]\!] v_{n(z,L(z))}&#39;^T v_{w_I}) + \sigma([\![y=ch(n(z, L(z)))]\!]v_{n(z,L(z))}&#39;^T v_{w_I}) -1)\\<br/>
 &amp;=0<br/>
 \end{split}<br/>
 \]<br/>
@@ -187,9 +187,40 @@ n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
 
 <p>根据引理1，我们通过（1）式定义的是一个概率测度。我们可以通过最最大似然法来进行参数估计。</p>
 
-<p>这是一个测试。</p>
+<h3 id="toc_4">梯度计算</h3>
 
-<p>hahahaha</p>
+<p>对于CBOW，投影层之后紧跟着的就是hierarchical softmax层，所以：</p>
+
+<p>\[v_{w_I} = x_w = \sum\limits_{i=-n}^{n}e(w_i)\]</p>
+
+<p>\[\mathrm{P}(w|\mathrm{context}(w)) = \prod\limits_{j=1}^{L(w)-1}\sigma([\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)\]</p>
+
+<p>我们优化的目标为对数似然函数：</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+L &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
+&amp;= \sum\limits_{w\in C}\sum\limits_{j=1}^{L(w)-1}\ln{\sigma([\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)}<br/>
+\end{split}<br/>
+\]</p>
+
+<p>我们令：\[L(w,j) = \ln{\sigma([\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)}\]</p>
+
+<p>在huffman编码中，如果我们令\([\![n(w,j+1)=\mathrm{ch}(n(w,j))]\!]\)为1时编码为0，为-1时编码为1，并且令这个数为\(d(w,j)\)，表示w的huffman编码的第j个数。</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+\frac{\partial L(w,j)}{\partial v_{n(w,j)}} &amp;= \sigma(-[\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)[\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]x_w\\<br/>
+&amp;= [1 - d(w,j) - \sigma(v_{n(w,j)}&#39;^T x_w)]x_w<br/>
+\end{split}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+\frac{\partial L(w,j)}{\partial x_w} &amp;= \sigma(-[\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)[\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]v_{n(w,j)}&#39;\\<br/>
+&amp;= [1 - d(w,j) - \sigma(v_{n(w,j)}&#39;^T x_w)]v_{n(w,j)}<br/>
+\end{split}<br/>
+\]</p>
 
 
     
