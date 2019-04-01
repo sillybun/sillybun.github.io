@@ -20,7 +20,7 @@
   <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
   function before_search(){
-    var searchVal = 'site: ' + document.getElementById('search_input').value;
+    var searchVal = 'site:sillybun.github.io ' + document.getElementById('search_input').value;
     document.getElementById('search_q').value = searchVal;
     return true;
   }
@@ -120,6 +120,8 @@
 
 <p>@todo</p>
 
+<span id="more"></span><!-- more -->
+
 <h2 id="toc_1">Model Introduction</h2>
 
 <p>在Word2Vec中，Mikolov提出了两个模型 — Continuous Bag-of-Words（CBOW）模型和Skip-gram（SG）模型。两个模型都有三层：输入层，投影层和输出层。对于CBOW模型，输入上下文预测单词；对于SG模型，通过单词预测上下文。目前来看，一般认为SG的效果好于CBOW模型。</p>
@@ -140,15 +142,15 @@ L = \sum\limits_{w\in C}\log \mathrm{P}(w|\mathrm{context}(w))<br/>
 
 <h3 id="toc_3">Hierarchical Softmax</h3>
 
-<p>由于如果对词典中的每个单词使用softmax的计算量非常的大，Word2Vec使用了多层的Softmax方法。我们根据词频建立的<a href="15540295441807.html">Huffman树</a>，这棵树包含了\(|D|\)个叶子和\(|D|-1\)个内点，每个叶子结点对应着词典中的一个单词，出现频率比较高的单词深度会比较的浅，因此到达它的路径会更短。由于到叶子的平均深度为\(\log_2|D|\)，所以对于每一个\((w, \mathrm{w})\)，需要训练的向量的个数的数学期望为：\(\log_2|D|\)。<br/>
-到每个叶子结点的路径是唯一的，我们做如下的约定：令p为从根到叶子结点w的路径，令\(n(w, j)\)是p上的第j个结点，\(L(w)\)是p的长度，则\(n(w,1)=\mathrm{root}\)，\(n(w, L(w))=w\)。对于任何的内点n，我们令\(ch(n)\)为n的任何一个选定的子节点，不是一般性的我们可以令它为n的左子节点。令\([x]\)为1，如果x为真，否则为-1，那么我们可以根据如下公式定义\(p(w_O|w_I)\)：<br/>
+<p>由于如果对词典中的每个单词使用softmax的计算量非常的大，Word2Vec使用了多层的Softmax方法。我们根据词频建立的<a href="15540295441807.html">Huffman树</a>，这棵树包含了\(|D|\)个叶子和\(|D|-1\)个内点，每个叶子节点对应着词典中的一个单词，出现频率比较高的单词深度会比较的浅，因此到达它的路径会更短。由于到叶子的平均深度为\(\log_2|D|\)，所以对于每一个\((w, \mathrm{w})\)，需要训练的向量的个数的数学期望为：\(\log_2|D|\)。<br/>
+到每个叶子节点的路径是唯一的，我们做如下的约定：令p为从根到叶子节点w的路径，令\(n(w, j)\)是p上的第j个节点，\(L(w)\)是p的长度，则\(n(w,1)=\mathrm{root}\)，\(n(w, L(w))=w\)。对于任何的内点n，我们令\(ch(n)\)为n的任何一个选定的子节点，不是一般性的我们可以令它为n的左子节点。令\([x]\)为1，如果x为真，否则为-1，那么我们可以根据如下公式定义\(p(w_O|w_I)\)：<br/>
 \[<br/>
 p(w|w_I) = \prod\limits_{j=1}^{L(w)-1}\sigma([n(w, j+1)=ch(n(w,j))]\cdot v_{n(w,j)}&#39;^T v_{w_I})<br/>
 \]<br/>
 我们下面证明：<br/>
 引理1：\(\sum\limits_{w\in C} p(w|w_I) = 1\)<br/>
 证明：<br/>
-令T是C构成的Huffman二叉树，根据Huffman树的性质是我们可以令x和y为T中深度最深的两个兄弟，我们在T中去掉x和y，并且把它们的父亲结点命名为z，得到的新的词表称为\(C’\)(\(C’ = C - {x,y} + {z}\))，对应的完全二叉树命名为\(T’\)。我们下面证明：<br/>
+令T是C构成的Huffman二叉树，根据Huffman树的性质是我们可以令x和y为T中深度最深的两个兄弟，我们在T中去掉x和y，并且把它们的父亲节点命名为z，得到的新的词表称为\(C’\)(\(C’ = C - {x,y} + {z}\))，对应的完全二叉树命名为\(T’\)。我们下面证明：<br/>
 \[<br/>
 \sum\limits_{w\in C} p(w|w_I) = \sum\limits_{w\in C’} p’(w|w_I)\<br/>
 \]<br/>
@@ -184,6 +186,8 @@ n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
 <hr/>
 
 <p>根据引理1，我们通过（1）式定义的是一个概率测度。我们可以通过最最大似然法来进行参数估计。</p>
+
+<p>这是一个测试。</p>
 
 
     
@@ -226,7 +230,7 @@ n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
           <div id="site-info" class="site-info">
             
                 <h1>张翼腾的博客</h1>
-                <div class="site-des">主要关注点在于自然语言处理领域，作者在学习的过程中分享自己学到的新的内容。</div>
+                <div class="site-des">主要关注点在于自然语言处理领域，作者在学习的过程中分享自己学到的新的内</div>
                 <div class="social">
 
 
