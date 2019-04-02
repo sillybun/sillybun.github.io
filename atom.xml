@@ -4,13 +4,135 @@
   <title><![CDATA[张翼腾的博客]]></title>
   <link href="https://sillybun.github.io/atom.xml" rel="self"/>
   <link href="https://sillybun.github.io/"/>
-  <updated>2019-04-01T15:36:08+08:00</updated>
+  <updated>2019-04-02T23:03:02+08:00</updated>
   <id>https://sillybun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[Noise Contrastive Estimation and Negative Sampling]]></title>
+    <link href="https://sillybun.github.io/15541232015450.html"/>
+    <updated>2019-04-01T20:53:21+08:00</updated>
+    <id>https://sillybun.github.io/15541232015450.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">背景</h2>
+
+<p>在NLP领域，使用分数来得到一个概率分布是一种非常常见的形式。我们通常通过取指数然后归一化来得到一个概率分布：</p>
+
+<p>\[<br/>
+P(y|x;\theta) = \frac{\mathrm{s}(y,x,\theta)}{\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)}<br/>
+\]</p>
+
+<p>我们称\(Z(x,\theta) = \sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\theta) = \theta_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\theta=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\ln\mathrm{s}(y,x,\theta) - \ln\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)]<br/>
+\]，但是计算这个概率（和它的导数）的计算量是非常大的（和词表的大小成正比）。<br/>
+为此，NLP科学家们提出了各种方法，一种是基于分类树方法（hierarchical softmax），但是它的缺点在于1. 结果对不同的树比较敏感2.对比较罕见的词效果比较好，但是对常见的单词效果比较差。另一种方法是今天我们要讲的Noise Contrastive Estimation(NCE)和Negative Sampling。</p>
+
+<h2 id="toc_1">Noise Contrastive Estimation</h2>
+
+<p>NCE通过引入负样本把一个多分类问题的参数估计转化成一个区分正负样本的二分类问题。其中负样本是从一个噪声分布中抽取。<br/>
+NCE的思想是：<strong>通过区分样本和人造的噪声来训练参数</strong>。<br/>
+它的做法是这样的，样本X服从分布\(p_d(\cdot)\)，它是一族分布中的一个, 这族分布中的任何一个可以由一个未归一化的概率密度定义：\(p_0(\cdot, \theta)\)，所以他的归一化的概率密度为：\(p_m(\cdot, \alpha) = \frac{p_0(\cdot,\alpha)}{\int p_0(u, \alpha)\mathrm{d}u}\)。也就是说，存在着\(\alpha^\star\)，使得\(p_d(\cdot) = p_m(\cdot, \alpha^\star)\)，我们可以通过最大似然法来估计\(\alpha^\star\)</p>
+
+<p>于是对数似然函数是：</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+\ell &amp;= \sum\limits_{x\in \mathrm{TD}} \ln(p_m(x,\theta))\\<br/>
+&amp;= \sum\limits_{x\in \mathrm{TD}}[\ln(p_0(x, \theta)) - \ln\int p_0(u,\theta)\mathrm{d}u]<br/>
+\end{split}<br/>
+\]</p>
+
+<p>我们用常数c来表示它的归一化常数（\(c = \int  p_0(u,\alpha)\mathrm{d}u\)），令\(\theta = \{\alpha, c\}\)，参数c是归一化常数\(Z(\alpha)\)的估计，注意到\(\alpha\)和c之间是要满足归一化条件的(\(c=\int p_0(u, \alpha)\mathrm{d}u\))。</p>
+
+<p>那么\[\ln p_m(u,\theta) = \ln p_0(u,\theta) - \ln c\]</p>
+
+<p>我们令\(\mathrm{TD} = (x_1, x_2, \dots, x_n)\)表示训练样本，对于每个训练样本\(x_i\)，我们从一个噪声分布中取出K个人造噪声样本\(\{y_i^1, y_i^2,\dots,y_i^K\}\)，\(Y = \{y_i^j|i\in\{1,2,\dots,T\},j\in\{1,2,\dots, K\}\}\)</p>
+
+<p>令\[G_K(u,\theta) = \ln p_m(u,\theta) - \ln [K \cdot p_n(u)] = \ln p_0(u,\alpha) - \ln c -\ln p_n(u) - \ln K\]，\[\begin{split}H_K(u,\theta) &amp;= \sigma (G(u,\theta))\\<br/>
+&amp;=\frac{p_m(u,\theta)}{p_m(u,\theta) + K\cdot p_n(u)}<br/>
+\end{split}\]</p>
+
+<p>我们对估计参数\(\hat\theta\)是最大化如下目标函数的\(\theta\)：</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\ln[1-H_K(y_t^j,\theta)]]\\<br/>
+&amp; = \frac{1}{(K+1)T}\sum\limits_{t}[\ln \frac{p_m(x_t,\theta)}{p_m(x_t,\theta) + K\cdot p_n(u)} + \sum_j\ln \frac{p_m(y_t^i,\theta)}{p_m(y_t^i,\theta) + K\cdot p_n(u)}]<br/>
+\end{split}<br/>
+\]</p>
+
+<h3 id="toc_2">NCE和有监督学习之间的关系</h3>
+
+<p>我们这里阐述NCE是如何能够通过一个有监督的二分类问题得到：<strong>我们通过训练区分样本和噪声，能够通过统计模型学到数据的信息</strong>。</p>
+
+<p>我们令\(U = X\cup Y = \{u_1,u_2,\dots,u_{TK}\}\)，对于\(U\)中的任何一个元素\(u_t\)，定一个标签\(\kappa_t\)：若\(u_t\in X\)，\(\kappa_t=1\)；否则\(\kappa_t=0\)。我们通过逻辑斯特回归来得到给定样本它属于哪个标签的后验概率。</p>
+
+<p>\[p(u|\kappa=1,\theta) = p_m(u,\theta)~~ p(u|\kappa=0,\theta)=p_n(u)\]</p>
+
+<p>因为先验概率\(P(\kappa=1) = \frac{1}{K+1}~P(\kappa=0) = \frac{K}{K+1}\)，所以后验概率<br/>
+\[P(\kappa=1|u,\theta) = \frac{p_m(u,\theta)}{p_m(u,\theta) + K\cdot p_n(u)}\]<br/>
+\[P(\kappa=0|u,\theta) = \frac{K\cdot p_n(u)}{p_m(u,\theta) + K\cdot p_n(u)}\]</p>
+
+<p>因此，我们的对数似然函数为：</p>
+
+<p>\[<br/>
+\ell = \sum\limits_{t}[\ln h_K(x_t,\theta) + \sum_j [1-h_K(y_t^j,\theta)]]<br/>
+\]<br/>
+我们可以看到两个对数似然函数只相差了一个常数。</p>
+
+<h3 id="toc_3">NCE分析</h3>
+
+<p>根据弱大数定理，\(J_{T}\)依概率收敛到\(J\)，\[J = \mathrm{E}[\ln H_K(x,\theta) + K\ln[1-H_K(y,\theta)]]\]</p>
+
+<p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
+
+<p>定理1: \(\tilde J\)在\(f(\cdot) = \ln p_d(\cdot)\)取得最大值。并且这个最大值点是唯一的如果\(\mathrm{supp}~p_n \subset \mathrm{supp}~p_d\)<br/>
+简单起见，我们证明一维的情况。</p>
+
+<p>证明：<br/>
+令\(f(\cdot) = \ln g(\cdot)\)</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+\tilde J(f) &amp;= E[\ln\frac{g(x)}{g(x)+K\cdot p_n(x)} + K \ln\frac{K\cdot p_n(y)}{g(y) + K\cdot p_n(y)}]\\<br/>
+&amp;= \int \ln\frac{g(t)}{g(t)+K\cdot p_n(t)}p_d(t) + K \ln\frac{K\cdot p_n(t)}{g(t) + K\cdot p_n(t)}\mathrm{d}t\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>我们令\[F(x,y) = \ln\frac{y}{y+K\cdot p_n(x)}p_d(x) + K \ln\frac{K\cdot p_n(x)}{y + K\cdot p_n(x)}\]<br/>
+根据欧拉-拉格朗日方程，我们可以得到变分问题取极值的条件为：\[\frac{\partial F}{\partial y} = 0\]</p>
+
+<p>经过化简可以得到，也即：\((p_d(x)-y)p_n(x) = 0\)。这就证明了我们的定理1。<br/>
+定理1最重要的一点是它对\(f\)没有任何归一化的要求。并且通过定理1我们可以得到以下几点：</p>
+
+<ol>
+<li>我们通过NCE方法无法在取不到负样本的区域作出任何的推断。</li>
+<li>我们在优化的过程中是通过控制参数\(\theta\)取到的，我们学到的有两组参数：\(\alpha\)和归一化常数c。</li>
+</ol>
+
+<h3 id="toc_4">噪声选择</h3>
+
+<p>噪声分布需要满足下列条件：</p>
+
+<ol>
+<li>它是很容易生成的</li>
+<li>它的对数密度函数需要是解析的</li>
+<li>它取得比较小的MSE \(\mathrm{E}\|\hat\theta -\theta^\star\|^2\)</li>
+</ol>
+
+<p>为了满足第三点，噪声函数需要和数据分布尽量的接近，因为如果不这样的话，分类问题会变得很容易，也就是说不需要学到很好的数据结构就能够得到比较好的分类结果，事实上：如果噪声函数就等于数据分布的话，那么我们估计的方差渐进的等于两倍的CR下界。因此，我们一般需要顾及一个比较简单的数据模型，然后根据这个简单的数据模型来得到噪声分布。</p>
+
+<h2 id="toc_5">参考文献：</h2>
+
+<ol>
+<li>Michael Gutmann and Aapo Hyvärinen. 2010. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proc. AISTATS.</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Word2Vec入门]]></title>

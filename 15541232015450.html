@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  张翼腾的博客
+  Noise Contrastive Estimation and Negative Sampling - 张翼腾的博客
   
   </title>
   
@@ -89,23 +89,34 @@
        
 
  <script type="text/javascript">
-	$(function(){
-		$('#menu_item_index').addClass('is_active');
-	});
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
 </script>
 <div class="row">
-	<div class="large-8 medium-8 columns">
-		<div class="markdown-body home-categories">
-		
-			<div class="article">
-                <a class="clearlink" href="15541232015450.html">
-                
-                  <h1>Noise Contrastive Estimation and Negative Sampling</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">背景</h2>
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>Noise Contrastive Estimation and Negative Sampling</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/4/1</span>
+
+          
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">背景</h2>
 
 <p>在NLP领域，使用分数来得到一个概率分布是一种非常常见的形式。我们通常通过取指数然后归一化来得到一个概率分布：</p>
 
@@ -218,121 +229,40 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 <li>Michael Gutmann and Aapo Hyvärinen. 2010. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proc. AISTATS.</li>
 </ol>
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2019/4/1</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15540423884690.html">
-                
-                  <h1>Word2Vec入门</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">Background</h2>
+    
 
-<p>@todo</p>
+      </div>
 
-<h2 id="toc_1">Model Introduction</h2>
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15540423884690.html" 
+          title="Next Post: Word2Vec入门">Word2Vec入门 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
 
-<p>在Word2Vec中，Mikolov提出了两个模型 — Continuous Bag-of-Words（CBOW）模型和Skip-gram（SG）模型。两个模型都有三层：输入层，投影层和输出层。对于CBOW模型，输入上下文预测单词；对于SG模型，通过单词预测上下文。目前来看，一般认为SG的效果好于CBOW模型。</p>
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15540423884690.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/3/31</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15540295441807.html">
-                
-                  <h1>Huffman树</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">问题</h2>
-
-<p>Huffman树是为了解决这样的问题：给一段文字，能不能给出一个编码方式使得这段文字长度最短。</p>
-
-<h2 id="toc_1">思考</h2>
-
-<p>比如对于<code>aabc</code>，如果我们a编码成00，b编码成01，c编码成10，那么这句话表示为：<code>00000110</code>，一共有8个比特。但是如果a编码成0，b编码成10，c编码成01，那么这句话表示为<code>001011</code>，一共有6个比特。<br/>
-看到了么？不同的编码方式下同样的内容对应的长度是不相同的，如何得到一段文字的最佳编码方式呢？Huffman提供了一种算法，他提供了一个贪心的解决了编码问题，并且证明了这种贪心算法得到的答案是最优解。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15540295441807.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/3/31</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-              
-
-
-			<div class="row">
-			  <div class="large-6 columns">
-			  <p class="text-left" style="padding-top:25px;">
-			   
-			  </p>
-			  </div>
-			  <div class="large-6 columns">
-			<p class="text-right" style="padding-top:25px;">
-			
-			</p>
-			  </div>
-			</div>
-		</div>
-	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
