@@ -4,7 +4,7 @@
   <title><![CDATA[张翼腾的博客]]></title>
   <link href="https://sillybun.github.io/atom.xml" rel="self"/>
   <link href="https://sillybun.github.io/"/>
-  <updated>2019-04-02T23:03:02+08:00</updated>
+  <updated>2019-04-03T00:45:21+08:00</updated>
   <id>https://sillybun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -47,7 +47,7 @@ NCE的思想是：<strong>通过区分样本和人造的噪声来训练参数</s
 
 <p>我们用常数c来表示它的归一化常数（\(c = \int  p_0(u,\alpha)\mathrm{d}u\)），令\(\theta = \{\alpha, c\}\)，参数c是归一化常数\(Z(\alpha)\)的估计，注意到\(\alpha\)和c之间是要满足归一化条件的(\(c=\int p_0(u, \alpha)\mathrm{d}u\))。</p>
 
-<p>那么\[\ln p_m(u,\theta) = \ln p_0(u,\theta) - \ln c\]</p>
+<p>那么\[\ln p_m(u,\theta) = \ln p_0(u,\alpha) - \ln c\]</p>
 
 <p>我们令\(\mathrm{TD} = (x_1, x_2, \dots, x_n)\)表示训练样本，对于每个训练样本\(x_i\)，我们从一个噪声分布中取出K个人造噪声样本\(\{y_i^1, y_i^2,\dots,y_i^K\}\)，\(Y = \{y_i^j|i\in\{1,2,\dots,T\},j\in\{1,2,\dots, K\}\}\)</p>
 
@@ -89,7 +89,7 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 
 <p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
 
-<p>定理1: \(\tilde J\)在\(f(\cdot) = \ln p_d(\cdot)\)取得最大值。并且这个最大值点是唯一的如果\(\mathrm{supp}~p_n \subset \mathrm{supp}~p_d\)<br/>
+<p>定理1: \(\tilde J\) 在 \(f(\cdot) = \ln p_d(\cdot)\)取得最大值。并且这个最大值点是唯一的如果\(\mathrm{supp}~p_n \subset \mathrm{supp}~p_d\)<br/>
 简单起见，我们证明一维的情况。</p>
 
 <p>证明：<br/>
@@ -125,7 +125,49 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 
 <p>为了满足第三点，噪声函数需要和数据分布尽量的接近，因为如果不这样的话，分类问题会变得很容易，也就是说不需要学到很好的数据结构就能够得到比较好的分类结果，事实上：如果噪声函数就等于数据分布的话，那么我们估计的方差渐进的等于两倍的CR下界。因此，我们一般需要顾及一个比较简单的数据模型，然后根据这个简单的数据模型来得到噪声分布。</p>
 
-<h2 id="toc_5">参考文献：</h2>
+<h2 id="toc_5">Word2Vec中的NCE</h2>
+
+<p>Word2Vec中的NCE和原始版本的NCE是有一定的差别的，这里我们给出阐述：</p>
+
+<h3 id="toc_6">Conditional NCE</h3>
+
+<p>我们在Word2Vec中考虑的是如下的参数估计：\[p_m(y|x,\alpha) = \frac{p_0(x,y;\alpha))}{Z(x;\alpha)}\]，其中\(p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)，s为某种分数。在Word2Vec中，\(s(x,y;\alpha) = \alpha_x^T\alpha_y\)，其中y是一个单词，x是它的上下文(context)中的一个单词，\(\alpha_x\in \mathbb{R}^d\)和\(\alpha_y\in \mathbb{R}^d\)是x和y对应的向量表示。</p>
+
+<p>\(Z(x;\alpha) = \int p_0(x,y;\theta)\mathrm{d}y\)是划分函数，对于固定的\(\alpha\)它是x的函数。</p>
+
+<p>我们对于训练集合\(\mathrm{TD} = \{(x_1,y_1),(x_2,y_2),\dots,(x_T,y_T)\}\)中的每一个样本\((x_i, y_i)\)，根据某种噪声分布\(p_n(\cdot)\)得到K个人造的噪声样本\((x_i,y_i^1),(x_i,y_i^2),\dots,(x_i,y_i^K)\)，和NCE一样，我们把样本和噪声并在一起构成一个新的集合U，并且对于U中的每一个元素，引入一个标签\(\kappa\)，如果来源于原始样本，标签值为1；否则为0。我们令\(G((x,y),\alpha) = \ln p_m(y|x,\alpha) - \ln(K\cdot p_n(y))\),和NCE的推导方式一样，我们可以根据贝叶斯公式得到后验概率：<br/>
+\[<br/>
+\begin{split}<br/>
+P(\kappa &amp;= 1|(x,y),\alpha) = \frac{p_m(y|x,\alpha)}{p_m(y|x,\alpha) + K\cdot p_n(y)}\\<br/>
+&amp;= \sigma(G((x,y),\alpha))<br/>
+\end{split}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+P(\kappa = 0|(x,y),\alpha) &amp;= \frac{K\cdot p_n(y)}{p_m(y|x,\alpha) + K\cdot p_n(y)}\\<br/>
+&amp;=1-\sigma(G((x,y),\alpha))<br/>
+\end{split}<br/>
+\]</p>
+
+<p>进一步的，模型作出了非常大的一步简化：直接令\(p_m(y|x,\alpha) = p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)；</p>
+
+<p>事实上\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln\int\exp(s(x,t,\alpha))\mathrm{d}t\]，令\(c_x = \int\exp(s(x,t,\alpha))\mathrm{d}t\)，就有：\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln c_x\]（这里需要注意的是\(c_x\)与\(\alpha\)具有约束条件），也就是说，有一个很重要的假设（虽然没有明确说出）:<br/>
+\[\forall \alpha,\forall c_{(\cdot)}, \exists \hat\alpha, s.t. s(x,y,\hat\alpha) = s(x,y,\alpha) - \ln c_x, \forall x,y\]</p>
+
+<p>那么对于区分标签的二分类问题，我们优化如下目标函数：</p>
+
+<p>\[<br/>
+J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-\sigma(G((x_i,y_i^j),\alpha))]]<br/>
+\]</p>
+
+<h3 id="toc_7">Conditional NCE分析</h3>
+
+<p>类似于NCE的定理1的分析，Conditional NCE正确性依赖于如下猜想：</p>
+
+<p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
+
+<h2 id="toc_8">参考文献：</h2>
 
 <ol>
 <li>Michael Gutmann and Aapo Hyvärinen. 2010. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proc. AISTATS.</li>
