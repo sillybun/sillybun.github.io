@@ -4,7 +4,7 @@
   <title><![CDATA[张翼腾的博客]]></title>
   <link href="https://sillybun.github.io/atom.xml" rel="self"/>
   <link href="https://sillybun.github.io/"/>
-  <updated>2019-04-09T17:44:41+08:00</updated>
+  <updated>2019-04-09T17:50:40+08:00</updated>
   <id>https://sillybun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -32,7 +32,7 @@
 
 <p>下面定义矩阵对矩阵的微分：</p>
 
-<p>设\(A\)，\(B\)分别为维度为\(n\times m\)， \(p\times q\)的矩阵，我们定义\(\frac{\partial A}{\partial B}\)为一个以\(q\times q\)维度的矩阵为元素的维度为\(n\times m\)的矩阵。我们把这样的矩阵的维度表示为：\(n\times m\to q\times p\)，把这样的矩阵叫做四维矩阵，用一个大写字母上面标4表示它为四维矩阵比如\(\mathop{A}\limits^4\)。其中的第\((i,j)\)位置元素为：</p>
+<p>设\(A\)，\(B\)分别为维度为\(n\times m\)， \(p\times q\)的矩阵，我们定义\(\frac{\partial A}{\partial B}\)为一个以\(q\times p\)维度的矩阵为元素的维度为\(n\times m\)的矩阵。我们把这样的矩阵的维度表示为：\(n\times m\to q\times p\)，把这样的矩阵叫做四维矩阵，用一个大写字母上面标4表示它为四维矩阵比如\(\mathop{A}\limits^4\)。其中的第\((i,j)\)位置元素为：</p>
 
 <p>\[(\frac{\partial A}{\partial B})_{i,j} = \begin{bmatrix}<br/>
     \frac{\partial A_{i,j}}{\partial B_{1,1}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,1}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{p,1}} \\<br/>
@@ -314,7 +314,9 @@ $\mathrm{tr}(\frac{\partial y}{\partial A} \frac{\partial A}{\partial B}) = \sum
 
 <p>命题7：若\(X\)是一个\(n\times m\)维的矩阵，\(\frac{\partial X}{\partial X}\)是一个\(n\times m\to m\times n\)的矩阵矩阵，并且其第\((i,j)\)个元素是\(e_{j,i}\)，它是一个\(m\times n\)的矩阵，除第\((j,i)\)个元素为1外其余元素都为0。我们把这个矩阵命名为\(E_{n\times m}\)，它在我们矩阵求导中有非常重要的作用。</p>
 
-<p>命题8：若\({\mathop{A}\limits^4}\)是一个维度为\(m\times n\to q\times p\)的四维矩阵，那么：\({\mathop{A}\limits^4} E_{p\times q} = E_{n\times m} = {\mathop{A}\limits^4}\)</p>
+<p>命题8：若\({\mathop{A}\limits^4}\)是一个维度为\(m\times n\to q\times p\)的四维矩阵，那么：\({\mathop{A}\limits^4} E_{p\times q} = E_{n\times m} {\mathop{A}\limits^4} = {\mathop{A}\limits^4}\)</p>
+
+<p>证明：</p>
 
 <p>命题9：若\(A\)是一个维度为\(m\times n\)的矩阵，\(B\)是一个\(p\times q\)的矩阵，我们定义：\(A\times B \mathop{=}\limits^\Delta AE_{n,p}B\)，它是一个维度为：\(m\times q\to p\times n\)的四维矩阵，其中第\((i,j)\)个元素为：\(Be_{ji}A\)</p>
 
