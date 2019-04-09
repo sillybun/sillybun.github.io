@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Huffman树 - 张翼腾的博客
+  信息论 - 张翼腾的博客
   
   </title>
   
@@ -98,10 +98,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>Huffman树</h1>
+          <h1>信息论</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2019/3/31</span>
+          <span class="date">2019/4/4</span>
 
           
            
@@ -116,95 +116,66 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <h2 id="toc_0">问题</h2>
+      <h2 id="toc_0">熵</h2>
 
-<p>Huffman树是为了解决这样的问题：给一段文字，能不能给出一个编码方式使得这段文字长度最短。</p>
-
-<h2 id="toc_1">思考</h2>
-
-<p>比如对于<code>aabc</code>，如果我们a编码成00，b编码成01，c编码成10，那么这句话表示为：<code>00000110</code>，一共有8个比特。但是如果a编码成0，b编码成10，c编码成01，那么这句话表示为<code>001011</code>，一共有6个比特。<br/>
-看到了么？不同的编码方式下同样的内容对应的长度是不相同的，如何得到一段文字的最佳编码方式呢？Huffman提供了一种算法，他提供了一个贪心的解决了编码问题，并且证明了这种贪心算法得到的答案是最优解。</p>
+<p>假设离散随机变量X服从概率分布P。我们用它熵表示一个随机变量的不确定程度，用\(\mathbb{H} (X)\)或者是\(\mathbb{H}(p)\)表示：\[\mathbb{H}(X)\mathop{=}\limits^\Delta -\sum\limits_{k=1}^K p(X=k)\log p(X=k) = \mathop{E}\limits_{x\sim p(\cdot)}[\log(p(x))]\]</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_2">定义</h2>
+<p>定理1: 在所有取值为\(\{1,2,\dots, K\}\)的离散随机变量，均匀分布取到最大熵。</p>
 
-<p>我们首先作出以下定义：<br/>
-<strong>前缀编码</strong>：如果一个编码方式中没有一个编码是另一个编码的前缀，我们称这种编码方式为前缀编码。<br/>
-我们可以看到，如果一种编码方式不是前缀编码，可能会出现二意性的问题，在使用上有很大的不方便。事实上，可以证明，最佳编码方式一定有一种是前缀编码，所以我们把我们的讨论范围限制在前缀编码上。<br/>
-我们可以使用一颗二叉树来表示我们的编码方式，每个叶子结点代表一个字符，它的编码由根结点到它的唯一路径表示，如果是左子结点对应着编码0，如果是右子结点对应着编码0。这样的话对于深度为depth（这里认为根结点对应的深度为0）的字符它的编码长度为depth。在这棵二叉树上越浅的位置的字符拥有越少的编码长度。这样来看，我们应该把出现频率高的字符放置在二叉树比较浅的位置，出现频率低的字符放在二叉树比较深的位置。<br/>
-显然，我们可以进一步的把我们的讨论范围局限在一颗完全二叉树上面来，这是因为，如果有一个结点只有1个子节点，我们完全可以把这个父亲结点取消掉，直接把子结点连接到父节点的父亲上。子树上的每个叶子结点对应的编码长度都会减少1。<br/>
-这样的话，设一种编码方式对应的二叉树为T，对于字符集中的每一个字符c，我们令\(c.freq\)表示c出现的次数，\(d_T(c)\)表示c在树中的深度，这样需要编码这个文件的比特数为：<br/>
-\[<br/>
-B(T) = \sum\limits_{c\in C}c.freq \cdot d_T(c)<br/>
+<p>这个定理的证明我会把它放到后面。根据这个定理我们可以得到Laplace&#39;s principle of insufficient reason. 当不能提供分布的任何信息的时候，我们偏好均匀分布，因为它保留了最大的不确定性。</p>
+
+<h2 id="toc_1">KL divergence</h2>
+
+<p>KL divergence（又称为相对熵），衡量了两种概率分布之间的不相似性：\[\mathbb{KL}(p\|q) = \sum_{k=1}^{K}p_k\log\frac{p_k}{q_k}=\mathop{\mathbb{E}}\limits_{x\sim  p(\cdot)}\log\frac{p(x)}{q(x)}\]</p>
+
+<p>我们可以把KL divergence重新写为：\[\mathbb{KL}(p\|q) = \mathop{\mathbb{E}}\limits_{x\sim  p(\cdot)}\log p(x) - \mathop{\mathbb{E}}\limits_{x\sim p(\cdot)}\log {q(x)} = \mathbb{H}(p,q) - \mathbb{H}(p)\]</p>
+
+<p>其中\[\mathbb{H}(p,q) = - \mathop{\mathbb{E}}\limits_{x\sim p(\cdot)}\log {q(x)}\]被称为交叉熵。</p>
+
+<p>定理2：\(\mathbb{KL}(p,q) \geq 0\). 当且仅当\(p=q\)时相对熵等于0。</p>
+
+<p>证明：<br/>
+\[\begin{split}\mathbb{KL}(p,q) &amp;= \sum_{k=1}^{K}p_k\log\frac{p_k}{q_k}\\<br/>
+&amp;= - \sum_{k=1}^{K}p_k\log\frac{q_k}{p_k}\\<br/>
+&amp;\geq - \log \sum_{k=1}^{K}p_k\frac{q_k}{p_k}\\<br/>
+&amp;= 0\\<br/>
+\end{split}<br/>
 \]</p>
 
-<h2 id="toc_3">Huffman树的建立</h2>
+<p>最后一个大于等于号是由于\(\log(\cdot)\)函数是concave函数。并且可以看到等号成立当且仅当存在c，使得\(p(x) = cq(x)\forall x\)，但是由于\(p(x)\)和\(q(x)\)都是自归一化的，所以\(c=1\)。</p>
 
-<p>我们作出以下约定：</p>
+<p>因此，\(\mathbb{KL}(p,q) =0\)当且仅当\(p=q\)。</p>
 
-<ol>
-<li>C表示字符集，里面含有n个字符，其中的每个字符c有一个属性\(c.freq\)</li>
-<li>Q表示一个最小堆（优先级队列）<br/>
-建立Huffman树的伪代码如下所示：</li>
-</ol>
+<p>我们使用这个定理来证明定理1。令\(p(x)\)是\(\{1,2,\dots,K\}\)上的概率函数，\(u(x)\)是其上的均匀分布。根据定理2,\[\begin{split}\mathbb{KL}(p\|u) &amp;=  \mathop{\mathbb{E}}\limits_{x\sim p(\cdot)} \log p(x) - \mathop{\mathbb{E}}\limits_{x\sim p(\cdot)} \log u(x)\\<br/>
+&amp;= \mathop{\mathbb{E}}\limits_{x\sim p(\cdot)} \log p(x) + \mathop{\mathbb{E}}\limits_{x\sim u(\cdot)} \log u(x) \\&amp;= \mathbb{H}(u) - \mathbb{H}(p)\geq 0\end{split}\]</p>
 
-<pre class="line-numbers"><code class="language-python">Huffman(C)
-N = |C|
-Q = C
-for i = 1 to n-1
-    allocate a new node z
-    z.left = x = Extract-Min(Q)
-    z.right = y = Extract-Min(Q)
-    z.freq = x.freq + y.freq
-    Insert(Q, z)
-return Extract-Min(Q)
-</code></pre>
+<h2 id="toc_2">共同信息MI</h2>
 
-<h3 id="toc_4">时间复杂度分析</h3>
+<p>我们考虑两个随机变量X和Y我们来衡量两个随机变量之间的独立情况，我们可以用相关系数来衡量，但是相关性并不能完全的衡量独立性。为此我们引入共同信息（Mutual infromation or MI）。是这样定义的：\[\mathbb{I}(X;Y) \mathop{=}\limits^\Delta \mathbb{KL}(p(X,Y)\|P(X)p(Y)) = \sum\limits_x\sum\limits_y p(x,y)\log\frac{p(x,y)}{p(x)p(y)}\]</p>
 
-<p>建立最小堆的时间复杂度为\(O(n)\)，一共有n-1次循环，每一次循环的时间复杂度为\(O\log n\)，所以Huffman算法的时间复杂度为\(O(n\log n)\)</p>
-
-<h2 id="toc_5">算法正确性的证明</h2>
-
-<p>我们需要证明两个引理。</p>
-
-<hr/>
-
-<p>引理一：对于C中出现次数最低的两个字符x,y，一定存在着一种编码方式，使得x和y的编码长度一样，除了最后一位外其他的位置都相同。<br/>
-证明：<br/>
-我们只要证明在对应的二叉树上，x和y是兄弟结点就可以了。<br/>
-对于一棵最优编码对应的二叉树T，设a和b是它深度最深的叶子兄弟（它们是叶子结点并且它们是兄弟）。假如a和b不是x和y，不妨假设x不是a也不是b。<br/>
-我们对换x和a的位置，y和b的位置，得到了一棵新的二叉树\(T’\)<br/>
-\[<br/>
-\begin{split}B(T) - B(T’) &amp;= x.freq\cdot d_T(x) + a.freq\cdot d_T(a)-x.freq\cdot d_T(a) - a.freq\cdot d_T(x) + \dots \\<br/>
-&amp;= (a.freq - x.freq) (d_T(a)-d_T(x)) +  (b.freq - y.freq) (d_T(b)-d_T(y))\\<br/>
-&amp;\geq 0<br/>
-\end{split}<br/>
-\]<br/>
-但是由于T是最佳二叉树，所以\(B(T) = B(T’)\)，所以\(T’\)也是完全二叉树，并且在\(T’\)中，x和y是最深的兄弟结点。<br/>
-引理二：对于C中出现的次数最低的两个字符x,y，我们在C中去掉x和y，加入一个新的字符z，并且令\(z.freq=x.freq + y.freq\)，建立一个新的字符集\(C’\)。那么对于\(C’\)的最佳二叉树\(T’\)，我们把z对应的叶子结点去掉，放置一个内部结点，并且以x和y作为两个子节点对应的完全二叉树为C对应的一棵最佳二叉树。<br/>
-证明：<br/>
-我们首先说明\(B(T)\)和\(B(T’)\)之间的关系：\(d_{T’}(z) = d_T(x) + 1\)。<br/>
-\[\begin{split}<br/>
-B(T) - B(T’) &amp;= x.freq \cdot d_T(x) +y.freq \cdot d_T(y) - z.freq \cdot d_{T’}(z)\\<br/>
-&amp;=x.freq \cdot d_T(x) +y.freq \cdot d_T(y) - (x.freq + y.freq) \cdot (d_{T}(x) - 1)\\<br/>
-&amp;=x.freq + y.freq<br/>
-\end{split}<br/>
-\]<br/>
-假设T不是C的一棵最佳二叉树，设\(T’’\)是C的一棵最佳二叉树，且根据引理1不妨假设x和y位于最深处并且x和y是兄弟。那么我们把x和y去掉并且把它们的父亲结点命名为z并且令\(z = x.freq + y.freq\)就构成了\(C’\)的一棵二叉树\(T’’’\)</p>
+<p>因此\(\mathbb{I}(X;Y)\geq 0\)。当且仅当X和Y独立时为0。</p>
 
 <p>\[\begin{split}<br/>
-B(T’’’) &amp;= B(T’’) - x.freq - y.freq\\<br/>
-&amp;&lt; B(T) - x.freq - y.freq\\<br/>
-&amp;= B(T’) <br/>
+\mathbb{I}(X;Y) &amp;= \sum\limits_x\sum\limits_y p(x,y)\log\frac{p(x,y)}{p(x)p(y)}\\<br/>
+&amp;= \sum\limits_x\sum\limits_y p(x,y)[\log p(x|y) -  \log p(x)]\\<br/>
+&amp;= \sum\limits_{y}p(y)\sum\limits_{x}p(x|y)\log p(x|y) - \sum_{x}p(x)\log p(x)\\<br/>
+&amp;= - \sum\limits_{y}p(y)H(Y|X=x) + H(X)\\<br/>
+&amp;= H(X) - H(X|Y)\\<br/>
 \end{split}\]</p>
 
-<p>这与\(T’\)是\(C’\)的最佳二叉树矛盾</p>
+<p>逐点互信息\[\mathrm{PMI}(X,Y) \mathop{=}\limits^{\Delta} \log\frac{p(x,y)}{p(x)p(y)} = \log \frac{p(x|y)}{p(x)} = \log \frac{p(y|x)}{p(y)}\]，他刻画了当我们知道y后将\(p(x)\)更新为\(p(x|y)\)所能得到的信息量。</p>
 
-<hr/>
+<h2 id="toc_3">Cross entropy loss 与MLE</h2>
 
-<p>根据引理一和引理二我们可以得到Huffman算法的正确性。~~~~</p>
+<p>在机器学习中一个常见的损失函数是Cross Entopy Loss。这里我们讨论一个多分类的问题，我们要把样本分到编号对应为\(1,2,\dots, n\)的类里面，我们的真实的编号是\(l_{true}\)，我们模型预测的属于某个编号的概率是\(P(l=k) = y_k\)，那么Cross Entropy Loss是：\[\mathrm{loss}_{CE}= -\log y_{l_{true}}\]</p>
+
+<p>我们这里有两种解释，一种是基于Cross Entropy：真实的概率分布是\(P_{true}(l=k) = \delta(k, l_{true})\)，估计的概率分布为\(P_{pred}=y_k\)。那么我们用\(H(P_{true}, P_{pred}) = \mathbb{KL}(P_{true}\|P_{pred})\)，来刻画两者之间的差异程度。根据Cross Entropy的性质\(\mathrm{loss}_{\mathrm{CE}} \geq 0\)，并且当且仅当两者一致时为0。</p>
+
+<p>另一种解释是基于MLE，似然函数就是是：\(y_{l_{true}}\)，所以对应的负对数释然函数就是：\[\ell = -\log y_{l_{true}}\]</p>
+
+<p>因此在标签唯一的情况下，Cross Entropy Loss和MLE是一致的。</p>
 
 
     
@@ -215,13 +186,16 @@ B(T’’’) &amp;= B(T’’) - x.freq - y.freq\\<br/>
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="15540423884690.html" 
-          title="Previous Post: Word2Vec入门">&laquo; Word2Vec入门</a>
+          <a href="15546453666266.html" 
+          title="Previous Post: 向量微分计算">&laquo; 向量微分计算</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15541232015450.html" 
+          title="Next Post: Noise Contrastive Estimation and Negative Sampling">Noise Contrastive Estimation and Negative Sampling &raquo;</a>
       
       </p>
         </div>

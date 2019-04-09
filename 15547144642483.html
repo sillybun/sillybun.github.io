@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  张翼腾的博客
+  矩阵微分计算 - 张翼腾的博客
   
   </title>
   
@@ -89,23 +89,34 @@
        
 
  <script type="text/javascript">
-	$(function(){
-		$('#menu_item_index').addClass('is_active');
-	});
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
 </script>
 <div class="row">
-	<div class="large-8 medium-8 columns">
-		<div class="markdown-body home-categories">
-		
-			<div class="article">
-                <a class="clearlink" href="15547144642483.html">
-                
-                  <h1>矩阵微分计算</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">符号表示</h2>
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>矩阵微分计算</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/4/8</span>
+
+          
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">符号表示</h2>
 
 <p>若\(A\)和\(B\)都是\(n\times m\)的矩阵，那么：\(A\oplus B\)和\(A\otimes B\)都是\(n\times m\)的矩阵，它们第\((i,j)\)位置的元素值分别为：\(A_{i,j}+B_{i,j}\)和\(A_{i,j} \times B_{i,j}\)。</p>
 
@@ -434,341 +445,40 @@ $\mathrm{tr}(\frac{\partial y}{\partial A} \frac{\partial A}{\partial B}) = \sum
 
 <p>\(\ell = -y^\top \mathrm{softmax}(W_1\sigma(W_2X+b_2)+b_1)\)，求\(\frac{\partial \ell}{\partial W}\)</p>
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2019/4/8</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15546453666266.html">
-                
-                  <h1>向量微分计算</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>矩阵微分在神经网络中的应用及其广泛，这里总结了各种矩阵微分的处理方法。</p>
+    
 
-<h2 id="toc_0">符号表示</h2>
+      </div>
 
-<p><strong>矩阵</strong>: \(a_{i,j}\in\mathbb{R}\quad i=1,2,\dots, m;j=1,2,\dots m\)\[A = \begin{bmatrix}<br/>
-    a_{11} &amp; a_{12} &amp; a_{13} &amp; \dots  &amp; a_{1n} \\<br/>
-    a_{21} &amp; a_{22} &amp; a_{23} &amp; \dots  &amp; a_{2n} \\<br/>
-    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
-    a_{m1} &amp; a_{m2} &amp; a_{m3} &amp; \dots  &amp; a_{mn}<br/>
-\end{bmatrix}\]是一个\(m\times n\)的矩阵。</p>
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15546453666266.html" 
+          title="Next Post: 向量微分计算">向量微分计算 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
 
-<p><strong>向量</strong>：一个\(n\)维的向量是一个\(n\times 1\)的矩阵，也就是说所有的向量都是列向量。</p>
+          
 
-<p>定义：若\(x\)是一个\(n\)维向量，\[\mathrm{diag}(x) = \begin{bmatrix}<br/>
-    x_1 &amp; 0 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
-    0 &amp; x_2 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
-    0 &amp; 0 &amp; x_3 &amp; \dots  &amp; 0 \\<br/>
-    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
-    0 &amp; 0 &amp; 0 &amp; \dots  &amp; x_n<br/>
-\end{bmatrix}\]</p>
-
-<p>定义：若\(x\)是一个\(n\)维向量，\(y\)是一个\(n\)维向量，\[\begin{split}x\otimes y &amp;= [x_1y_1, x_2y_2,\dots, x_ny_n]^\top\\x\oplus y &amp;= [x_1+y_1, x_2+y_2,\dots, x_n+y_n]^\top\\\end{split}\]</p>
-
-<h3 id="toc_1">向量微分</h3>
-
-<p>令\(y=\phi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，我们定义：\[\frac{\partial y}{\partial x} \mathop{=}\limits^\Delta \begin{bmatrix}<br/>
-    \frac{\partial y_1}{\partial x_1} &amp; \frac{\partial y_1}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_1}{\partial x_n} \\<br/>
-    \frac{\partial y_2}{\partial x_1} &amp; \frac{\partial y_2}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_2}{\partial x_n} \\<br/>
-    \vdots &amp; \vdots &amp;  \ddots &amp; \vdots \\<br/>
-    \frac{\partial y_m}{\partial x_1} &amp; \frac{\partial y_m}{\partial x_n} &amp;  \dots  &amp; \frac{\partial y_m}{\partial x_n}<br/>
-\end{bmatrix}\]</p>
-
-<p>注意到如果\(x\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量；如果\(y\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量的转置。</p>
-
-<blockquote>
-<p>这样定义向量微分的原因是这种定义下有：\(\mathrm{d}y = \frac{\partial y}{\partial x}\mathrm{d}x\)。</p>
-</blockquote>
-
-<h2 id="toc_2">命题 -- 向量微分</h2>
-
-<p>定理1：（线性性）若\(a,b\in\mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(\phi\colon \mathbb{R}^n\to \mathbb{R}^m\)，\(\varphi\colon \mathbb{R}^n\to \mathbb{R}^m\)，那么\(\frac{\partial (a\phi(x)+ b\varphi(x))}{\partial x} = a\frac{\partial \phi(x)}{\partial x} + b\frac{\partial \varphi(x)}{\partial x}\)</p>
-
-<p>定理2：（链锁法则）若\(y = \phi(z)\)，\(z = \varphi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
-
-<p>证明：<br/>
-\(\frac{\partial y_i}{\partial z_k} = \sum_{j=1}^{n}\frac{\partial y_i}{\partial x_j}\frac{\partial x_j}{\partial z_k}\)<br/>
-因此：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
-
-<p>命题1：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(A\)与\(x\)无关，那么：\(\frac{\partial y}{\partial x} = A\)。</p>
-
-<p>证明：<br/>
-\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
-\(\frac{\partial y_i}{\partial x_j} = A_{i,j}\)<br/>
-因此：\(\frac{\partial y}{\partial x} = A\)</p>
-
-<p>命题2：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，\(x\)是\(z\)的函数，那么\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)。</p>
-
-<p>证明：<br/>
-\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
-\(\frac{\partial y_i}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}\frac{\partial x_k}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}(\frac{\partial x}{\partial z})_{k,j}\)<br/>
-因此：\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)</p>
-
-<p>命题3：若\(\alpha = y^\top  A x\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，那么\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)。</p>
-
-<p>证明：<br/>
-\(\alpha = \sum\limits_{i,k}y_i A_{i,k}x_k\)<br/>
-\[\begin{split}<br/>
-\frac{\partial \alpha}{\partial z_j} &amp;= \sum\limits_{i,k}(\frac{\partial y_i}{\partial z_j} A_{i,k}x_k + y_i A_{i,k}\frac{\partial x_k}{\partial z_j})\\<br/>
-&amp;= \sum\limits_{i=1}^{m}(x^\top A^\top )_i\frac{\partial y_i}{\partial z_j} + \sum\limits_{k=1}^{n}(y^\top A)_k\frac{\partial x_k}{\partial z_j}\\<br/>
-&amp;= (x^\top A^\top \frac{\partial y}{\partial z})_j + (y^\top A\frac{\partial x}{\partial z})_j<br/>
-\end{split}\]<br/>
-因此，\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)</p>
-
-<p>命题4 ：若\(f\colon \mathbb{R}\to \mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(f(x) \mathop{=}\limits^\Delta [f(x_1),f(x_2),\dots, f(x_n)]^\top\)，那么：\(\frac{\partial f(x)}{\partial z} = \mathrm{diag}(f&#39;(x))\frac{\partial x}{\partial z}\)。注意到这个命题对\(x\)是一个数值同样是正确的。</p>
-
-<p>证明：<br/>
-\(\frac{\partial f(x)_i}{\partial z_j} = f&#39;(x_i)\frac{\partial x_i}{\partial z_j}\)，这样就证明了结论。</p>
-
-<p>命题5：若\(y = ax\)，其中\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(a\)是一个数值，那么：\(\frac{\partial y}{\partial z} = x \frac{\partial a}{\partial z} + a \frac{\partial x}{\partial z}\)</p>
-
-<p>证明：<br/>
-\(\frac{\partial y_i}{\partial z_k} = a\frac{\partial x_i}{\partial  z_k} + \frac{\partial a}{\partial  z_k} x_i = (a\frac{\partial x}{\partial z})_{i, k}+ (x \frac{\partial a}{\partial  z})_{i, k}\\\)</p>
-
-<p>命题6：若\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\[\begin{split}\frac{\partial (x\oplus y)}{\partial z} &amp;= \frac{\partial x}{\partial  z} + \frac{\partial y}{\partial  z}\\ \frac{\partial (x\otimes y)}{\partial z} &amp;= \mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}\\ \end{split}\]</p>
-
-<p>证明：<br/>
-\(\frac{\partial (x_i+y_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k} + \frac{\partial y_i}{\partial z_k}\)，这样就证明了第一个结论。</p>
-
-<p>\(\frac{\partial (x_iy_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k}y_i + x_i\frac{\partial y_i}{\partial z_k} = [\mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}]_{i,k}\)</p>
-
-<p>命题7：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，那么\(\frac{\partial y}{\partial z} = A \frac{\partial x}{\partial z} + \frac{\partial A}{\partial z}x\)。</p>
-
-<p>证明：<br/>
-\(y_i = \sum\limits_{j=1}^{n}A_{i,j}x_j\)<br/>
-\(\frac{\partial y_i}{\partial z_k} = \sum\limits_{j=1}^{n}(\frac{\partial A_{i,j}}{\partial z_k}x_j + A_{i,j}\frac{\partial x_j}{\partial z_k}) =(\frac{\partial A}{\partial z}x)_{i, k} + (A\frac{\partial x}{\partial z})_{i,k}\)</p>
-
-<h2 id="toc_3">例子</h2>
-
-<p>\(x\)是一个\(n\)维的向量，\(y=\mathrm{softmax}(x)\)，也就是\(y_i = \frac{\exp(x_i)}{\sum\limits_{j=1}^{n} \exp(x_j)}\)，求\(\frac{\partial y}{\partial x}\)。</p>
-
-<p>解：<br/>
-我们令\(\mathbb{1}\)表示\(n\)维所有元素均为1的向量，则：<br/>
-\[\begin{split}y &amp;= \mathrm{softmax}(x)\\ &amp;= \frac{\exp(x)}{\sum\limits_{i=1}^{n} \exp(x_i)}\\ &amp;= \frac{\exp(x)}{\mathrm{1}^\top \exp(x)} \end{split}\]</p>
-
-<p>\[\begin{split}\frac{\partial y}{\partial x} &amp;= \exp(x)\frac{\partial \frac{1}{\mathbb{1}^\top \exp(x)}}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~5)\\ &amp;= \exp(x)[-\frac{1}{(\mathbb{1}^\top \exp(x))^2}]\frac{\partial [\mathbb{1}^\top \exp(x)]}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~4)\\<br/>
-&amp;= [-\frac{\exp(x)}{(\mathbb{1}^\top \exp(x))^2}]\mathbb{1}^\top \mathrm{diag}(\exp(x)) + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~1, 4)\\<br/>
-&amp;= -\frac{\exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2} + \frac{1}{\mathbb{1}^\top \exp(x)}\mathrm{diag}(\exp(x))\quad (proposition ~4)\\<br/>
-&amp;= \frac{\mathbb{1}^\top \exp(x)\mathrm{diag}(\exp(x)) - \exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2}\\<br/>
-&amp;= \mathbb{1}^\top y\mathrm{diag}(y) - yy^\top\\<br/>
-&amp;= \mathrm{diag}(y y^\top \mathbb{1}) - yy^\top\\ <br/>
-&amp;= \mathrm{diag}(y) - yy^\top\\<br/>
-\end{split}\]</p>
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2019/4/7</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15543921008119.html">
-                
-                  <h1>信息论</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">熵</h2>
-
-<p>假设离散随机变量X服从概率分布P。我们用它熵表示一个随机变量的不确定程度，用\(\mathbb{H} (X)\)或者是\(\mathbb{H}(p)\)表示：\[\mathbb{H}(X)\mathop{=}\limits^\Delta -\sum\limits_{k=1}^K p(X=k)\log p(X=k) = \mathop{E}\limits_{x\sim p(\cdot)}[\log(p(x))]\]</p>
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
 
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15543921008119.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/4/4</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15541232015450.html">
-                
-                  <h1>Noise Contrastive Estimation and Negative Sampling</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">背景</h2>
-
-<p>在NLP领域，使用分数来得到一个概率分布是一种非常常见的形式。我们通常通过取指数然后归一化来得到一个概率分布：</p>
-
-<p>\[<br/>
-\begin{equation}<br/>
-P_d(y|x;\alpha) = \frac{\exp(\mathrm{s}(y,x,\alpha))}{\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))}<br/>
-\end{equation}<br/>
-\]</p>
-
-<p>我们称\(Z(x,\alpha) = \sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\alpha) = \alpha_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\alpha=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\mathrm{s}(y,x,\alpha) - \ln\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))]<br/>
-\]，但是计算这个概率（和它的导数）的计算量是非常大的（和词表的大小成正比）。<br/>
-为此，NLP科学家们提出了各种方法，一种是基于分类树方法（hierarchical softmax），但是它的缺点在于1. 结果对不同的树比较敏感2.对比较罕见的词效果比较好，但是对常见的单词效果比较差。另一种方法是今天我们要讲的Noise Contrastive Estimation(NCE)和Negative Sampling。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15541232015450.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/4/1</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15540423884690.html">
-                
-                  <h1>Word2Vec入门</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">Background</h2>
-
-<p>@todo</p>
-
-<h2 id="toc_1">Model Introduction</h2>
-
-<p>在Word2Vec中，Mikolov提出了两个模型 — Continuous Bag-of-Words（CBOW）模型和Skip-gram（SG）模型。两个模型都有三层：输入层，投影层和输出层。对于CBOW模型，输入上下文预测单词；对于SG模型，通过单词预测上下文。目前来看，一般认为SG的效果好于CBOW模型。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15540423884690.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/3/31</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15540295441807.html">
-                
-                  <h1>Huffman树</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<h2 id="toc_0">问题</h2>
-
-<p>Huffman树是为了解决这样的问题：给一段文字，能不能给出一个编码方式使得这段文字长度最短。</p>
-
-<h2 id="toc_1">思考</h2>
-
-<p>比如对于<code>aabc</code>，如果我们a编码成00，b编码成01，c编码成10，那么这句话表示为：<code>00000110</code>，一共有8个比特。但是如果a编码成0，b编码成10，c编码成01，那么这句话表示为<code>001011</code>，一共有6个比特。<br/>
-看到了么？不同的编码方式下同样的内容对应的长度是不相同的，如何得到一段文字的最佳编码方式呢？Huffman提供了一种算法，他提供了一个贪心的解决了编码问题，并且证明了这种贪心算法得到的答案是最优解。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15540295441807.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/3/31</span>
-                    
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-              
-
-
-			<div class="row">
-			  <div class="large-6 columns">
-			  <p class="text-left" style="padding-top:25px;">
-			   
-			  </p>
-			  </div>
-			  <div class="large-6 columns">
-			<p class="text-right" style="padding-top:25px;">
-			
-			</p>
-			  </div>
-			</div>
-		</div>
-	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">

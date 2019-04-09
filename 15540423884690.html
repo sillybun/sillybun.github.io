@@ -199,7 +199,7 @@ n(x,j) = n(y,j)=n(z,j), \forall 1\leq j\leq L(z)\\<br/>
 
 <p>\[<br/>
 \begin{split}<br/>
-L &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
+\ell &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
 &amp;= \sum\limits_{w\in C}\sum\limits_{j=1}^{L(w)-1}\ln{\sigma([\![n(w, j+1)=\mathrm{ch}(n(w,j))]\!]\cdot v_{n(w,j)}&#39;^T x_w)}<br/>
 \end{split}<br/>
 \]</p>
@@ -221,6 +221,45 @@ L &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
 &amp;= [1 - d(w,j) - \sigma(v_{n(w,j)}&#39;^T x_w)]v_{n(w,j)}<br/>
 \end{split}<br/>
 \]</p>
+
+<h2 id="toc_5">Negative Sampling</h2>
+
+<p>在我的文章<a href="15541232015450.html">Noise Contrastive Estimation and Negative Sampling</a>中，详细介绍了NCE和Negative Sampling。Mikolov指出对于小的训练数据\(K\)取5-20，而对于比较大的训练数据\(K\)取2-5就可以了。Negative Sampling的简单之处在于它认为模型可以包含噪声分布，因此在计算中不需要噪声分布。</p>
+
+<p>我们优化的目标为对数似然函数：</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+\ell &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
+&amp;= \sum\limits_{y\in C}[\ln\frac{\exp(v_y^Tx_y)}{\exp(v_y^Tx_y) + 1}+\sum\limits_{j=1,y_j\sim p_n(y)}^{K}\ln\frac{1}{\exp(v_{y_j}^Tx_y) + 1}]<br/>
+\end{split}<br/>
+\]</p>
+
+<p>如果模型足够强大的话，得到的结果应该满足自归一化条件，也就是说：\[\sum\limits_{y\in \mathbf{V}}\exp(v_y^T x_y)p_n(y)K=1\]</p>
+
+<p>对于NCE和Negative Sampling来说噪声分布都是一个自由的参数，Mikolov指出取\(U(w)^{3/4}/Z\)是最好的选择，也就是说：\[p_n(y)=\frac{f(y)^{3/4}}{\sum\limits_{t\in \mathbf{Y}}f(t)^{3/4}}\]</p>
+
+<h2 id="toc_6">Skip-Gram模型</h2>
+
+<p>SG的目标在于通过预测一个单词的上下文来得到词表示，也就是说，我们的目标是最大化平均对数概率：\[\frac1T\sum_{t=1}^T\sum_{w\in \mathrm{context}}\ln p(w|w_t)\]</p>
+
+<p>最基础的SG模型中使用softmax函数来定义概率：\[p(y|x) = \frac{\exp(v_y^Tv_x)}{\sum\limits_{t\in\mathbf{Y}}\exp(v_t^Tv_x)}\]</p>
+
+<h3 id="toc_7">常见词的降采样</h3>
+
+<p>在文本中，一些非常常见的词会经常出现，但是这些单词能够提供的信息比稀有的单词要少得多，为了利用这个特点，SG使用了降采样的方法，忽略根据单词出现的频率忽略常见单词，忽略的概率为：</p>
+
+<p>\[<br/>
+P(w) = 1 - \sqrt{\frac{t}{f(w)}}<br/>
+\]</p>
+
+<p>其中\(f(w)\)是w这个单词出现的频率，t是阈值，通常设为\(10^-5\)，出现频率小于t的单词不会被降采样，而出现频率大于t的单词会被忽略。</p>
+
+<h2 id="toc_8">参考文献</h2>
+
+<ol>
+<li>Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. 2013. Distributed representations of words and phrases and their composition- ality. In Proceedings of the 26th International Con- ference on Neural Information Processing Systems - Volume 2, NIPS’13, pages 3111–3119, USA. Curran Associates Inc.</li>
+</ol>
 
 
     
@@ -309,6 +348,24 @@ L &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
 	      
 		      
 			      <li class="post">
+			        <a href="15547144642483.html">矩阵微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15546453666266.html">向量微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15543921008119.html">信息论</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15541232015450.html">Noise Contrastive Estimation and Negative Sampling</a>
 			      </li>
 		     
@@ -320,10 +377,6 @@ L &amp;= \sum\limits_{w\in C}\ln \mathrm{P}(w|\mathrm{context}(w))\\<br/>
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15540295441807.html">Huffman树</a>
-			      </li>
-		     
 		   
 		  		</ul>
                 </div>

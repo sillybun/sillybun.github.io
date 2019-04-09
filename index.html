@@ -98,6 +98,540 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
+                <a class="clearlink" href="15547144642483.html">
+                
+                  <h1>矩阵微分计算</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">符号表示</h2>
+
+<p>若\(A\)和\(B\)都是\(n\times m\)的矩阵，那么：\(A\oplus B\)和\(A\otimes B\)都是\(n\times m\)的矩阵，它们第\((i,j)\)位置的元素值分别为：\(A_{i,j}+B_{i,j}\)和\(A_{i,j} \times B_{i,j}\)。</p>
+
+<h2 id="toc_1">矩阵微分</h2>
+
+<p>为了引入矩阵微分的概念，如果这时候涉及到数值/向量/矩阵对数值/向量/矩阵的求导，若分别定义的话太过繁琐，我们下面把数值和向量均看成矩阵，数值是\(1\times 1\)的矩阵，而维度为\(n\)的向量是维度为\(n\times 1\)的矩阵。这样我们只要定义好矩阵对矩阵的导数，就包含了全部的情况。不过这样做后要对数乘做特殊的处理：若\(a\)是一个数值，\(A\)是一个\(n\times m\)的矩阵，我们用\(I^a_n\)表示对角线元素全部为\(a\)的对角矩阵。</p>
+
+<p>\[aA\mathop{=}\limits^{\Delta} I^a_n A\]</p>
+
+<p>\[Aa\mathop{=}\limits^{\Delta}A I^a_m\]</p>
+
+<p>下面定义矩阵对矩阵的微分：</p>
+
+<p>设\(A\)，\(B\)分别为维度为\(n\times m\)， \(p\times q\)的矩阵，我们定义\(\frac{\partial A}{\partial B}\)为一个以\(q\times q\)维度的矩阵为元素的维度为\(n\times m\)的矩阵。我们把这样的矩阵的维度表示为：\(n\times m\to q\times p\)，把这样的矩阵叫做四维矩阵，用一个大写字母上面标4表示它为四维矩阵比如\(\mathop{A}\limits^4\)。其中的第\((i,j)\)位置元素为：</p>
+
+<p>\[(\frac{\partial A}{\partial B})_{i,j} = \begin{bmatrix}<br/>
+    \frac{\partial A_{i,j}}{\partial B_{1,1}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,1}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{p,1}} \\<br/>
+    \frac{\partial A_{i,j}}{\partial B_{1,2}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,2}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{p,2}} \\<br/>
+    \vdots &amp; \vdots &amp;  \ddots &amp; \vdots \\<br/>
+    \frac{\partial A_{i,j}}{\partial B_{1,p}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,p}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{q,p}}<br/>
+\end{bmatrix}\]</p>
+
+<h3 id="toc_2">运算规则</h3>
+
+<p>我们下面来定义涉及到这种以矩阵为元素的矩阵的运算。</p>
+
+<p>设\(\mathop{A}\limits^4\)，\(\mathop{B}\limits^4\)均为维度为\(n\times m\to p\times q\)的四维矩阵，那么：\(\mathop{A}\limits^4\pm \mathop{B}\limits^4\)是一个维度为\(n\times m\to p\times q\)的四维矩阵，其中的第\((i,j)\)位置的元素是\({\mathop{A}\limits^4}_{i,j}\pm {\mathop{B}\limits^4}_{i,j}\)。显然这样定义的加法和减法满足交换律、结合律。</p>
+
+<p>数乘运算：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(c\)是一个数，定义\(c\mathop{A}\limits^4 = (c{\mathop{A}\limits^4}_{i,j})_{n\times m\to p\times q}\)。数乘运算对四维矩阵加减法满足分配律。</p>
+
+<p>四维矩阵的迹：设\(\mathop{A}\limits^4\)为维度为\(n\times n\to p\times q\)的四维矩阵，那么它的迹是一个维度为\(p\times q\)的矩阵：\[\mathrm{tr}(\mathop{A}\limits^4) = \sum\limits_{i=1}^n {\mathop{A}\limits^4}_{i,i}\]</p>
+
+<p>四维矩阵的转置：设\(\mathop{A}\limits^4\)为维度为\(m\times n\to p\times q\)的四维矩阵，那么它的转置\({\mathop{A^\top}\limits^4}\)是一个维度为\(n\times m\to p\times q\)的四维矩阵，且其第\((i,j)\)位置的元素为：\(A_{j,i}\)。则：\({\mathop{A^\top}\limits^4} {\mathop{B^\top}\limits^4} = ({\mathop{B}\limits^4} {\mathop{A}\limits^4})^\top\)</p>
+
+<p>四维矩阵与二维矩阵之间的乘法：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(B\)、\(C\)分别为维度为\(m\times r\)和\(s\times n\)的矩阵，那么：\(\mathop{A}\limits^4 B\)是一个维度为\(n\times r\to p\times q\)的思维矩阵，其中的第\((i,j)\)元素为：\((\mathop{A}\limits^4 B)_{i,j} = \sum\limits_{k=1}^m {\mathop{A}\limits^4}_{i,k}B_{k,j}\)；\(C \mathop{A}\limits^4\)是一个维度为\(s\times m\to p\times q\)的思维矩阵，其中的第\((i,j)\)元素为：\((C \mathop{A}\limits^4)_{i,j} = \sum\limits_{k=1}^n {C_{i,k} \mathop{A}\limits^4}_{k,j}\)。</p>
+
+<p>四维矩阵与四维矩阵之间的乘法：设\(\mathop{A}\limits^4\)，\(\mathop{B}\limits^4\)分别为维度为\(n\times m\to p\times q\)和\(q\times p\to r\times s\)的四维矩阵，那么我们定义\(\mathop{A}\limits^4\mathop{B}\limits^4\)是一个\(n\times m\to r\times s\)的四维矩阵，其中的第\((i,j)\)个元素为：<br/>
+\[(\mathop{A}\limits^4\mathop{B}\limits^4)_{i,j} = \mathrm{tr}({\mathop{A}\limits^4}_{i,j}\mathop{B}\limits^4) = \sum\limits_{k=1}^{p}\sum\limits_{l=1}^{q}(A_{i,j})_{k,l}B_{l,k}\]</p>
+
+<p>我们可以用下列式子来帮助理解：</p>
+
+<p>\[<br/>
+\begin{matrix}<br/>
+\mathop{A}\limits^4 &amp;B&amp;\longrightarrow &amp;\mathop{A}\limits^4 B\\<br/>
+m\times k\to p\times q&amp;k\times n&amp;\longrightarrow&amp; m\times n\to p\times q\\<br/>
+\end{matrix}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{matrix}<br/>
+C &amp; \mathop{A}\limits^4 &amp;\longrightarrow &amp; C \mathop{A}\limits^4\\<br/>
+m\times k&amp; k\times n\to p\times q&amp;\longrightarrow&amp; m\times n\to p\times q\\<br/>
+\end{matrix}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{matrix}<br/>
+\mathop{A}\limits^4 &amp; \mathop{B}\limits^4 &amp;\longrightarrow &amp;\mathop{A}\limits^4 \mathop{B}\limits^4\\<br/>
+n\times m\to p\times q&amp; q\times p\to r\times s &amp;\longrightarrow&amp; n\times m\to r\times s\\<br/>
+\end{matrix}<br/>
+\]</p>
+
+<p>这样的定义满足：</p>
+
+<ol>
+<li>结合律：\((\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A}\limits^4 (\mathop{B}\limits^4 \mathop{C}\limits^4)\)，\((\mathop{A}\limits^4 B)C  = \mathop{A}\limits^4 (B C)\)，\((A \mathop{B}\limits^4)C = A (\mathop{B}\limits^4 C)\)，\((A B)\mathop{C}\limits^4 = A (B \mathop{C}\limits^4)\)，\((A \mathop{B}\limits^4)\mathop{C}\limits^4 = A(\mathop{B}\limits^4 \mathop{C}\limits^4)\)</li>
+<li>分配律：\((\mathop{A}\limits^4 + \mathop{B}\limits^4) \mathop{C}\limits^4 = \mathop{A}\limits^4 \mathop{C}\limits^4 + \mathop{B}\limits^4 \mathop{C}\limits^4\)，\(\mathop{C}\limits^4 (\mathop{A}\limits^4 + \mathop{B}\limits^4)  = \mathop{C}\limits^4 \mathop{A}\limits^4 + \mathop{C}\limits^4 \mathop{B}\limits^4\)，\((\mathop{A}\limits^4 + \mathop{B}\limits^4) C = \mathop{A}\limits^4 C + \mathop{B}\limits^4 C\)，\(C (\mathop{A}\limits^4 + \mathop{B}\limits^4)  = C \mathop{A}\limits^4 + C \mathop{B}\limits^4\)，\((A + B) \mathop{C}\limits^4 = A \mathop{C}\limits^4 + B \mathop{C}\limits^4\)，\(\mathop{C}\limits^4 (A + B)  = \mathop{C}\limits^4 A + \mathop{C}\limits^4 B\)</li>
+<li>\(c(\mathop{A}\limits^4 \mathop{B}\limits^4) = (c\mathop{A}\limits^4)\mathop{B}\limits^4 = \mathop{A}\limits^4(c\mathop{B}\limits^4)\)，\(c(A \mathop{B}\limits^4) = (cA)\mathop{B}\limits^4 = A(c\mathop{B}\limits^4)\)，\(c(\mathop{A}\limits^4 B) = (c\mathop{A}\limits^4)B = \mathop{A}\limits^4(cB)\)</li>
+</ol>
+
+<!-- 
+，$(\mathop{A}\limits^4 \mathop{B}\limits^4)C  = \mathop{A}\limits^4 (\mathop{B}\limits^4 C)$，$(\mathop{A} \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A} (\mathop{B}\limits^4 \mathop{C}\limits^4)$，$(\mathop{A}\limits^4 B)\mathop{C}\limits^4 = \mathop{A}\limits^4 (B \mathop{C}\limits^4)$，$(\mathop{A}\limits^4 B)C  = \mathop{A}\limits^4 (B C)$，$(A \mathop{B}\limits^4)C = A (\mathop{B}\limits^4 C)$，$(A B)\mathop{C}\limits^4 = A (B \mathop{C}\limits^4)$
+-->
+
+<p>证明：<br/>
+1）：<br/>
+设\(\mathop{A}\limits^4\)、\(\mathop{B}\limits^4\)、\(\mathop{C}\limits^4\)的维度分别为\(n\times m\to q\times p\)、\(p\times q\to s\times r\)、\(r\times s\to v\times u\)<br/>
+\[\begin{split}[(\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4]_{i,j} &amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ((\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,j})_{a,b} C_{b,a}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r (\sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}{\mathop{B}\limits^4}_{c,d})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{cd})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+\end{split}\]</p>
+
+<p>\[\begin{split}[\mathop{A}\limits^4 (\mathop{B}\limits^4\mathop{C}\limits^4)]_{i,j} &amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ({\mathop{A}\limits^4}_{i,j})_{a,b}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{a,b}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ({\mathop{A}\limits^4}_{i,j})_{a,b} [\sum\limits_{c=1}^q\sum\limits_{d=1}^p ({\mathop{B}\limits^4}_{a,b})_{c,d}{\mathop{C}\limits^4}_{c,d}]\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{cd})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+\end{split}\]</p>
+
+<p>因此：\((\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A}\limits^4 (\mathop{B}\limits^4 \mathop{C}\limits^4)\)</p>
+
+<p>剩下的三个结论可以根据矩阵乘法的结合律直接得到。</p>
+
+<p>对于最后一个结论：<br/>
+设\(A\)是一个维度为\(n\times p\)的矩阵。</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+(A({\mathop{B}\limits^4}{\mathop{C}\limits^4}))_{i,j} &amp;= \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{k,j}\\<br/>
+&amp;= \sum_{k=1}^{p}A_{i,k}\mathrm{tr}({\mathop{B}\limits^4}_{k,j}{\mathop{C}\limits^4})\\<br/>
+&amp;= \sum_{k=1}^{p}A_{i,k}\sum\limits_{a=1}^s\sum_{b=1}^r({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+((A{\mathop{B}\limits^4}){\mathop{C}\limits^4})_{i,j} &amp;= \mathrm{tr}((A{\mathop{B}\limits^4})_{i,j}{\mathop{C}\limits^4})\\<br/>
+&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r((A{\mathop{B}\limits^4})_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r(\sum_{k=1}^{p}A_{i,k}{\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;=\sum_{k=1}^{p} \sum\limits_{a=1}^s\sum_{b=1}^r A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= (A({\mathop{B}\limits^4}{\mathop{C}\limits^4}))_{i,j}\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>2）我们只证明前两条：<br/>
+设\(\mathop{A}\limits^4\)、\(\mathop{B}\limits^4\)、\(\mathop{C}\limits^4\)、\(\mathop{D}\limits^4\)的维度分别为\(n\times m\to q\times p\)、\(n\times m\to q\times p\)、\(p\times q\to s\times r\)、\(r\times s\to m\times n\)<br/>
+\[<br/>
+\begin{split}<br/>
+[(\mathop{A}\limits^4 + \mathop{B}\limits^4) \mathop{C}\limits^4]_{i,j} &amp;= \sum_{a=1}^{q}\sum_{b=1}^p [(\mathop{A}\limits^4 + \mathop{B}\limits^4)_{i,j}]_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum_{a=1}^{q}\sum_{b=1}^p [({\mathop{A}\limits^4}_{i,j})_{a,b} + ({\mathop{B}\limits^4}_{i,j})_{a,b}]{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum_{a=1}^{q}\sum_{b=1}^p ({\mathop{A}\limits^4}_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a} + \sum_{a=1}^{q}\sum_{b=1}^p ({\mathop{B}\limits^4}_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= (\mathop{A}\limits^4 \mathop{C}\limits^4)_{i,j} + (\mathop{B}\limits^4 \mathop{C}\limits^4)_{i,j}\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+[\mathop{D}\limits^4(\mathop{A}\limits^4 + \mathop{B}\limits^4) ]_{i,j} &amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}(\mathop{A}\limits^4 + \mathop{B}\limits^4)_{b,a}\\<br/>
+&amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}({\mathop{A}\limits^4}_{b,a} + {\mathop{B}\limits^4}_{b,a})\\<br/>
+&amp;= \sum_{a=1}^{n}\sum_{b=1}^m [({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{A}\limits^4}_{b,a} + ({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{B}\limits^4}_{b,a}]\\<br/>
+&amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{A}\limits^4}_{b,a} + \sum_{a=1}^{n}\sum_{b=1}^m({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{B}\limits^4}_{b,a}\\<br/>
+&amp;= (\mathop{D}\limits^4\mathop{A}\limits^4)_{i,j} + (\mathop{D}\limits^4 \mathop{B}\limits^4) _{i,j} \\<br/>
+\end{split}<br/>
+\]</p>
+
+<!--
+再设$C$为$m\times u$的矩阵，
+
+$$
+\begin{split}
+[(\mathop{A}\limits^4 \mathop{B}\limits^4)C]_{i,j} &= \sum_{k=1}^{m}(\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,k}C_{k, j}\\
+&= \sum_{k=1}^{m}(\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a})C_{k, j}\\
+&= \sum_{k=1}^{m}\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a}C_{k, j}\\
+\end{split}
+$$
+
+$$
+\begin{split}
+[\mathop{A}\limits^4 (\mathop{B}\limits^4 C)]_{i,j} &= \sum_{k=1}^{m}(\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,k}C_{k, j}\\
+&= \sum_{k=1}^{m}(\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a})C_{k, j}\\
+&= \sum_{k=1}^{m}\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a}C_{k, j}\\
+\end{split}
+$$
+
+-->
+
+<!--
+
+我们定义了四种矩阵微分：
+
+第一种是矩阵对向量的微分：
+
+令$A = \varphi(x)$其中$x$是一个$l$维的向量，$A$是一个$n\times m$的矩阵，我们定义：$\frac{\partial A}{\partial x}$是一个张量矩阵，我们用大写字母上面标1（比如$\mathop{A}\limits^1$）表示一个矩阵是张量矩阵，也就是说，是一个$n\times m$的矩阵，其中的每个元素是一个$l$维向量的转置：
+
+$$(\frac{\partial A}{\partial x})_{i,j} = \frac{\partial  A_{i,j}}{\partial x}$$
+
+$$\frac{\partial A}{\partial x} = \begin{bmatrix}
+    \frac{\partial A_{1,1}}{\partial x} & \frac{\partial A_{1,2}}{\partial x_2} &  \dots  & \frac{\partial A_{1,n}}{\partial x_n} \\
+    \frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} &  \dots  & \frac{\partial y_2}{\partial x_n} \\
+    \vdots & \vdots &  \ddots & \vdots \\
+    \frac{\partial y_m}{\partial x_1} & \frac{\partial y_m}{\partial x_n} &  \dots  & \frac{\partial y_m}{\partial x_n}
+\end{bmatrix}$$
+
+我们用$n\times m\to l$表示上述张量矩阵的维度。
+
+我们定义张量矩阵的加法是平凡的：对于维度相同的张量矩阵，它们的加法是同样维度的张量矩阵，每个位置的元素值是原来两个矩阵对应位置元素的求和。
+
+同时我们要定义这种矩阵的乘法：
+
+对于一个$n\times m\to l$维的张量矩阵$\mathop{A}\limits^1$：
+
+- 若$a$是一个数值，$a\mathop{A}\limits^1 = \mathop{A}\limits^1 a$是一个张量矩阵，其中的第$(i,j)$个元素是原张量矩阵第$(i,j)$个元素的$a$倍。
+- 若$z$是一个$m$维的向量，$\mathop{A}\limits^1 \cdot z$是一个$n\times l$的矩阵，其中的第$(i,k)$位置的元素为：$\sum\limits_{j=1}^{m}(\mathop{A}\limits^1)_{i,j} z_j$。
+- 若$B$是一个$m\times p$的矩阵，$\mathop{A}\limits^1 \cdot B$是一个$n\times p\to l$维的张量矩阵，其中的第$(i,k)$位置的元素是一个向量的转置：$(\mathop{A}\limits^1\cdot B)_{i,k} = \sum\limits_{j=1}^{m}(\mathop{A}\limits^1)_{i,j} B_{j,k}$。
+
+第二种是数值对矩阵的微分：
+
+$\alpha = f(A)$，其中$A$是一个$m\times n$的矩阵，$\alpha$是一个数值，那么：$$\frac{\partial \alpha}{\partial A} = \begin{bmatrix}
+    \frac{\partial \alpha}{\partial A_{1,1}} & \frac{\partial \alpha}{\partial A_{2,1}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,1}} \\
+    \frac{\partial \alpha}{\partial A_{1,2}} & \frac{\partial \alpha}{\partial A_{2,2}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,2}} \\
+    \vdots & \vdots &  \ddots & \vdots \\
+    \frac{\partial \alpha}{\partial A_{1,n}} & \frac{\partial \alpha}{\partial A_{2,n}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,n}}
+\end{bmatrix}$$
+
+这样：$\frac{\partial \alpha}{\partial A} = \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\frac{\partial \alpha}{\partial A_{i,j}}e_{j,i}$
+
+第三种是向量对矩阵的微分：
+
+设$x = f(A)$，其中$x$是一个$l$维的向量，$A$是一个$n\times m$的矩阵，$\frac{\partial x}{\partial A}$是一个矩阵向量：它是一个$l$维向量，每一个元素是一个$m\times n$的矩阵，它的第$i$个元素是$\frac{\partial x_i}{\partial A}$。它的维度定义为：$l\to m\times n$，用小写字母上面加上2来表示（比如$\mathop{x}\limits^2$）。
+
+$$
+\frac{\partial x}{\partial A} = \begin{bmatrix}\frac{\partial x_1}{\partial A}\\
+\frac{\partial x_2}{\partial A}\\
+\vdots\\
+\frac{\partial x_l}{\partial A}\\
+\end{bmatrix}
+$$
+
+我们需要定义矩阵向量的乘法：
+设$\mathop{x}\limits^{2}$是一个$l\to m\times n$的矩阵向量。
+
+- 若$a$是一个数值，$a\mathop{x}\limits^2 = \mathop{x}\limits^2 a$是一个向量矩阵，其中的第$i$个元素是原张量矩阵第$i$个元素的$a$倍。
+- 若$z$是一个$l$维的向量，$\mathop{x}\limits^2 \cdot z^\top$是一个$l\times l$的矩阵矩阵（维度为：$l\times l\to m\times n$），其中的第$(i,j)$位置的元素为：$ (\mathop{x}\limits^{2})_i z_j$。$z^\top \mathop{x}\limits^2 \cdot$是一个矩阵：$\sum\limits_{i=1}^l (\mathop{x}\limits^{2})_i z_i$
+- 若$A$是一个$p\times l$的矩阵，$A \cdot \mathop{x}\limits^2$是一个$p\to m\times n$维的矩阵向量，其中的第$i$位置的元素是一个矩阵：$(A \cdot \mathop{x}\limits^2)_i = \sum\limits_{j=1}^{l}A_{i,j}(\mathop{x}\limits^{2})_j$；
+
+最后：矩阵对矩阵的微分：
+
+$Y = f(A)$，其中$A$是一个$n\times m$的矩阵，$Y$是一个$p\times q$的矩阵，那么：$\frac{\partial Y}{\partial A}$是一个四维的结构，我们可以把它看成一个$p\times q$的矩阵，只是其中的第$(i,j)$个元素是一个矩阵：$\frac{\partial Y_{i,j}}{\partial A}$。我们叫它矩阵矩阵（用一个大写字母上面标2表示比如$\mathop{A}\limits^2$），定义它的维度为：$p\times q\to m\times n$。
+
+矩阵矩阵和普通矩阵的乘法和一般矩阵的乘法定义是一样的，只是要注意的是有的元素可能是一个矩阵。
+对于一个$p\times q\to m\times n$维的张量矩阵$\mathop{A}\limits^2$：
+
+- 若$a$是一个数值，$a\mathop{A}\limits^2 = \mathop{A}\limits^2 a$是一个矩阵矩阵，其中的第$(i,j)$个元素是原矩阵矩阵第$(i,j)$个元素的$a$倍。
+- 若$z$是一个$q$维的向量，$\mathop{A}\limits^2 \cdot z$是一个$p\to m\times n$的矩阵向量，其中的第$i$位置的元素为：$\sum\limits_{j=1}^{q}(\mathop{A}\limits^2)_{i,j} z_j$。
+- 若$B$是一个$q\times r$的矩阵，$\mathop{A}\limits^2 \cdot B$是一个$p\times r\to m\times n$维的矩阵矩阵，其中的第$(i,k)$位置的元素是一个矩阵：$(\mathop{A}\limits^2\cdot B)_{i,k} = \sum\limits_{j=1}^{q}(\mathop{A}\limits^2)_{i,j} B_{j,k}$；若$C$是一个$r\times p$的矩阵，$C\cdot \mathop{A}\limits^2$是一个$r\times q\to m\times n$维的矩阵矩阵，其中的第$(i,k)$位置的元素是一个矩阵：$(C\cdot \mathop{A}\limits^2)_{i,k} = \sum\limits_{j=1}^{p}C_{i,j}(\mathop{A}\limits^2)_{j,k} $。
+- 若$\mathop{B}\limits^2$是一个维度为$n\times m \to s\times r$的矩阵矩阵，那么$\mathop{A}\limits^2 \mathop{B}\limits^2$是一个维度为$p\times q\to s\times r$的矩阵矩阵，其中的第$(i,j)$个元素为$\mathrm{tr} [(\mathop{A}\limits^2)_{i,j} \mathop{B}\limits^2]$
+
+ > 注意：这种定义的数值对矩阵的微分和我们定义的向量微分是不一致的，如果把向量当成一个一列的矩阵的话，数值对向量的微分应该是一个列向量，但是我们实际上数值对向量的微分是一个向量的转置。
+-->
+
+<h2 id="toc_3">命题</h2>
+
+<p>命题1：\(y = f(A)\)是一个数值，\(\mathrm{d}y = \mathrm{tr}((\frac{\partial y}{\partial A})_{1,1}\mathrm{d}A)\)。其中\(\mathrm{d}A = (\mathrm{d}A_{i,j})_{i=1,2,\dots,m\colon j = 1,2,\dots, n}\)</p>
+
+<p>证明：<br/>
+\(\mathrm{d}y = \sum\limits_{i=1}^n \sum\limits_{j=1}^m \frac{\partial y}{\partial A_{i,j}}\mathrm{d}A_{i,j} = \mathrm{tr}((\frac{\partial y}{\partial A})_{1,1}\mathrm{d}A)\)</p>
+
+<p>命题2：\(A = f(B)\)，\(B=g(C)\)，\(A\),\(B\)，\(C\)分别为\(m\times n\)、\(p\times q\)、\(r\times s\)的矩阵，那么：\(\frac{\partial A}{\partial B} =\frac{\partial A}{\partial B} \frac{\partial B}{\partial C}\)</p>
+
+<p>证明：<br/>
+\[\begin{split}(\frac{\partial A}{\partial C})_{i,j} &amp;= \frac{\partial A_{i,j}}{\partial C}\\<br/>
+&amp;= \sum_{a=1}^p\sum_{b=1}^q \frac{\partial A_{i,j}}{\partial B_{a,b}}\frac{\partial B_{a,b}}{\partial C}\\<br/>
+&amp;= \sum_{a=1}^p\sum_{b=1}^q \frac{\partial A_{i,j}}{\partial B_{a,b}}\frac{\partial B_{a,b}}{\partial C}\\<br/>
+&amp;= \mathrm{tr} [(\frac{\partial A}{\partial B})_{i,j} \frac{\partial B}{\partial C}]\\<br/>
+&amp;= (\frac{\partial A}{\partial B} \frac{\partial B}{\partial C})_{i,j}<br/>
+\end{split}\]</p>
+
+<!--
+
+$\frac{\partial y}{\partial A} = \begin{bmatrix}\frac{\partial y}{\partial A_{1,1}} & \frac{\partial y}{\partial A_{2,1}} & \dots & \frac{\partial y}{\partial A_{n, 1}}\\\frac{\partial y}{\partial A_{1,2}} & \frac{\partial y}{\partial A_{2,2}}& \dots & \frac{\partial y}{\partial A_{n, 2}}\\ \vdots & \vdots & \ddots & \vdots\\\frac{\partial y}{\partial A_{1,m}} & \frac{\partial y}{\partial A_{2,m}}& \dots & \frac{\partial y}{\partial A_{n, m}}\end{bmatrix}$
+
+$\frac{\partial A}{\partial B} = \begin{bmatrix}\frac{\partial A_{1,1}}{\partial B} & \frac{\partial A_{1,2}}{\partial B} & \dots & \frac{\partial A_{1,m}}{\partial B}\\\frac{\partial A_{2,1}}{\partial B} & \frac{\partial A_{2,2}}{\partial B}& \dots & \frac{\partial A_{2,m}}{\partial B}\\ \vdots & \vdots & \ddots & \vdots\\\frac{\partial A_{n,1}}{\partial B} & \frac{\partial A_{n,2}}{\partial B}& \dots & \frac{\partial A_{n,m}}{\partial B}\end{bmatrix}$
+
+$\mathrm{tr}(\frac{\partial y}{\partial A} \frac{\partial A}{\partial B}) = \sum\limits_{i=1}^{n}\sum\limits_{j=1}^m\frac{\partial y}{\partial x_{i,j}}\frac{\partial x_{i,j}}{\partial B} = \frac{\partial y}{\partial B}$
+
+
+
+命题3：$a = f(A)$，$b = g(A)$，A是$n\times m$维的矩阵，$a,b\in\mathbb{R}$，那么：$\frac{\partial (ab)}{\partial A} = a\frac{\partial b}{\partial A} + b\frac{\partial a}{\partial A}$，$\frac{\partial (a+b)}{\partial A} = \frac{\partial a}{\partial A} + \frac{\partial b}{\partial A}$
+
+-->
+
+<p>命题3：若\(A\)，\(B\)，\(C\)分别为\(n\times m\)、\(m\times p \)和\(r\times s\)的矩阵，那么\(\frac{\partial (A+B)}{\partial C}=\frac{\partial A}{\partial C} + \frac{\partial B}{\partial C}\)， \(\frac{\partial (AB)}{\partial C} = \frac{\partial A}{\partial C}B + A\frac{\partial B}{\partial C}\)。</p>
+
+<p>证明：</p>
+
+<p>\[\begin{split}<br/>
+[\frac{\partial (AB)}{\partial C})_{i,j}]_{k,l} &amp;= \frac{\partial (AB)_{i,k}}{\partial  C_{k,l}}\\<br/>
+&amp;= \frac{\partial \sum\limits_{a=1}^{m} A_{i,a}B_{a, j}}{\partial  C_{k,l}}\\<br/>
+&amp;= \sum\limits_{a=1}^{m}[\frac{\partial A_{i, a}}{\partial C_{k,l}}B_{a,j} + A_{i, a}\frac{\partial B_{a, j}}{\partial C_{k,l}}]\\<br/>
+&amp;= \sum\limits_{a=1}^{m}\frac{\partial A_{i, a}}{\partial C_{k,l}}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}\frac{\partial B_{a, j}}{\partial C_{k,l}}\\<br/>
+&amp;= \sum\limits_{a=1}^{m}[(\frac{\partial A}{\partial C})_{i,a}]_{k,l}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}[(\frac{\partial B}{\partial C})_{a, j}]_{k,l}\\<br/>
+&amp;= \sum\limits_{a=1}^{m}[(\frac{\partial A}{\partial C})_{i,a}]_{k,l}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}[(\frac{\partial B}{\partial C})_{a, j}]_{k,l}\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>命题5：\(A = f(B)\)，\(B=g(C)\)，其中\(A\)，\(B\)，\(C\)分别为\(n\times m\)、\(p\times q \)和\(r\times s\)的矩阵。那么\(\frac{\partial A}{\partial C} = \frac{\partial A}{\partial B}\frac{\partial B}{\partial C}\)</p>
+
+<p>证明：<br/>
+\[\begin{split}(\frac{\partial A}{\partial C})_{i,j} &amp;= \frac{\partial A_{i,j}}{\partial  C}\\<br/>
+&amp;= \mathrm{tr}(\frac{\partial A_{i,j}}{\partial B}\frac{\partial B}{\partial C})\\<br/>
+&amp;= (\frac{\partial A}{\partial B}\frac{\partial B}{\partial C})_{i,j}<br/>
+\end{split}\]</p>
+
+<p>命题6：若\(f\colon \mathbb{R}\to \mathbb{R}\)，\[f(A)\mathop{=}\limits^\Delta \begin{bmatrix}<br/>
+    f(A_{11}) &amp; f(A_{12}) &amp; \dots  &amp; f(A_{1n}) \\<br/>
+    f(A_{21}) &amp; f(A_{22}) &amp; \dots  &amp; f(A_{2n}) \\<br/>
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
+    f(A_{n1}) &amp; f(A_{n2}) &amp; \dots  &amp; f(A_{mn})<br/>
+\end{bmatrix}\]，那么\(\frac{\partial f(A)}{\partial B} = f&#39;(A)\otimes \frac{\partial A}{\partial B}\)。</p>
+
+<p>证明：<br/>
+\(\frac{\partial f(A_{i,j})}{\partial B} = f&#39;(A_{i,j})\frac{\partial A_{i,j}}{\partial B}\)</p>
+
+<p>命题7：若\(X\)是一个\(n\times m\)维的矩阵，\(\frac{\partial X}{\partial X}\)是一个\(n\times m\to m\times n\)的矩阵矩阵，并且其第\((i,j)\)个元素是\(e_{j,i}\)，它是一个\(m\times n\)的矩阵，除第\((j,i)\)个元素为1外其余元素都为0。我们把这个矩阵命名为\(E_{n\times m}\)，它在我们矩阵求导中有非常重要的作用。</p>
+
+<p>命题8：若\({\mathop{A}\limits^4}\)是一个维度为\(m\times n\to q\times p\)的四维矩阵，那么：\({\mathop{A}\limits^4} E_{p\times q} = E_{n\times m} = {\mathop{A}\limits^4}\)</p>
+
+<p>命题9：若\(A\)是一个维度为\(m\times n\)的矩阵，\(B\)是一个\(p\times q\)的矩阵，我们定义：\(A\times B \mathop{=}\limits^\Delta AE_{n,p}B\)，它是一个维度为：\(m\times q\to p\times n\)的四维矩阵，其中第\((i,j)\)个元素为：\(Be_{ji}A\)</p>
+
+<p>证明：</p>
+
+<p>\[<br/>
+\begin{split}<br/>
+(A\times B)_{i,j} &amp;= (AE_{n,p}B)_{i,j}\\<br/>
+&amp;= \sum_{a=1}^n\sum_{b=1}^p A_{i,a}e_{b,a}B_{b,j}\\<br/>
+&amp;= Be_{j,i}A\\<br/>
+\end{split}<br/>
+\]</p>
+
+<p>命题9推论：若\(a\)是一个\(n\)维的向量，\(b\)是一个\(m\)维的向量，那么\(a^\top E_{n, m}b = b a^\top\)。</p>
+
+<p>命题10：若\(a\)、\(b\)、\(c\)都是\(n\)维的向量，那么：\(a^\top (b\otimes c) = (a\otimes b)^\top c = (a\otimes c)^\top b\)，在其中有一个是矩阵向量时也是正确的。</p>
+
+<h2 id="toc_4">例子：</h2>
+
+<p>例1：Cross Entropy Loss：\(\ell = -y^\top \log \frac{\exp(Wx)}{\mathbb{1}^\top \exp(Wx)}\)，求\(\frac{\partial \ell}{\partial W}\)</p>
+
+<p>解：<br/>
+\(\ell = -y^\top \log\exp(Wx) + \log[1^T\exp(Wx)] = -y^\top Wx + \log[1^\top\exp(Wx)]\)<br/>
+\[\begin{split}<br/>
+\frac{\partial \ell}{\partial W} &amp;= - x y^\top + \frac{1^\top[\exp(Wx)\otimes (\frac{\partial W}{\partial W}x)]}{1^\top \exp(Wx)}\\<br/>
+&amp;= - x y^\top + \frac{[1\otimes \exp(Wx)]^\top(\frac{\partial W}{\partial W}x)}{1^\top \exp(Wx)}\\<br/>
+&amp;= - x y^\top + \frac{x\exp(Wx)^\top}{1^\top \exp(Wx)}\\<br/>
+&amp;= x(\mathrm{softmax}(Wx) - y)^\top<br/>
+\end{split}\]</p>
+
+<p>\(\ell = -y^\top \mathrm{softmax}(W_1\sigma(W_2X+b_2)+b_1)\)，求\(\frac{\partial \ell}{\partial W}\)</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/4/8</span>
+                    
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="15546453666266.html">
+                
+                  <h1>向量微分计算</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>矩阵微分在神经网络中的应用及其广泛，这里总结了各种矩阵微分的处理方法。</p>
+
+<h2 id="toc_0">符号表示</h2>
+
+<p><strong>矩阵</strong>: \(a_{i,j}\in\mathbb{R}\quad i=1,2,\dots, m;j=1,2,\dots m\)\[A = \begin{bmatrix}<br/>
+    a_{11} &amp; a_{12} &amp; a_{13} &amp; \dots  &amp; a_{1n} \\<br/>
+    a_{21} &amp; a_{22} &amp; a_{23} &amp; \dots  &amp; a_{2n} \\<br/>
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
+    a_{m1} &amp; a_{m2} &amp; a_{m3} &amp; \dots  &amp; a_{mn}<br/>
+\end{bmatrix}\]是一个\(m\times n\)的矩阵。</p>
+
+<p><strong>向量</strong>：一个\(n\)维的向量是一个\(n\times 1\)的矩阵，也就是说所有的向量都是列向量。</p>
+
+<p>定义：若\(x\)是一个\(n\)维向量，\[\mathrm{diag}(x) = \begin{bmatrix}<br/>
+    x_1 &amp; 0 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
+    0 &amp; x_2 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
+    0 &amp; 0 &amp; x_3 &amp; \dots  &amp; 0 \\<br/>
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
+    0 &amp; 0 &amp; 0 &amp; \dots  &amp; x_n<br/>
+\end{bmatrix}\]</p>
+
+<p>定义：若\(x\)是一个\(n\)维向量，\(y\)是一个\(n\)维向量，\[\begin{split}x\otimes y &amp;= [x_1y_1, x_2y_2,\dots, x_ny_n]^\top\\x\oplus y &amp;= [x_1+y_1, x_2+y_2,\dots, x_n+y_n]^\top\\\end{split}\]</p>
+
+<h3 id="toc_1">向量微分</h3>
+
+<p>令\(y=\phi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，我们定义：\[\frac{\partial y}{\partial x} \mathop{=}\limits^\Delta \begin{bmatrix}<br/>
+    \frac{\partial y_1}{\partial x_1} &amp; \frac{\partial y_1}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_1}{\partial x_n} \\<br/>
+    \frac{\partial y_2}{\partial x_1} &amp; \frac{\partial y_2}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_2}{\partial x_n} \\<br/>
+    \vdots &amp; \vdots &amp;  \ddots &amp; \vdots \\<br/>
+    \frac{\partial y_m}{\partial x_1} &amp; \frac{\partial y_m}{\partial x_n} &amp;  \dots  &amp; \frac{\partial y_m}{\partial x_n}<br/>
+\end{bmatrix}\]</p>
+
+<p>注意到如果\(x\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量；如果\(y\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量的转置。</p>
+
+<blockquote>
+<p>这样定义向量微分的原因是这种定义下有：\(\mathrm{d}y = \frac{\partial y}{\partial x}\mathrm{d}x\)。</p>
+</blockquote>
+
+<h2 id="toc_2">命题 -- 向量微分</h2>
+
+<p>定理1：（线性性）若\(a,b\in\mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(\phi\colon \mathbb{R}^n\to \mathbb{R}^m\)，\(\varphi\colon \mathbb{R}^n\to \mathbb{R}^m\)，那么\(\frac{\partial (a\phi(x)+ b\varphi(x))}{\partial x} = a\frac{\partial \phi(x)}{\partial x} + b\frac{\partial \varphi(x)}{\partial x}\)</p>
+
+<p>定理2：（链锁法则）若\(y = \phi(z)\)，\(z = \varphi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
+
+<p>证明：<br/>
+\(\frac{\partial y_i}{\partial z_k} = \sum_{j=1}^{n}\frac{\partial y_i}{\partial x_j}\frac{\partial x_j}{\partial z_k}\)<br/>
+因此：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
+
+<p>命题1：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(A\)与\(x\)无关，那么：\(\frac{\partial y}{\partial x} = A\)。</p>
+
+<p>证明：<br/>
+\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
+\(\frac{\partial y_i}{\partial x_j} = A_{i,j}\)<br/>
+因此：\(\frac{\partial y}{\partial x} = A\)</p>
+
+<p>命题2：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，\(x\)是\(z\)的函数，那么\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)。</p>
+
+<p>证明：<br/>
+\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
+\(\frac{\partial y_i}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}\frac{\partial x_k}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}(\frac{\partial x}{\partial z})_{k,j}\)<br/>
+因此：\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)</p>
+
+<p>命题3：若\(\alpha = y^\top  A x\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，那么\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)。</p>
+
+<p>证明：<br/>
+\(\alpha = \sum\limits_{i,k}y_i A_{i,k}x_k\)<br/>
+\[\begin{split}<br/>
+\frac{\partial \alpha}{\partial z_j} &amp;= \sum\limits_{i,k}(\frac{\partial y_i}{\partial z_j} A_{i,k}x_k + y_i A_{i,k}\frac{\partial x_k}{\partial z_j})\\<br/>
+&amp;= \sum\limits_{i=1}^{m}(x^\top A^\top )_i\frac{\partial y_i}{\partial z_j} + \sum\limits_{k=1}^{n}(y^\top A)_k\frac{\partial x_k}{\partial z_j}\\<br/>
+&amp;= (x^\top A^\top \frac{\partial y}{\partial z})_j + (y^\top A\frac{\partial x}{\partial z})_j<br/>
+\end{split}\]<br/>
+因此，\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)</p>
+
+<p>命题4 ：若\(f\colon \mathbb{R}\to \mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(f(x) \mathop{=}\limits^\Delta [f(x_1),f(x_2),\dots, f(x_n)]^\top\)，那么：\(\frac{\partial f(x)}{\partial z} = \mathrm{diag}(f&#39;(x))\frac{\partial x}{\partial z}\)。注意到这个命题对\(x\)是一个数值同样是正确的。</p>
+
+<p>证明：<br/>
+\(\frac{\partial f(x)_i}{\partial z_j} = f&#39;(x_i)\frac{\partial x_i}{\partial z_j}\)，这样就证明了结论。</p>
+
+<p>命题5：若\(y = ax\)，其中\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(a\)是一个数值，那么：\(\frac{\partial y}{\partial z} = x \frac{\partial a}{\partial z} + a \frac{\partial x}{\partial z}\)</p>
+
+<p>证明：<br/>
+\(\frac{\partial y_i}{\partial z_k} = a\frac{\partial x_i}{\partial  z_k} + \frac{\partial a}{\partial  z_k} x_i = (a\frac{\partial x}{\partial z})_{i, k}+ (x \frac{\partial a}{\partial  z})_{i, k}\\\)</p>
+
+<p>命题6：若\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\[\begin{split}\frac{\partial (x\oplus y)}{\partial z} &amp;= \frac{\partial x}{\partial  z} + \frac{\partial y}{\partial  z}\\ \frac{\partial (x\otimes y)}{\partial z} &amp;= \mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}\\ \end{split}\]</p>
+
+<p>证明：<br/>
+\(\frac{\partial (x_i+y_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k} + \frac{\partial y_i}{\partial z_k}\)，这样就证明了第一个结论。</p>
+
+<p>\(\frac{\partial (x_iy_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k}y_i + x_i\frac{\partial y_i}{\partial z_k} = [\mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}]_{i,k}\)</p>
+
+<p>命题7：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，那么\(\frac{\partial y}{\partial z} = A \frac{\partial x}{\partial z} + \frac{\partial A}{\partial z}x\)。</p>
+
+<p>证明：<br/>
+\(y_i = \sum\limits_{j=1}^{n}A_{i,j}x_j\)<br/>
+\(\frac{\partial y_i}{\partial z_k} = \sum\limits_{j=1}^{n}(\frac{\partial A_{i,j}}{\partial z_k}x_j + A_{i,j}\frac{\partial x_j}{\partial z_k}) =(\frac{\partial A}{\partial z}x)_{i, k} + (A\frac{\partial x}{\partial z})_{i,k}\)</p>
+
+<h2 id="toc_3">例子</h2>
+
+<p>\(x\)是一个\(n\)维的向量，\(y=\mathrm{softmax}(x)\)，也就是\(y_i = \frac{\exp(x_i)}{\sum\limits_{j=1}^{n} \exp(x_j)}\)，求\(\frac{\partial y}{\partial x}\)。</p>
+
+<p>解：<br/>
+我们令\(\mathbb{1}\)表示\(n\)维所有元素均为1的向量，则：<br/>
+\[\begin{split}y &amp;= \mathrm{softmax}(x)\\ &amp;= \frac{\exp(x)}{\sum\limits_{i=1}^{n} \exp(x_i)}\\ &amp;= \frac{\exp(x)}{\mathrm{1}^\top \exp(x)} \end{split}\]</p>
+
+<p>\[\begin{split}\frac{\partial y}{\partial x} &amp;= \exp(x)\frac{\partial \frac{1}{\mathbb{1}^\top \exp(x)}}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~5)\\ &amp;= \exp(x)[-\frac{1}{(\mathbb{1}^\top \exp(x))^2}]\frac{\partial [\mathbb{1}^\top \exp(x)]}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~4)\\<br/>
+&amp;= [-\frac{\exp(x)}{(\mathbb{1}^\top \exp(x))^2}]\mathbb{1}^\top \mathrm{diag}(\exp(x)) + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~1, 4)\\<br/>
+&amp;= -\frac{\exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2} + \frac{1}{\mathbb{1}^\top \exp(x)}\mathrm{diag}(\exp(x))\quad (proposition ~4)\\<br/>
+&amp;= \frac{\mathbb{1}^\top \exp(x)\mathrm{diag}(\exp(x)) - \exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2}\\<br/>
+&amp;= \mathbb{1}^\top y\mathrm{diag}(y) - yy^\top\\<br/>
+&amp;= \mathrm{diag}(y y^\top \mathbb{1}) - yy^\top\\ <br/>
+&amp;= \mathrm{diag}(y) - yy^\top\\<br/>
+\end{split}\]</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2019/4/7</span>
+                    
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="15543921008119.html">
+                
+                  <h1>信息论</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">熵</h2>
+
+<p>假设离散随机变量X服从概率分布P。我们用它熵表示一个随机变量的不确定程度，用\(\mathbb{H} (X)\)或者是\(\mathbb{H}(p)\)表示：\[\mathbb{H}(X)\mathop{=}\limits^\Delta -\sum\limits_{k=1}^K p(X=k)\log p(X=k) = \mathop{E}\limits_{x\sim p(\cdot)}[\log(p(x))]\]</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="15543921008119.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2019/4/4</span>
+                    
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
                 <a class="clearlink" href="15541232015450.html">
                 
                   <h1>Noise Contrastive Estimation and Negative Sampling</h1>
@@ -110,155 +644,15 @@
 <p>在NLP领域，使用分数来得到一个概率分布是一种非常常见的形式。我们通常通过取指数然后归一化来得到一个概率分布：</p>
 
 <p>\[<br/>
-P(y|x;\theta) = \frac{\mathrm{s}(y,x,\theta)}{\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)}<br/>
+\begin{equation}<br/>
+P_d(y|x;\alpha) = \frac{\exp(\mathrm{s}(y,x,\alpha))}{\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))}<br/>
+\end{equation}<br/>
 \]</p>
 
-<p>我们称\(Z(x,\theta) = \sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\theta) = \theta_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\theta=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\ln\mathrm{s}(y,x,\theta) - \ln\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)]<br/>
+<p>我们称\(Z(x,\alpha) = \sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\alpha) = \alpha_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\alpha=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\mathrm{s}(y,x,\alpha) - \ln\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))]<br/>
 \]，但是计算这个概率（和它的导数）的计算量是非常大的（和词表的大小成正比）。<br/>
 为此，NLP科学家们提出了各种方法，一种是基于分类树方法（hierarchical softmax），但是它的缺点在于1. 结果对不同的树比较敏感2.对比较罕见的词效果比较好，但是对常见的单词效果比较差。另一种方法是今天我们要讲的Noise Contrastive Estimation(NCE)和Negative Sampling。</p>
 
-<h2 id="toc_1">Noise Contrastive Estimation</h2>
-
-<p>NCE通过引入负样本把一个多分类问题的参数估计转化成一个区分正负样本的二分类问题。其中负样本是从一个噪声分布中抽取。<br/>
-NCE的思想是：<strong>通过区分样本和人造的噪声来训练参数</strong>。<br/>
-它的做法是这样的，样本X服从分布\(p_d(\cdot)\)，它是一族分布中的一个, 这族分布中的任何一个可以由一个未归一化的概率密度定义：\(p_0(\cdot, \theta)\)，所以他的归一化的概率密度为：\(p_m(\cdot, \alpha) = \frac{p_0(\cdot,\alpha)}{\int p_0(u, \alpha)\mathrm{d}u}\)。也就是说，存在着\(\alpha^\star\)，使得\(p_d(\cdot) = p_m(\cdot, \alpha^\star)\)，我们可以通过最大似然法来估计\(\alpha^\star\)</p>
-
-<p>于是对数似然函数是：</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-\ell &amp;= \sum\limits_{x\in \mathrm{TD}} \ln(p_m(x,\theta))\\<br/>
-&amp;= \sum\limits_{x\in \mathrm{TD}}[\ln(p_0(x, \theta)) - \ln\int p_0(u,\theta)\mathrm{d}u]<br/>
-\end{split}<br/>
-\]</p>
-
-<p>我们用常数c来表示它的归一化常数（\(c = \int  p_0(u,\alpha)\mathrm{d}u\)），令\(\theta = \{\alpha, c\}\)，参数c是归一化常数\(Z(\alpha)\)的估计，注意到\(\alpha\)和c之间是要满足归一化条件的(\(c=\int p_0(u, \alpha)\mathrm{d}u\))。</p>
-
-<p>那么\[\ln p_m(u,\theta) = \ln p_0(u,\alpha) - \ln c\]</p>
-
-<p>我们令\(\mathrm{TD} = (x_1, x_2, \dots, x_n)\)表示训练样本，对于每个训练样本\(x_i\)，我们从一个噪声分布中取出K个人造噪声样本\(\{y_i^1, y_i^2,\dots,y_i^K\}\)，\(Y = \{y_i^j|i\in\{1,2,\dots,T\},j\in\{1,2,\dots, K\}\}\)</p>
-
-<p>令\[G_K(u,\theta) = \ln p_m(u,\theta) - \ln [K \cdot p_n(u)] = \ln p_0(u,\alpha) - \ln c -\ln p_n(u) - \ln K\]，\[\begin{split}H_K(u,\theta) &amp;= \sigma (G(u,\theta))\\<br/>
-&amp;=\frac{p_m(u,\theta)}{p_m(u,\theta) + K\cdot p_n(u)}<br/>
-\end{split}\]</p>
-
-<p>我们对估计参数\(\hat\theta\)是最大化如下目标函数的\(\theta\)：</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\ln[1-H_K(y_t^j,\theta)]]\\<br/>
-&amp; = \frac{1}{(K+1)T}\sum\limits_{t}[\ln \frac{p_m(x_t,\theta)}{p_m(x_t,\theta) + K\cdot p_n(u)} + \sum_j\ln \frac{p_m(y_t^i,\theta)}{p_m(y_t^i,\theta) + K\cdot p_n(u)}]<br/>
-\end{split}<br/>
-\]</p>
-
-<h3 id="toc_2">NCE和有监督学习之间的关系</h3>
-
-<p>我们这里阐述NCE是如何能够通过一个有监督的二分类问题得到：<strong>我们通过训练区分样本和噪声，能够通过统计模型学到数据的信息</strong>。</p>
-
-<p>我们令\(U = X\cup Y = \{u_1,u_2,\dots,u_{TK}\}\)，对于\(U\)中的任何一个元素\(u_t\)，定一个标签\(\kappa_t\)：若\(u_t\in X\)，\(\kappa_t=1\)；否则\(\kappa_t=0\)。我们通过逻辑斯特回归来得到给定样本它属于哪个标签的后验概率。</p>
-
-<p>\[p(u|\kappa=1,\theta) = p_m(u,\theta)~~ p(u|\kappa=0,\theta)=p_n(u)\]</p>
-
-<p>因为先验概率\(P(\kappa=1) = \frac{1}{K+1}~P(\kappa=0) = \frac{K}{K+1}\)，所以后验概率<br/>
-\[P(\kappa=1|u,\theta) = \frac{p_m(u,\theta)}{p_m(u,\theta) + K\cdot p_n(u)}\]<br/>
-\[P(\kappa=0|u,\theta) = \frac{K\cdot p_n(u)}{p_m(u,\theta) + K\cdot p_n(u)}\]</p>
-
-<p>因此，我们的对数似然函数为：</p>
-
-<p>\[<br/>
-\ell = \sum\limits_{t}[\ln h_K(x_t,\theta) + \sum_j [1-h_K(y_t^j,\theta)]]<br/>
-\]<br/>
-我们可以看到两个对数似然函数只相差了一个常数。</p>
-
-<h3 id="toc_3">NCE分析</h3>
-
-<p>根据弱大数定理，\(J_{T}\)依概率收敛到\(J\)，\[J = \mathrm{E}[\ln H_K(x,\theta) + K\ln[1-H_K(y,\theta)]]\]</p>
-
-<p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
-
-<p>定理1: \(\tilde J\) 在 \(f(\cdot) = \ln p_d(\cdot)\)取得最大值。并且这个最大值点是唯一的如果\(\mathrm{supp}~p_n \subset \mathrm{supp}~p_d\)<br/>
-简单起见，我们证明一维的情况。</p>
-
-<p>证明：<br/>
-令\(f(\cdot) = \ln g(\cdot)\)</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-\tilde J(f) &amp;= E[\ln\frac{g(x)}{g(x)+K\cdot p_n(x)} + K \ln\frac{K\cdot p_n(y)}{g(y) + K\cdot p_n(y)}]\\<br/>
-&amp;= \int \ln\frac{g(t)}{g(t)+K\cdot p_n(t)}p_d(t) + K \ln\frac{K\cdot p_n(t)}{g(t) + K\cdot p_n(t)}\mathrm{d}t\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>我们令\[F(x,y) = \ln\frac{y}{y+K\cdot p_n(x)}p_d(x) + K \ln\frac{K\cdot p_n(x)}{y + K\cdot p_n(x)}\]<br/>
-根据欧拉-拉格朗日方程，我们可以得到变分问题取极值的条件为：\[\frac{\partial F}{\partial y} = 0\]</p>
-
-<p>经过化简可以得到，也即：\((p_d(x)-y)p_n(x) = 0\)。这就证明了我们的定理1。<br/>
-定理1最重要的一点是它对\(f\)没有任何归一化的要求。并且通过定理1我们可以得到以下几点：</p>
-
-<ol>
-<li>我们通过NCE方法无法在取不到负样本的区域作出任何的推断。</li>
-<li>我们在优化的过程中是通过控制参数\(\theta\)取到的，我们学到的有两组参数：\(\alpha\)和归一化常数c。</li>
-</ol>
-
-<h3 id="toc_4">噪声选择</h3>
-
-<p>噪声分布需要满足下列条件：</p>
-
-<ol>
-<li>它是很容易生成的</li>
-<li>它的对数密度函数需要是解析的</li>
-<li>它取得比较小的MSE \(\mathrm{E}\|\hat\theta -\theta^\star\|^2\)</li>
-</ol>
-
-<p>为了满足第三点，噪声函数需要和数据分布尽量的接近，因为如果不这样的话，分类问题会变得很容易，也就是说不需要学到很好的数据结构就能够得到比较好的分类结果，事实上：如果噪声函数就等于数据分布的话，那么我们估计的方差渐进的等于两倍的CR下界。因此，我们一般需要顾及一个比较简单的数据模型，然后根据这个简单的数据模型来得到噪声分布。</p>
-
-<h2 id="toc_5">Word2Vec中的NCE</h2>
-
-<p>Word2Vec中的NCE和原始版本的NCE是有一定的差别的，这里我们给出阐述：</p>
-
-<h3 id="toc_6">Conditional NCE</h3>
-
-<p>我们在Word2Vec中考虑的是如下的参数估计：\[p_m(y|x,\alpha) = \frac{p_0(x,y;\alpha))}{Z(x;\alpha)}\]，其中\(p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)，s为某种分数。在Word2Vec中，\(s(x,y;\alpha) = \alpha_x^T\alpha_y\)，其中y是一个单词，x是它的上下文(context)中的一个单词，\(\alpha_x\in \mathbb{R}^d\)和\(\alpha_y\in \mathbb{R}^d\)是x和y对应的向量表示。</p>
-
-<p>\(Z(x;\alpha) = \int p_0(x,y;\theta)\mathrm{d}y\)是划分函数，对于固定的\(\alpha\)它是x的函数。</p>
-
-<p>我们对于训练集合\(\mathrm{TD} = \{(x_1,y_1),(x_2,y_2),\dots,(x_T,y_T)\}\)中的每一个样本\((x_i, y_i)\)，根据某种噪声分布\(p_n(\cdot)\)得到K个人造的噪声样本\((x_i,y_i^1),(x_i,y_i^2),\dots,(x_i,y_i^K)\)，和NCE一样，我们把样本和噪声并在一起构成一个新的集合U，并且对于U中的每一个元素，引入一个标签\(\kappa\)，如果来源于原始样本，标签值为1；否则为0。我们令\(G((x,y),\alpha) = \ln p_m(y|x,\alpha) - \ln(K\cdot p_n(y))\),和NCE的推导方式一样，我们可以根据贝叶斯公式得到后验概率：<br/>
-\[<br/>
-\begin{split}<br/>
-P(\kappa &amp;= 1|(x,y),\alpha) = \frac{p_m(y|x,\alpha)}{p_m(y|x,\alpha) + K\cdot p_n(y)}\\<br/>
-&amp;= \sigma(G((x,y),\alpha))<br/>
-\end{split}<br/>
-\]</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-P(\kappa = 0|(x,y),\alpha) &amp;= \frac{K\cdot p_n(y)}{p_m(y|x,\alpha) + K\cdot p_n(y)}\\<br/>
-&amp;=1-\sigma(G((x,y),\alpha))<br/>
-\end{split}<br/>
-\]</p>
-
-<p>进一步的，模型作出了非常大的一步简化：直接令\(p_m(y|x,\alpha) = p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)；</p>
-
-<p>事实上\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln\int\exp(s(x,t,\alpha))\mathrm{d}t\]，令\(c_x = \int\exp(s(x,t,\alpha))\mathrm{d}t\)，就有：\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln c_x\]（这里需要注意的是\(c_x\)与\(\alpha\)具有约束条件），也就是说，有一个很重要的假设（虽然没有明确说出）:<br/>
-\[\forall \alpha,\forall c_{(\cdot)}, \exists \hat\alpha, s.t. s(x,y,\hat\alpha) = s(x,y,\alpha) - \ln c_x, \forall x,y\]</p>
-
-<p>那么对于区分标签的二分类问题，我们优化如下目标函数：</p>
-
-<p>\[<br/>
-J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-\sigma(G((x_i,y_i^j),\alpha))]]<br/>
-\]</p>
-
-<h3 id="toc_7">Conditional NCE分析</h3>
-
-<p>类似于NCE的定理1的分析，Conditional NCE正确性依赖于如下猜想：</p>
-
-<p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
-
-<h2 id="toc_8">参考文献：</h2>
-
-<ol>
-<li>Michael Gutmann and Aapo Hyvärinen. 2010. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proc. AISTATS.</li>
-</ol>
 
                         
                       </div>
@@ -266,7 +660,7 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
                 </a>
                 <div class="read-more clearfix">
                   <div class="more-left left">
-                  
+                   <a href="15541232015450.html">Read more</a>&nbsp;&nbsp; 
                     <span class="date">2019/4/1</span>
                     
           				   
@@ -425,6 +819,24 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
 	      
 		      
 			      <li class="post">
+			        <a href="15547144642483.html">矩阵微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15546453666266.html">向量微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15543921008119.html">信息论</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15541232015450.html">Noise Contrastive Estimation and Negative Sampling</a>
 			      </li>
 		     
@@ -436,10 +848,6 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15540295441807.html">Huffman树</a>
-			      </li>
-		     
 		   
 		  		</ul>
                 </div>

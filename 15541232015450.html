@@ -121,25 +121,29 @@
 <p>在NLP领域，使用分数来得到一个概率分布是一种非常常见的形式。我们通常通过取指数然后归一化来得到一个概率分布：</p>
 
 <p>\[<br/>
-P(y|x;\theta) = \frac{\mathrm{s}(y,x,\theta)}{\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)}<br/>
+\begin{equation}<br/>
+P_d(y|x;\alpha) = \frac{\exp(\mathrm{s}(y,x,\alpha))}{\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))}<br/>
+\end{equation}<br/>
 \]</p>
 
-<p>我们称\(Z(x,\theta) = \sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\theta) = \theta_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\theta=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\ln\mathrm{s}(y,x,\theta) - \ln\sum\limits_{y\in\mathbf{Y}}s(y,x,\theta)]<br/>
+<p>我们称\(Z(x,\alpha) = \sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))\)为partition funciton（划分函数）。 在Word2Vec中\(s(y,x,\alpha) = \alpha_y&#39;v_x\)。标准的学习过程是最大化训练样本的似然函数\[\hat\alpha=\arg\max\sum\limits_{(x,y)\in \mathbf{TD}}[\mathrm{s}(y,x,\alpha) - \ln\sum\limits_{y\in\mathbf{Y}}\exp(s(y,x,\alpha))]<br/>
 \]，但是计算这个概率（和它的导数）的计算量是非常大的（和词表的大小成正比）。<br/>
 为此，NLP科学家们提出了各种方法，一种是基于分类树方法（hierarchical softmax），但是它的缺点在于1. 结果对不同的树比较敏感2.对比较罕见的词效果比较好，但是对常见的单词效果比较差。另一种方法是今天我们要讲的Noise Contrastive Estimation(NCE)和Negative Sampling。</p>
+
+<span id="more"></span><!-- more -->
 
 <h2 id="toc_1">Noise Contrastive Estimation</h2>
 
 <p>NCE通过引入负样本把一个多分类问题的参数估计转化成一个区分正负样本的二分类问题。其中负样本是从一个噪声分布中抽取。<br/>
 NCE的思想是：<strong>通过区分样本和人造的噪声来训练参数</strong>。<br/>
-它的做法是这样的，样本X服从分布\(p_d(\cdot)\)，它是一族分布中的一个, 这族分布中的任何一个可以由一个未归一化的概率密度定义：\(p_0(\cdot, \theta)\)，所以他的归一化的概率密度为：\(p_m(\cdot, \alpha) = \frac{p_0(\cdot,\alpha)}{\int p_0(u, \alpha)\mathrm{d}u}\)。也就是说，存在着\(\alpha^\star\)，使得\(p_d(\cdot) = p_m(\cdot, \alpha^\star)\)，我们可以通过最大似然法来估计\(\alpha^\star\)</p>
+它的做法是这样的，样本X服从分布\(p_d(\cdot)\)，它是一族分布中的一个, 这族分布中的任何一个可以由一个未归一化的概率密度定义：\(p_0(\cdot, \alpha)\)，所以他的归一化的概率密度为：\(p_m(\cdot, \alpha) = \frac{p_0(\cdot,\alpha)}{\int p_0(u, \alpha)\mathrm{d}u}\)。也就是说，存在着\(\alpha^*\)，使得\(p_d(\cdot) = p_m(\cdot, \alpha^*)\)，我们可以通过最大似然法来估计\(\alpha^*\)</p>
 
 <p>于是对数似然函数是：</p>
 
 <p>\[<br/>
 \begin{split}<br/>
-\ell &amp;= \sum\limits_{x\in \mathrm{TD}} \ln(p_m(x,\theta))\\<br/>
-&amp;= \sum\limits_{x\in \mathrm{TD}}[\ln(p_0(x, \theta)) - \ln\int p_0(u,\theta)\mathrm{d}u]<br/>
+\ell &amp;= \sum\limits_{x\in \mathrm{TD}} \ln(p_m(x,\alpha))\\<br/>
+&amp;= \sum\limits_{x\in \mathrm{TD}}[\ln(p_0(x, \alpha)) - \ln\int p_0(u,\alpha)\mathrm{d}u]<br/>
 \end{split}<br/>
 \]</p>
 
@@ -158,7 +162,7 @@ NCE的思想是：<strong>通过区分样本和人造的噪声来训练参数</s
 <p>\[<br/>
 \begin{split}<br/>
 J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\ln[1-H_K(y_t^j,\theta)]]\\<br/>
-&amp; = \frac{1}{(K+1)T}\sum\limits_{t}[\ln \frac{p_m(x_t,\theta)}{p_m(x_t,\theta) + K\cdot p_n(u)} + \sum_j\ln \frac{p_m(y_t^i,\theta)}{p_m(y_t^i,\theta) + K\cdot p_n(u)}]<br/>
+&amp; = \frac{1}{(K+1)T}\sum\limits_{t}[\ln \frac{p_m(x_t,\theta)}{p_m(x_t,\theta) + K\cdot p_n(x_t)} + \sum_j\ln \frac{p_m(y_t^i,\theta)}{p_m(y_t^i,\theta) + K\cdot p_n(y_t^i)}]<br/>
 \end{split}<br/>
 \]</p>
 
@@ -196,11 +200,11 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 <p>\[<br/>
 \begin{split}<br/>
 \tilde J(f) &amp;= E[\ln\frac{g(x)}{g(x)+K\cdot p_n(x)} + K \ln\frac{K\cdot p_n(y)}{g(y) + K\cdot p_n(y)}]\\<br/>
-&amp;= \int \ln\frac{g(t)}{g(t)+K\cdot p_n(t)}p_d(t) + K \ln\frac{K\cdot p_n(t)}{g(t) + K\cdot p_n(t)}\mathrm{d}t\\<br/>
+&amp;= \int \ln\frac{g(t)}{g(t)+K\cdot p_n(t)}p_d(t) + K \ln\frac{K\cdot p_n(t)}{g(t) + K\cdot p_n(t)}p_n(t)\mathrm{d}t\\<br/>
 \end{split}<br/>
 \]</p>
 
-<p>我们令\[F(x,y) = \ln\frac{y}{y+K\cdot p_n(x)}p_d(x) + K \ln\frac{K\cdot p_n(x)}{y + K\cdot p_n(x)}\]<br/>
+<p>我们令\[F(x,y) = \ln\frac{y}{y+K\cdot p_n(x)}p_d(x) + K\cdot p_n(x) \ln\frac{K\cdot p_n(x)}{y + K\cdot p_n(x)}\]<br/>
 根据欧拉-拉格朗日方程，我们可以得到变分问题取极值的条件为：\[\frac{\partial F}{\partial y} = 0\]</p>
 
 <p>经过化简可以得到，也即：\((p_d(x)-y)p_n(x) = 0\)。这就证明了我们的定理1。<br/>
@@ -218,7 +222,7 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 <ol>
 <li>它是很容易生成的</li>
 <li>它的对数密度函数需要是解析的</li>
-<li>它取得比较小的MSE \(\mathrm{E}\|\hat\theta -\theta^\star\|^2\)</li>
+<li>它取得比较小的MSE \(\mathrm{E}\|\hat\theta -\theta^*\|^2\)</li>
 </ol>
 
 <p>为了满足第三点，噪声函数需要和数据分布尽量的接近，因为如果不这样的话，分类问题会变得很容易，也就是说不需要学到很好的数据结构就能够得到比较好的分类结果，事实上：如果噪声函数就等于数据分布的话，那么我们估计的方差渐进的等于两倍的CR下界。因此，我们一般需要顾及一个比较简单的数据模型，然后根据这个简单的数据模型来得到噪声分布。</p>
@@ -231,7 +235,7 @@ J_T(\theta) &amp;= \frac{1}{(K+1)T}\sum\limits_{t}[\ln H_K(x_t,\theta) + \sum_j\
 
 <p>我们在Word2Vec中考虑的是如下的参数估计：\[p_m(y|x,\alpha) = \frac{p_0(x,y;\alpha))}{Z(x;\alpha)}\]，其中\(p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)，s为某种分数。在Word2Vec中，\(s(x,y;\alpha) = \alpha_x^T\alpha_y\)，其中y是一个单词，x是它的上下文(context)中的一个单词，\(\alpha_x\in \mathbb{R}^d\)和\(\alpha_y\in \mathbb{R}^d\)是x和y对应的向量表示。</p>
 
-<p>\(Z(x;\alpha) = \int p_0(x,y;\theta)\mathrm{d}y\)是划分函数，对于固定的\(\alpha\)它是x的函数。</p>
+<p>\(Z(x;\alpha) = \int p_0(x,y;\alpha)\mathrm{d}y\)是划分函数，对于固定的\(\alpha\)它是x的函数。</p>
 
 <p>我们对于训练集合\(\mathrm{TD} = \{(x_1,y_1),(x_2,y_2),\dots,(x_T,y_T)\}\)中的每一个样本\((x_i, y_i)\)，根据某种噪声分布\(p_n(\cdot)\)得到K个人造的噪声样本\((x_i,y_i^1),(x_i,y_i^2),\dots,(x_i,y_i^K)\)，和NCE一样，我们把样本和噪声并在一起构成一个新的集合U，并且对于U中的每一个元素，引入一个标签\(\kappa\)，如果来源于原始样本，标签值为1；否则为0。我们令\(G((x,y),\alpha) = \ln p_m(y|x,\alpha) - \ln(K\cdot p_n(y))\),和NCE的推导方式一样，我们可以根据贝叶斯公式得到后验概率：<br/>
 \[<br/>
@@ -250,25 +254,153 @@ P(\kappa = 0|(x,y),\alpha) &amp;= \frac{K\cdot p_n(y)}{p_m(y|x,\alpha) + K\cdot 
 
 <p>进一步的，模型作出了非常大的一步简化：直接令\(p_m(y|x,\alpha) = p_0(x,y,\alpha) = \exp(s(x,y,\alpha))\)；</p>
 
-<p>事实上\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln\int\exp(s(x,t,\alpha))\mathrm{d}t\]，令\(c_x = \int\exp(s(x,t,\alpha))\mathrm{d}t\)，就有：\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln c_x\]（这里需要注意的是\(c_x\)与\(\alpha\)具有约束条件），也就是说，有一个很重要的假设（虽然没有明确说出）:<br/>
-\[\forall \alpha,\forall c_{(\cdot)}, \exists \hat\alpha, s.t. s(x,y,\hat\alpha) = s(x,y,\alpha) - \ln c_x, \forall x,y\]</p>
+<p>事实上\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln\int\exp(s(x,t,\alpha))\mathrm{d}t\]，令\(c_x = \int\exp(s(x,t,\alpha))\mathrm{d}t\)，就有：\[\ln p_m(y|x,\alpha) = s(x,y,\alpha) - \ln c_x\]（这里需要注意的是\(c_x\)与\(\alpha\)具有约束条件），也就是说，有一个很重要的假设1（虽然没有明确说出）:<br/>
+\[\forall \alpha, \exists \hat\alpha, s.t. s(x,y,\hat\alpha) = s(x,y,\alpha) - \ln c_x, \forall x,y\]，这蕴含着\(\int \exp(s(x,y,\hat\alpha))\mathrm{d}y = 1, \forall x\)</p>
+
+<p>有一个更强的假设：\[\forall \alpha,\forall h_{(\cdot)}, \exists \hat\alpha, s.t. s(x,y,\hat\alpha) = s(x,y,\alpha) - \ln h_x, \forall x,y\]</p>
 
 <p>那么对于区分标签的二分类问题，我们优化如下目标函数：</p>
 
 <p>\[<br/>
-J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-\sigma(G((x_i,y_i^j),\alpha))]]<br/>
+J(\alpha) = \sum_{i=1}^{T}[\ln \sigma((G((x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-\sigma(G((x_i,y_i^j),\alpha))]]<br/>
 \]</p>
 
 <h3 id="toc_7">Conditional NCE分析</h3>
 
-<p>类似于NCE的定理1的分析，Conditional NCE正确性依赖于如下猜想：</p>
+<p>类似于NCE的定理1的分析，Conditional NCE正确性依赖于如下定理：</p>
 
-<p>我们定义一个泛函：\[\tilde J(f) = \mathrm{E}[\ln \sigma(f(x) - \ln [K\cdot p_n(x)]) + K\ln[1-\sigma(f(y) - \ln[K\cdot p_n(y)])]]\]</p>
+<p>定理2：我们定义一个泛函：\[\tilde{J} (f(\cdot, \cdot)) = \mathop{\mathrm{E}}\limits_{(x,y)\sim p_d, n\sim p_n}[\ln \sigma(f(x,y) - \ln [K\cdot p_n(y)]) + K\ln[1-\sigma(f(x,n) - \ln[K\cdot p_n(n)])]]\]，这个泛函在\(f(x,y) = \ln p_d(y|x)\)处取得最大值。</p>
 
-<h2 id="toc_8">参考文献：</h2>
+<p>证明：</p>
+
+<p>\[\tilde{J} (f(\cdot, \cdot)) = \mathop{\mathrm{E}}\limits_{x\sim {p_d}_x}[\mathop{\mathrm{E}}\limits_{y\sim p_d(\cdot|x), n\sim p_n}[\ln \sigma(f(x,y) - \ln [K\cdot p_n(y)]) + K\ln[1-\sigma(f(x,n) - \ln[K\cdot p_n(n)])]]]\]<br/>
+对于固定的x，根据定理1，\[\ln p_d(\cdot|x) = \mathop{\arg\max}\limits_{f(\cdot)}\mathop{\mathrm{E}}\limits_{y\sim p_d(\cdot|x), n\sim p_n}[\ln \sigma(f(y) - \ln [K\cdot p_n(y)]) + K\ln[1-\sigma(f(n) - \ln[K\cdot p_n(n)])]]\] ，进一步的我们就证明了定理2。</p>
+
+<p>因此如果我们的评分函数满足假设1，那么得到的估计参数\(\hat\alpha\)自然的会满足归一化条件：\[\int \exp(s(x,t,\hat\alpha))\mathrm{d}t = 1\]</p>
+
+<h2 id="toc_8">Two estimation algorithm for NCE</h2>
+
+<h3 id="toc_9">自归一化假设</h3>
+
+<p>我们这里给出两个假设：</p>
+
+<p>假设2: 存在着\(\alpha^*\)使得，\(P_d(y|x) = \frac{\exp(s(x,y;\alpha^*))}{Z(x,\alpha^*)}\)，其中\(Z(x,\alpha) = \int\limits_{y}\exp((x,y;\alpha^*))\mathrm{d}y\)</p>
+
+<p>假设3: 存在着\(\alpha^*\)和\(\gamma^*\in \mathbb{R}\)，使得：\[P_d(y|x)=\exp(s(x,y,\alpha^*)-\gamma^*)\]，也就是说\(\gamma^* = \ln Z(x;\alpha^*)\)是与x无关的量。</p>
+
+<p>可以看到，<strong>假设3是严格强于假设2的</strong>。我们称符合假设3的条件分布函数是<strong>自归一化</strong>的。但是着包含着\(|\mathbf{X}|\)个限制条件，但是有\(d+1\)个自由变量，在\(|\mathbf{X}| \gg d+1\)时，假设3是几乎不可能实现的。这是我猜测为什么Skip-Gram方法是好于CBOW方法的一个地方：Skip-Gram是自归一化的，而CBOW不是@todo。</p>
+
+<p>给出满足假设2的分数函数\(s(x,y,\alpha)\)，我们可以重新定义一个满足假设3的分数函数：\[s&#39;(x,y,\alpha,{c_x:x\in\mathbf{X}}) = s(x,y,\alpha) - c_x\]，也就是说我们需要引入一个新的参数\(c_x\)对于每一个可能的历史x，这也是(Minch and Tech, 2012)年的工作中采用的方法，他们使用了CBOW方法，对于每一个context学习了一个对数正则化常数(他们学习的其实是\(-c_x\))，并且把它存储在一个以context为索引的哈希表中。带来的缺点是要引入大量的存储。但是论文中提到：他们发现固定正则化常数为1也就是令\(c_x=0\)也能取到相当不错的效果。他们解释为模型拥有了非常多自由的参数，能够大概满足自归一化条件，也就是满足假设3。</p>
+
+<h3 id="toc_10">二分类目标和排序目标</h3>
+
+<p>两种NCE方法大体上相同的，不同点在于：二分类目标是为了训练一个区分正负样本的二分类问题，也就是我们上文中提到的NCE方法；而排序目标是为了使得正确样本的排序能够在噪声样本之上。排序目标的NCE比二分类目标的NCE统计性质更好，它在假设2下是一致的，但是二分类目标在假设3下才是一致的。</p>
+
+<p>定义：\[\bar{s}(x,y;\alpha) = s(x,y;\alpha) - \ln p_n(y)\]</p>
+
+<p>排序目标：\[L^n_R(\alpha) = \frac{1}{n}\sum_{i=1}^{n}\ln\frac{\exp(\bar{s}(x_i,y_i;\alpha))}{\exp(\bar{s}(x_i,y_i;\alpha)) + \sum\limits_{j=1}^{K}\exp(\bar{s}(x_i,y_i^j;\alpha))}\]</p>
+
+<p>二分类目标：\[L^n_B(\alpha,\gamma) = \frac{1}{(K+1)n}\sum\limits_{i=1}^{n}\{\ln \sigma(\bar{s}(x_i,y_i;\alpha) - \gamma - \ln K) + \sum\limits_{j=1}^K\ln[1-\sigma(\bar{s}(x_i,y_i^j;\alpha) - \gamma - \ln K)]\}\]</p>
+
+<p>我们令\(L^\infty_R(\alpha)=\mathbb{E}[L^n_R(\alpha)]\), \(L^\infty_B(\alpha)=\mathbb{E}[L^n_B(\alpha)]\)</p>
+
+<h3 id="toc_11">分析</h3>
+
+<h4 id="toc_12">二分类目标</h4>
+
+<p>根据定理2我们知道，在满足假设3的情况下二分类目标是一致的，并且最优化二分类目标的参数恰好满足：\[\ln p_d(y|x) = s(x,y,\alpha^*) - \gamma^*\] 但是只满足假设2的情况下估计有可能是不一致的，我们在接下来会给出一个具体的例子。</p>
+
+<h4 id="toc_13">排序目标</h4>
+
+<p>假设4: 对于任何参数\(\alpha\)，如果存在函数\(c(x)\)使得\(s(x,y;\alpha) - s(x,y;\alpha^*) = c(x),\forall x,y\)，那么就有\(\alpha = \alpha^*\)。</p>
+
+<p>我们可以证明在满足假设2的情况下，基于排序目标的NCE算法能够得到强的一致估计。进一步的，如果假设4成立，那么\[P\{\lim\limits_{n\rightarrow \infty}\hat{\alpha_R^n}=\alpha^*\} = 1\]</p>
+
+<h4 id="toc_14">例子</h4>
+
+<p>\(X = \{0, 1\}\)，并且\(P(X = 0) = P(X=1) = 0.5\)，\(Y = \{0,1\}\)，并且条件概率分布由参数为\(\alpha = (\alpha_1,\alpha_2)\)分数函数和(1)式定义。<br/>
+并且：\[s(0,0;\alpha) = \ln\alpha_1\] \[s(0,1;\alpha)=s(1,0;\alpha) = s(1,1;\alpha) = \ln\alpha_2\]</p>
+
+<p>也就是说：\[p_d(y=0|x=0;\alpha) = \frac{\alpha_1}{\alpha_1+\alpha_2}\]<br/>
+\[p_d(y=1|x=0;\alpha) = \frac{\alpha_2}{\alpha_1+\alpha_2}\]<br/>
+\[p_d(y=0|x=1;\alpha) = p_d(y=1|x=1;\alpha) = 0.5\]</p>
+
+<p>这样一来我们可以用表格表示联合概率：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>x=0</th>
+<th>x=1</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>y=0</td>
+<td>\(\frac{\alpha_1}{2(\alpha_1 + \alpha_2)}\)</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td>y=1</td>
+<td>\(\frac{\alpha_2}{2(\alpha_1 + \alpha_2)}\)</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+
+<p>我们的真实概率参数为\(\alpha^* = (1,3)\)，我们取的噪声函数为\(p_n(0) = p_n(1)=0.5\)，根据大数定理，当我们取到的样本足够多的情况下，二分类目标将会逼近其期望情况。</p>
+
+<p>\[\begin{split}<br/>
+L_B^\infty(\alpha,\gamma) &amp;= \frac{1}{8}\ln \sigma(\ln\theta_1 - \gamma - 0.5) + \frac78\ln \sigma(\ln\theta_2 - \gamma - 0.5) \\<br/>
+&amp;~~~+ \frac{K}{4}\ln[1-\sigma(\ln\theta_1-\gamma-0.5)] + \frac{3K}{4}\ln[1-\sigma(\ln\theta_2-\gamma-0.5)]\\<br/>
+&amp;= \frac{1}{8}\ln \frac{2\theta_1}{2\theta_1 + K\exp \gamma} + \frac78\ln \frac{2\theta_2}{2\theta_1 + K\exp \gamma} + \frac{K}{4}\ln[\frac{K\gamma}{2\theta_1 + K\exp \gamma}] \\<br/>
+&amp;~~~+ \frac{3K}{4}\ln[\frac{K\gamma}{2\theta_1 + K\exp \gamma}]\\<br/>
+\end{split}\]</p>
+
+<p>经过计算我们可以得到最小化目标函数的条件是：\[\theta_1=\frac14\exp\gamma,\theta_2=\frac{7}{12}\exp\gamma\]这时候估计的条件概率为：<br/>
+\[P(y=0|x=0) = \frac14, P(y=1|x=0)=\frac{7}{12}\]</p>
+
+<p>\[P(y=0|x=1) = \frac{7}{12}, P(y=1|x=1)=\frac{7}{12}\]<br/>
+显然这时候没有做到自归一化，因此无法给出条件分布的一致估计。</p>
+
+<p>但是对于排序目标，其期望情况为：</p>
+
+<p>\[\begin{split}<br/>
+L_R^\infty(\alpha,\gamma) &amp;= \frac{1}{16}[\ln \frac{\alpha_1}{\alpha_1+\alpha2} + \ln \frac{\alpha_1}{\alpha_1+\alpha2}] \\<br/>
+&amp;~~~\frac{3}{16}[\ln \frac{\alpha_2}{\alpha_2+\alpha1} + \ln \frac{\alpha_2}{\alpha_2+\alpha2}] \\<br/>
+&amp;~~~\frac{1}{8}[\ln \frac{\alpha_2}{\alpha_2+\alpha2} + \ln \frac{\alpha_1}{\alpha_1+\alpha2}]<br/>
+\\&amp;~~~\frac{1}{8}[\ln \frac{\alpha_2}{\alpha_2+\alpha2} + \ln \frac{\alpha_2}{\alpha_2+\alpha2}] \\<br/>
+&amp;=\frac{1}{16}\ln\frac{\alpha_1}{\alpha_1+\alpha_2} + \frac{3}{16}\ln\frac{\alpha_2}{\alpha_1+\alpha_2} + \mathrm{Const}\\<br/>
+\end{split}\]</p>
+
+<p>最小化的条件恰好为：\(\alpha_2 = 3\alpha_1\)</p>
+
+<h3 id="toc_15">实验观察</h3>
+
+<ol>
+<li>NCE估计对一切固定的K都是一致的，对于固定的数据集大小，NCE估计随着K的增大而估计的越准确，当K足够大后能够取得和MLE能够相比拟的效果。</li>
+<li>数据集越大，NCE估计的参数对K越不敏感，当数据集足够大后，比较小的K也能够得到比较好的效果</li>
+<li>当满足假设3的时候，二分类的NCE效果要好于MLE和排序的NCE，这是因为二分类的NCE模型能够自归一化。因此可以在排序NCE和MLE的目标函数后面加上正则项来促进模型的自归一化：\(\frac{\eta}{n}\sum\limits_{i=1}^n[\ln(\frac1m \sum\limits_{j=1}^m\exp(\bar s(x_i, y_i^j;\alpha)))]^2\)。这样做之后，排序NCE能够取得比二分类NCE更好的效果。</li>
+</ol>
+
+<h2 id="toc_16">NCE和Negative Sampling</h2>
+
+<p>如果我们令\(\bar s(x,y;\alpha) = v_y^T \cdot v_x + \ln K\)，或者说等价的话\(s(x,y;\alpha) = v_y^T \cdot v_x + \ln p_n(y) + \ln K\)，就可以得到Negative Sampling。</p>
+
+<p>\[L^n_B(\alpha,\gamma) = \frac{1}{(K+1)n}\sum\limits_{i=1}^{n}\{\ln \frac{\exp(v_y^T\cdot v_x)}{\exp(v_y^T\cdot v_x)+1} + \sum\limits_{j=1}^K\ln \frac{1}{\exp(v_y^T\cdot v_x)+1}\}\]</p>
+
+<p>注意到：此时自归一化的条件是：\(\int \exp(v_y^T \cdot v_x)p_n(y)\mathrm{d}y = \frac{1}{K}\)，而不是\(\int \exp(v_y^T \cdot v_x)\mathrm{d}y = 1\)</p>
+
+<h2 id="toc_17">参考文献：</h2>
 
 <ol>
 <li>Michael Gutmann and Aapo Hyvärinen. 2010. Noise-contrastive estimation: A new estimation principle for unnormalized statistical models. In Proc. AISTATS.</li>
+<li>Andriy Mnih and Yee W Teh. 2012. A fast and simple algorithm for training neural probabilistic language models. In Proceedings of the 29th International Conference on Machine Learning (ICML-12), pages 1751–1758.</li>
+<li>Andriy Mnih and Koray Kavukcuoglu. 2013. Learning word embeddings efficiently with noise-contrastive estimation. In NIPS.</li>
+<li>Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. 2013. Distributed representations of words and phrases and their composition- ality. In Proceedings of the 26th International Con- ference on Neural Information Processing Systems - Volume 2, NIPS’13, pages 3111–3119, USA. Curran Associates Inc.</li>
+<li>Zhuang Ma and Michael Collins. Noise contrastive estimation and negative sampling for conditional models: Consistency and statistical efficiency. arXiv preprint arXiv:1809.01812, 2018.</li>
 </ol>
 
 
@@ -279,6 +411,9 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
       <div class="row">
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15543921008119.html" 
+          title="Previous Post: 信息论">&laquo; 信息论</a>
       
         </p>
         </div>
@@ -355,6 +490,24 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
 	      
 		      
 			      <li class="post">
+			        <a href="15547144642483.html">矩阵微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15546453666266.html">向量微分计算</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15543921008119.html">信息论</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="15541232015450.html">Noise Contrastive Estimation and Negative Sampling</a>
 			      </li>
 		     
@@ -366,10 +519,6 @@ J(\theta) = \sum_{i=1}^{T}[\ln \sigma((G(x_i, y_i),\alpha)) + \sum_{j=1}^K\ln[1-
 		     
 		  
 		      
-			      <li class="post">
-			        <a href="15540295441807.html">Huffman树</a>
-			      </li>
-		     
 		   
 		  		</ul>
                 </div>
