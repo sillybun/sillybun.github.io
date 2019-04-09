@@ -4,7 +4,7 @@
   <title><![CDATA[张翼腾的博客]]></title>
   <link href="https://sillybun.github.io/atom.xml" rel="self"/>
   <link href="https://sillybun.github.io/"/>
-  <updated>2019-04-09T17:56:06+08:00</updated>
+  <updated>2019-04-09T18:03:43+08:00</updated>
   <id>https://sillybun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -99,13 +99,14 @@ n\times m\to p\times q&amp; q\times p\to r\times s &amp;\longrightarrow&amp; n\t
 1）：<br/>
 设\(\mathop{A}\limits^4\)、\(\mathop{B}\limits^4\)、\(\mathop{C}\limits^4\)的维度分别为\(n\times m\to q\times p\)、\(p\times q\to s\times r\)、\(r\times s\to v\times u\)<br/>
 \[\begin{split}[(\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4]_{i,j} &amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ((\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,j})_{a,b} C_{b,a}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r (\sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}{\mathop{B}\limits^4}_{c,d})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{cd})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r (\sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}{\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
 \end{split}\]</p>
 
-<p>\[\begin{split}[\mathop{A}\limits^4 (\mathop{B}\limits^4\mathop{C}\limits^4)]_{i,j} &amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ({\mathop{A}\limits^4}_{i,j})_{a,b}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{a,b}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ({\mathop{A}\limits^4}_{i,j})_{a,b} [\sum\limits_{c=1}^q\sum\limits_{d=1}^p ({\mathop{B}\limits^4}_{a,b})_{c,d}{\mathop{C}\limits^4}_{c,d}]\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{cd})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+<p>\[\begin{split}[\mathop{A}\limits^4 (\mathop{B}\limits^4\mathop{C}\limits^4)]_{i,j} &amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p ({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{d,c}\\<br/>
+&amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p ({\mathop{A}\limits^4}_{i,j})_{c,d} [\sum\limits_{a=1}^s\sum\limits_{b=1}^r ({\mathop{B}\limits^4}_{d,c})_{a,b}{\mathop{C}\limits^4}_{b,a}]\\<br/>
+&amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p \sum\limits_{a=1}^s\sum\limits_{b=1}^r({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
+&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
 \end{split}\]</p>
 
 <p>因此：\((\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A}\limits^4 (\mathop{B}\limits^4 \mathop{C}\limits^4)\)</p>
