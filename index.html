@@ -136,11 +136,13 @@
 
 <p>数乘运算：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(c\)是一个数，定义\(c\mathop{A}\limits^4 = (c{\mathop{A}\limits^4}_{i,j})_{n\times m\to p\times q}\)。数乘运算对四维矩阵加减法满足分配律。</p>
 
-<p>四维矩阵的迹：设\(\mathop{A}\limits^4\)为维度为\(n\times n\to p\times q\)的四维矩阵，那么它的迹是一个维度为\(p\times q\)的矩阵：\[\mathrm{tr}(\mathop{A}\limits^4) = \sum\limits_{i=1}^n {\mathop{A}\limits^4}_{i,i}\]</p>
+<!--
+四维矩阵的迹：设$\mathop{A}\limits^4$为维度为$n\times n\to p\times q$的四维矩阵，那么它的迹是一个维度为$p\times q$的矩阵：$$\mathrm{tr}(\mathop{A}\limits^4) = \sum\limits_{i=1}^n {\mathop{A}\limits^4}_{i,i}$$
+-->
 
 <p>四维矩阵的转置：设\(\mathop{A}\limits^4\)为维度为\(m\times n\to p\times q\)的四维矩阵，那么它的转置\({\mathop{A^\top}\limits^4}\)是一个维度为\(n\times m\to p\times q\)的四维矩阵，且其第\((i,j)\)位置的元素为：\(A_{j,i}\)。则：\({\mathop{A^\top}\limits^4} {\mathop{B^\top}\limits^4} = ({\mathop{B}\limits^4} {\mathop{A}\limits^4})^\top\)</p>
 
-<p>四维矩阵与二维矩阵之间的乘法：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(B\)、\(C\)分别为维度为\(m\times r\)和\(s\times n\)的矩阵，那么：\(\mathop{A}\limits^4 B\)是一个维度为\(n\times r\to p\times q\)的思维矩阵，其中的第\((i,j)\)元素为：\((\mathop{A}\limits^4 B)_{i,j} = \sum\limits_{k=1}^m {\mathop{A}\limits^4}_{i,k}B_{k,j}\)；\(C \mathop{A}\limits^4\)是一个维度为\(s\times m\to p\times q\)的思维矩阵，其中的第\((i,j)\)元素为：\((C \mathop{A}\limits^4)_{i,j} = \sum\limits_{k=1}^n {C_{i,k} \mathop{A}\limits^4}_{k,j}\)。</p>
+<p>四维矩阵与二维矩阵之间的乘法：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(B\)、\(C\)分别为维度为\(m\times r\)和\(s\times n\)的矩阵，那么：\(\mathop{A}\limits^4 B\)是一个维度为\(n\times r\to p\times q\)的四维矩阵，其中的第\((i,j)\)元素为：\((\mathop{A}\limits^4 B)_{i,j} = \sum\limits_{k=1}^m {\mathop{A}\limits^4}_{i,k}B_{k,j}\)；\(C \mathop{A}\limits^4\)是一个维度为\(s\times m\to p\times q\)的四维矩阵，其中的第\((i,j)\)元素为：\((C \mathop{A}\limits^4)_{i,j} = \sum\limits_{k=1}^n {C_{i,k} \mathop{A}\limits^4}_{k,j}\)。</p>
 
 <p>四维矩阵与四维矩阵之间的乘法：设\(\mathop{A}\limits^4\)，\(\mathop{B}\limits^4\)分别为维度为\(n\times m\to p\times q\)和\(q\times p\to r\times s\)的四维矩阵，那么我们定义\(\mathop{A}\limits^4\mathop{B}\limits^4\)是一个\(n\times m\to r\times s\)的四维矩阵，其中的第\((i,j)\)个元素为：<br/>
 \[(\mathop{A}\limits^4\mathop{B}\limits^4)_{i,j} = \mathrm{tr}({\mathop{A}\limits^4}_{i,j}\mathop{B}\limits^4) = \sum\limits_{k=1}^{p}\sum\limits_{l=1}^{q}(A_{i,j})_{k,l}B_{l,k}\]</p>
