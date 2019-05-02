@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Archives - 张翼腾的博客
+  The Alias Method: Efficient Sampling with Many Discrete Outcomes - 张翼腾的博客
   
   </title>
   
@@ -90,98 +90,81 @@
 
  <script type="text/javascript">
   $(function(){
-    $('#menu_item_archives').addClass('is_active');
+    $('#menu_item_index').addClass('is_active');
   });
 </script>
 <div class="row">
   <div class="large-8 medium-8 columns">
-    <div id="archives-page-wrap">
-        <h1>Archives</h1>
-        <div class="markdown-body archives-wrap">
+      <div class="markdown-body article-wrap">
+       <div class="article">
           
-             
-                <h1>2019</h1>
-            
-            <div class="article">
-              <a class="clearlink" href="15568111388917.html">
-                <h1>The Alias Method: Efficient Sampling with Many Discrete Outcomes</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/5/2</span>
-                
-                 
-              </div>
-            </div><!-- article -->
+          <h1>The Alias Method: Efficient Sampling with Many Discrete Outcomes</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/5/2</span>
 
           
-            
-            <div class="article">
-              <a class="clearlink" href="15556540091713.html">
-                <h1>pytorch 入门</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/4/19</span>
-                
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15543921008119.html">
-                <h1>信息论</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/4/4</span>
-                
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15541232015450.html">
-                <h1>Noise Contrastive Estimation and Negative Sampling</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/4/1</span>
-                
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15540423884690.html">
-                <h1>Word2Vec入门</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/3/31</span>
-                
-                 
-              </div>
-            </div><!-- article -->
-
-          
-            
-            <div class="article">
-              <a class="clearlink" href="15540295441807.html">
-                <h1>Huffman树</h1>
-              </a>
-              <div class="read-more clearfix">
-                <span class="date">2019/3/31</span>
-                
-                 
-              </div>
-            </div><!-- article -->
-
            
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>在进行抽样时，我们经常遇到的一个问题是如何能够快速的通过概率分布来重复性的抽取独立离散样本。如果使用累计概率分布表再加上二分类查找能够得到\(O(\ln K)\)的复杂度。但是这是不够好的。事实上，我们可以把问题转化为一个\(1,2,\dots, K\)上的均匀分布和一个两点分布来解决这个问题，预处理的复杂度为\(O(K)\)，抽取一个样本的复杂度将为\(O(1)\)，空间复杂度为\(O(K)\)。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>我们用具体的例子来解释算法：</p>
+
+<p>比如概率分布为：\(\frac{1}{2}, \frac{1}{3}, \frac{1}{6}\)</p>
+
+<ol>
+<li>每个概率乘以\(K = 3\)，得到：\(\frac{3}{2}, 1, \frac{1}{2}\)</li>
+<li>我们由于\(\frac{3}{2}&gt;1&gt;\frac{1}{2}\)，我们将属于1的\(\frac{1}{2}\)的概率借给3。这样就得到了\(1,1,1\)</li>
+<li>但是借过去的\(0.5\)的概率还是属于1号分类的，所以我们就标记3号分类现在有\(0.5\)的概率实际上是1号样本，我们用\(((1,0), (1, 0), (0.5, 0.5:1))\)来表示三号样本中有\(0.5\)的可能性实际上是1号样本。</li>
+<li>这样我们在抽取的时候首先在\(1,2,3\)中均匀的抽取一个样本，如果抽取到的是1或者2那么就是抽取到的结果，但是如果抽取到的是3号样本的话</li>
+</ol>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15556540091713.html" 
+          title="Next Post: pytorch 入门">pytorch 入门 &raquo;</a>
+      
+      </p>
         </div>
       </div>
-  </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">

@@ -1,0 +1,861 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  pytorch 入门 - 张翼腾的博客
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="张翼腾的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:sillybun.github.io ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="https://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; 张翼腾的博客</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+        
+        <li><a target="self" href="index.html">Home</a></li>
+        
+        <li><a target="_self" href="archives.html">Archives</a></li>
+        
+
+    <li><label>Categories</label></li>
+
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>pytorch 入门</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/4/19</span>
+
+          
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <span id="more"></span><!-- more -->
+
+<h2 id="toc_0">变量</h2>
+
+<h3 id="toc_1">根据数据产生tensor</h3>
+
+<p>根据数值产生tensor⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python"> torch.tensor(1., requires_grad=True[False])
+</code></pre>
+
+<p>根据numpy产生tensor⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python"> torch.tensor(np.array([1., 2., 3.], dtype=np.float32), required_grad=True[False])
+</code></pre>
+
+<p>还有一个函数是<code>torch.from_numpy()</code>，它们两者的区别在于：</p>
+
+<ul>
+<li> <code>torch.tensor</code>会复制numpy数组数据，所以对新的拷贝进行任何改变并不会改变原来数据的数值；但是<code>torch.from_numpy()</code>共享内存并不会复制数据，对tensor进行的任何改变会对原有数据产生影响。</li>
+<li> <code>torch.from_numpy</code>没有<code>required_grad</code>参数，可以这样认为，pytorch并不赞同改变由<code>from_numpy</code>引入的数据。</li>
+</ul>
+
+<p>根据list产生tensor⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python"> torch.tensor([1., 2., 3.], required_grad=True[False])
+</code></pre>
+
+<h3 id="toc_2">根据分布产生tensor</h3>
+
+<p>0-1均匀分布⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">torch.rand(3, 3)
+# random number of the same size:⬇️
+torch.rand_like({some tensor})
+</code></pre>
+
+<p>正态分布⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">torch.randn(10, 3)
+torch.randn_lile({some tensor})
+</code></pre>
+
+<p>单位矩阵⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">torch.eye(3)
+torch.eye(3,4)
+# tensor([[1., 0., 0., 0.],
+#         [0., 1., 0., 0.],
+#         [0., 0., 1., 0.]])
+</code></pre>
+
+<p>全0矩阵⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.zeros(10,3)
+torch.zeros_like(x)
+</code></pre>
+
+<p>全1矩阵⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.ones(10,3)
+torch.ones_like(x)
+</code></pre>
+
+<h3 id="toc_3">引入数据</h3>
+
+<p><code>torch.utils.data.DataLoader</code>提供了对数据的引入：</p>
+
+<p>参数有：</p>
+
+<ul>
+<li><code>dataset</code>：数据源</li>
+<li><code>batch_size</code>：batch_size，默认1</li>
+<li><code>shuffle</code>：如果为<code>True</code>：在每一次<code>epoch</code>便会打乱数据。默认<code>False</code></li>
+<li><code>drop_last</code>：如果为<code>True</code>：在数据量不能整除<code>batch_size</code>时，会舍弃掉最后一个不完整的batch。默认<code>False</code></li>
+</ul>
+
+<p><code>torch.utils.data.random_split</code>提供了对数据的分割：</p>
+
+<p>参数有：</p>
+
+<ul>
+<li><code>dataset</code>：数据源</li>
+<li><code>lengths</code>：分割出来的每一块的长度</li>
+</ul>
+
+<h3 id="toc_4">DataSet</h3>
+
+<pre class="line-numbers"><code class="language-python">class Dataset(object):
+
+    def __getitem__(self, index):
+        raise NotImplementedError
+
+    def __len__(self):
+        raise NotImplementedError
+
+    def __add__(self, other):
+        return ConcatDataset([self, other])
+</code></pre>
+
+<p>所以要自己生成dataset需要定义：</p>
+
+<pre class="line-numbers"><code class="language-python">class CustomDataset(torch.utils.data.Dataset):
+    def __init__(self):
+        # TODO
+        # 1. Initialize file paths or a list of file names. 
+        pass
+    def __getitem__(self, index):
+        # TODO
+        # 1. Read one data from file (e.g. using numpy.fromfile, PIL.Image.open).
+        # 2. Preprocess the data (e.g. torchvision.Transform).
+        # 3. Return a data pair (e.g. image and label).
+        pass
+    def __len__(self):
+        # 有 should change 0 to the total size of your dataset.
+        return 0 
+</code></pre>
+
+<p>dataset在使用DataLoader导入后会自动的变成tensor。</p>
+
+<pre class="line-numbers"><code class="language-python">train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+                                           batch_size=100, 
+                                           shuffle=True)
+total_step = len(train_loader)
+for epoch in range(num_epochs):
+    for i, (images, labels) in enumerate(train_loader):
+        # TODO
+        if (i+1) % 100 == 0:
+            print (&quot;Epoch [{}/{}], Step [{}/{}] Loss: {:.4f}&quot;
+                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+</code></pre>
+
+<h2 id="toc_5">操作</h2>
+
+<h3 id="toc_6">加减法</h3>
+
+<p>加减法可以在相同大小的tensor上进行，是元素的加减⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+y = torch.tensor([[0., 1., 2.], [1., 0., 3.]])
+x + y #⬇️
+# tensor([[1., 3., 5.],
+#         [3., 2., 5.]])
+</code></pre>
+
+<p>一个维度为\(1\times n\)的行向量可以和一个维度为\(m\times n\)的矩阵相加，其结果为矩阵的每行都加上<br/>
+行向量⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+z = torch.tensor([1., 2., 3.])
+x + z #⬇️
+# tensor([[2., 4., 6.],
+#         [3., 4., 5.]])
+</code></pre>
+
+<p>一个维度为\(m\times 1\)的列向量可以和一个维度为\(m\times n\)的行向量相加，其结果为矩阵的每一列都加上列向量⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+z = torch.tensor([[1.], [2.]])
+x + z #⬇️
+# tensor([[2., 3., 4.],
+#         [4., 4., 4.]])
+</code></pre>
+
+<p>加减法是自动广播的，两个维度为\(d_1\times d_2\times \dots\times d_{k_1}\)和\(d_1&#39;\times d_2&#39;\times \dots\times d_{k_n}&#39;\)的矩阵（不妨设\(k_1\leq k_2\)）在\((d_{k_1-i} - d_{k_2-i})(d_{k_1-i} - 1)(d_{k_2-i}-1) =0,\forall 0\leq i&lt;k_1\)时可以加减，相当于把每个矩阵的维度都广播为：\(d_1&#39;\times d_2&#39;\times \dots \times d_{k_2-k_1}&#39;\times \max(d_{1}, d_{k_2-k_1+1}&#39;)\times \max(d_{2}, d_{k_2-k_1+2}&#39;)\times \max(d_{k_1}, d_{k_2}&#39;)\)</p>
+
+<h3 id="toc_7">乘除法：</h3>
+
+<h4 id="toc_8">Hadamard Product（逐元素乘法）</h4>
+
+<p>两个维度相同的矩阵可以做乘法和除法，表示对应位置的乘法和除法⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+y = torch.tensor([[1., 1., 1.], [2., 2., 2.]])
+x * y #⬇️
+# tensor([[ 1.,  2.,  3.],
+#        [ 8., 10., 12.]])
+x / y #⬇️
+# tensor([[1.0000, 2.0000, 3.0000],
+#        [2.0000, 2.5000, 3.0000]])
+</code></pre>
+
+<p>一个维度为\(1\times n\)的行向量可以和一个维度为\(m\times n\)的矩阵做乘法和除法运算，其含义是把矩阵中每一行与行向量做相应的运算⬇️。</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+z = torch.tensor([1., 2., 3.])
+x * z # ⬇️
+# tensor([[ 1.,  4.,  9.],
+#         [ 4., 10., 18.]])
+x / z # ⬇️
+# tensor([[1.0000, 1.0000, 1.0000],
+#         [4.0000, 2.5000, 2.0000]])
+z / x # ⬇️
+# tensor([[1.0000, 1.0000, 1.0000],
+#         [0.2500, 0.4000, 0.5000]])
+</code></pre>
+
+<p>一个维度为\(m\times 1\)的列向量可以和一个维度为\(m\times n\)的矩阵做乘法和除法运算，其含义是把矩阵中的每一列与列向量做相应的运算。</p>
+
+<p>乘法和除法是自动广播的，两个维度为\(d_1\times d_2\times \dots\times d_{k_1}\)和\(d_1&#39;\times d_2&#39;\times \dots\times d_{k_n}&#39;\)的矩阵（不妨设\(k_1\leq k_2\)）在\((d_{k_1-i} - d_{k_2-i})(d_{k_1-i} - 1)(d_{k_2-i}-1) =0,\forall 0\leq i&lt;k_1\)时可以加减，相当于把每个矩阵的维度都广播为：\(d_1&#39;\times d_2&#39;\times \dots \times d_{k_2-k_1}&#39;\times \max(d_{1}, d_{k_2-k_1+1}&#39;)\times \max(d_{2}, d_{k_2-k_1+2}&#39;)\times \max(d_{k_1}, d_{k_2}&#39;)\)</p>
+
+<h4 id="toc_9">矩阵乘法</h4>
+
+<p>一个维度为\(m\times n\)的矩阵\(A\)可以和维度为\(n\times p\)的矩阵\(B\)做矩阵乘法，得到维度为\(m\times p\)的矩阵。<strong>注意：pytorch中并不会把一个向量理解成一个矩阵</strong></p>
+
+<pre class="line-numbers"><code class="language-text">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+y = torch.tensor([[1., 2.], [3., 4.]])
+torch.mm(y, x) #⬇️
+# tensor([[ 9., 12., 15.],
+#         [19., 26., 33.]])
+w = torch.tensor([1., 2.])
+torch.mm(w, x) #❌
+torch.mm(w.reshape(1, 2), x) #⬇️
+# tensor([[ 9., 12., 15.]])
+z = torch.tensor([1., 2., 3.])
+torch.mm(x, z) #❌
+torch.mm(x, z.reshape(3, 1)) #⬇️
+# tensor([[14.],
+#         [32.]])
+</code></pre>
+
+<h4 id="toc_10">广播矩阵乘法</h4>
+
+<p>两个维度为\(n\)的向量\(a, b\)可以做广播矩阵乘法，得到了\(a\cdot b\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-text">w = torch.tensor([1., 2.])
+torch.matmul(w, w)
+# tensor(5.)
+</code></pre>
+
+<p>一个维度为\(m\)的向量\(v\)可以和一个维度为\(m\times n\)的矩阵\(A\)做广播矩阵乘法，得到了一个维度为\(n\)的向量\(v^\top A\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2.], [3., 4.]])
+w = torch.tensor([1., 2.])
+torch.matmul(w, x)
+# tensor([ 7., 10.])
+</code></pre>
+
+<p>一个维度为\(m\times n\)的矩阵\(A\)可以和维度为\(n\)的矩阵\(u\)做广播矩阵乘法，得到了一个维度为\(m\)的向量\(A u\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2.], [3., 4.]])
+w = torch.tensor([1., 2.])
+torch.matmul(x, w)
+# tensor([ 5., 11.])
+</code></pre>
+
+<p>对于两个矩阵之间，广播矩阵乘法等同于矩阵乘法。</p>
+
+<p>如果有某一个矩阵的维度超过2维，那么会把最后两维看作是矩阵，前面的维度都看成是batch被广播。</p>
+
+<p>分为两种情况：只有一个矩阵的维度超过2，对这个矩阵倒数第二个维度前面的所有维度都当成batch；另一种情况是两个矩阵的维度都超过2，那么这两个矩阵的batch必须要匹配：要么一个为1，要么两者都不为1但是一定要相同。比如batch的维度为\(5\times 1\times 3\)与\(1\times 4\times 1\)就是匹配的，两者都被广播成维度为\(5\times 4\times 3\)的batch。</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.ones([5, 1, 3, 3, 3])
+y = torch.ones([1, 4, 1, 3, 3])
+torch.matmul(x, y).shape
+# torch.Size([5, 4, 3, 3, 3])
+</code></pre>
+
+<h3 id="toc_11">改变矩阵的大小</h3>
+
+<pre class="line-numbers"><code class="language-python">reshape(*shape) → Tensor
+view(*shape) → Tensor
+</code></pre>
+
+<p>两者都能改变矩阵的大小，但是<code>view</code>保证了输入输出共享内存，但是这要求输入的内存是连续保存的，<code>reshape</code>无法保证这一点。</p>
+
+<h3 id="toc_12">转置</h3>
+
+<pre class="line-numbers"><code class="language-python">torch.transpose(input, dim0, dim1) → Tensor
+torch.t(input) → Tensor
+</code></pre>
+
+<p>第一个函数是交换矩阵中两个维度，输入矩阵的维度为\(d_1 \times d_2 \times \dots \times d_k\)，交换\(i, j\)，那么输出矩阵的维度为：\(d_1 \times d_2 \times \dots\times d_{i-1}\times d_{j}\times d_{i+1}\times  \dots d_{j-1}\times d_i\times d_{j+1}\times \dots \times d_k\)。</p>
+
+<p>第二个函数是<code>torch.transpose(input, 0, 1)</code>的简写，表现出来的就是矩阵的转置。</p>
+
+<h3 id="toc_13">堆叠</h3>
+
+<p><code>torch.stack(seq, dim=0, out=None)</code>：把一串矩阵（需要维度相同）合并成一个新的矩阵在一个新的维度上。</p>
+
+<h3 id="toc_14">合并</h3>
+
+<p><code>torch.cat(tensors, dim=0, out=None) → Tensor</code>：把一串矩阵合并成一个新的矩阵，除却合并的维度外，其他维度要一致。</p>
+
+<pre class="line-numbers"><code class="language-python">&gt;&gt;&gt; x = torch.randn(2, 3)
+&gt;&gt;&gt; x
+tensor([[ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497]])
+&gt;&gt;&gt; torch.cat((x, x, x), 0)
+tensor([[ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497],
+        [ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497],
+        [ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497]])
+&gt;&gt;&gt; torch.cat((x, x, x), 1)
+tensor([[ 0.6580, -1.0969, -0.4614,  0.6580, -1.0969, -0.4614,  0.6580,
+         -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497, -0.1034, -0.5790,  0.1497, -0.1034,
+         -0.5790,  0.1497]])
+</code></pre>
+
+<h3 id="toc_15">Where</h3>
+
+<p><code>torch.where(condition, x, y) → Tensor</code></p>
+
+<h3 id="toc_16">Max</h3>
+
+<pre class="line-numbers"><code class="language-python">torch.max(input) → Tensor
+torch.max(input, dim, keepdim=False, out=None) -&gt; (Tensor, LongTensor)
+</code></pre>
+
+<p>如果只有一个输入，那么就输出矩阵的最大值</p>
+
+<p>如果指定了最大化的维度，那么输出的规则为：输入矩阵\(x\)的维度是\(d_1\times d_2\times \dots \times d_k\)，<code>dim</code>为l，那么输出的维度是：\(d_1\times d_2\times \dots \times d_{l-1}\times d_{l}\times \dots \times d_k\)，并且：\(\mathrm{output}_{i_1,i_2,\dots,i_{l-1},i_{l+1},\dots, i_k} = \max\limits_{0\leq j&lt;d_l}\mathrm{input}_{i_1,i_2,\dots,i_{l-1},j,i_{l+1},\dots, i_k}\)，并且会输出最大值取到的位置，维度是：\(d_1\times d_2\times \dots \times d_{l-1}\times d_{l}\times \dots \times d_k\)，并且：\(\mathrm{location}_{i_1,i_2,\dots,i_{l-1},i_{l+1},\dots, i_k} = \mathop{\arg\max}\limits_{0\leq j&lt;d_l}\mathrm{input}_{i_1,i_2,\dots,i_{l-1},j,i_{l+1},\dots, i_k}\)</p>
+
+<h2 id="toc_17">Layers</h2>
+
+<h3 id="toc_18">Module</h3>
+
+<p>Module是神经网络模块的基本类型，一个Module可以包含子Module，它需要实现初始化方法和<code>forward</code>方法。</p>
+
+<pre class="line-numbers"><code class="language-python">import torch.nn as nn
+import torch.nn.functional as F
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5)
+        self.conv2 = nn.Conv2d(20, 20, 5)
+
+    def forward(self, x):
+       x = F.relu(self.conv1(x))
+       return F.relu(self.conv2(x))
+</code></pre>
+
+<p>重要的函数有：</p>
+
+<p><code>apply(fn)</code>：为这个Module和所有的子Module执行<code>fn</code>函数，通常的用处是初始化函数。</p>
+
+<pre class="line-numbers"><code class="language-python">def init_weights(m):
+    print(m)
+    if type(m) == nn.Linear:
+        m.weight.data.fill_(1.0)
+        print(m.weight)
+
+net = nn.Sequential(nn.Linear(2, 2), nn.Linear(2, 2))
+net.apply(init_weights)
+</code></pre>
+
+<p><code>to()</code>：把这个Module放到cpu或者gpu中：</p>
+
+<pre class="line-numbers"><code class="language-python">device = torch.device(&#39;cuda&#39; if torch.cuda.is_available() else &#39;cpu&#39;)
+model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+</code></pre>
+
+<p><code>zero_grad</code>：把Module所有的grad设为0</p>
+
+<h3 id="toc_19">Linear layer</h3>
+
+<p>\[<br/>
+y = xA^\top + b<br/>
+\]</p>
+
+<p>对于由<code>nn.Linear(m, n)</code>生成的线形层，它的<code>weight</code>矩阵是一个大小为\(n\times m\)的矩阵，它会把输入的\(m\)个特征经过线性变换变成\(n\)个特征。\(x\)的最后一个维度是特征，其他前面的维度都可以理解为batch。也就是说，输入的大小为：\(b_1\times b_2\times \dots b_k\times m\)，输出的维度为：\(b_1\times b_2\times \dots b_k\times n\)</p>
+
+<pre class="line-numbers"><code class="language-python">linear = nn.Linear(3, 2)
+x = torch.randn(10, 3)
+pred = linear(x)
+</code></pre>
+
+<p>可选参数：</p>
+
+<ol>
+<li><code>bias</code>：如果这一项是<code>False</code>，那么不会有<code>bias</code>。</li>
+</ol>
+
+<p>注意：</p>
+
+<ol>
+<li><code>weight</code>和<code>bias</code>中的每一个元素都从\(U[-\frac{1}{\sqrt{m}}, \frac1{\sqrt{m}}]\)中初始化。</li>
+</ol>
+
+<h3 id="toc_20">Convolutional Layer</h3>
+
+<p>\[<br/>
+\mathrm{out}(i, j) = \mathrm{bias}^j + \sum\limits_{k=0}^{C_{in}-1}\mathrm{weight}_k^j \star \mathrm{input}(i, k), \forall 0\leq j&lt; C_{out},  0\leq i &lt; n<br/>
+\]</p>
+
+<p>输入矩阵的大小为 \(n\times C_{in}\times h_{in}\times w_{in}\)，输出矩阵的大小为\(n\times C_{out}\times h_{out}\times w_{out}\)。</p>
+
+<p>必须的参数有：</p>
+
+<ul>
+<li><code>in_channel</code>: \(C_{in}\)</li>
+<li><code>out_channel</code>: \(C_{out}\)</li>
+<li><code>kernel_size</code>: 卷积核也就是\(\mathrm{weight}\)的大小，提示：如果<code>group=1</code>，那么一共有\(C_{in}C_{out}\)个卷积核。</li>
+</ul>
+
+<p>可以选择的参数有：</p>
+
+<ul>
+<li><code>stride</code>：默认是1</li>
+<li><code>padding</code>：默认是0</li>
+<li><code>groups</code>：它必须同时被\(C_{in}, C_{out}\)整除，这时候将输入的channel分为group组，将输出的channel分为同样的组，输出的内容只由它对应组的输入决定。默认值为1</li>
+<li><code>bias</code>：默认是<code>True</code></li>
+</ul>
+
+<h3 id="toc_21">Max Pooling</h3>
+
+<p><code>torch.nn.MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)</code>：和卷积原理类似，只是不改变输出的channel，每个channel都独立计算最大值。</p>
+
+<p>注意，它一定不会把padding的0参与最大值的计算。</p>
+
+<h3 id="toc_22">Average Pooling</h3>
+
+<p><code>torch.nn.AvgPool2d(kernel_size, stride=None, padding=0, ceil_mode=False, count_include_pad=True)</code></p>
+
+<p>如果<code>count_include_pad</code>计算平均值不会涉及到padding的0。</p>
+
+<h3 id="toc_23">Batch Normlization</h3>
+
+<p><code>torch.nn.BatchNorm1d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</code></p>
+
+<p>\(\mathrm{out} = \frac{x - E[x]}{\sqrt{\mathrm{var}(x)+\mathrm{eps}}}\times \gamma + \beta\)</p>
+
+<p>这里需要注意的是输入的维度是两种情况\(n\times C\times L\)或者是\(n\times L\)，第一种情况下<code>num_features</code>应为\(C\)，归一化是对于\((\cdot, i, \cdot)\)进行；对于第二种情况下<code>num_features</code>应为\(L\)，归一化是对于\((\cdot, i)\)进行。其中保存了<code>num_features</code>个\(\gamma\)和\(\beta\)，并且记录了<code>num_features</code>个均值和方差。</p>
+
+<p>参数解释：</p>
+
+<ul>
+<li><code>momentum</code>：统计均值和方差的滑动平均值时的冲量参数，如果为<code>None</code>，那么便记录平均值。 </li>
+<li><code>affine</code>：如果为<code>False</code>：那么没有\(\gamma\)和\(\beta\)</li>
+<li><code>track_running_states</code>：如果为<code>False</code>，那么不记录均值和方差的均值，每次都现场计算。</li>
+</ul>
+
+<p>注意：在训练时会统计均值和方差，但是在评估时，应该调用<code>bn.eval()</code>函数来停止记忆均值和方差。</p>
+
+<p><code>torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</code>：和1d的模块基本一致，但是输入的维度为\(n\times C\times h\times w\)，归一化是针对\((\cdot, i, \cdot, \cdot)\)进行。</p>
+
+<p><code>num_features = C</code></p>
+
+<h4 id="toc_24">LSTM</h4>
+
+<p><code>torch.nn.LSTM(*args, **kwargs)</code></p>
+
+<p>参数：</p>
+
+<ul>
+<li><code>input_size</code>：输入的特征维数</li>
+<li><code>hidden_size</code>：隐藏层-输出的特征维数</li>
+<li><code>num_layers</code>：堆叠的层数</li>
+<li><code>bias</code>：默认<code>False</code></li>
+<li><code>batch_first</code>：如果为真，输入的维度为：\(n\times L\times p\)，其中\(L\)为输入长度，\(p\)为特征数，否则，输入的维度为：\(L\times n\times p\)。<strong>影响输出维度！！</strong></li>
+<li><code>drop_out</code>：如果为非零，在每一层上面加一层dropout层，概率为参数，默认值：0</li>
+<li><code>bidirectional</code>：若为<code>True</code>，是双向的LSTM，默认是<code>False</code></li>
+</ul>
+
+<p>输入：</p>
+
+<ul>
+<li><code>input</code>：维度\(L\times n\times p\)，如果<code>batch_first==False</code>；否则：\(n\times L\times p\)</li>
+<li><code>h_0</code>, <code>c_0</code>：维度\(\mathrm{num\_layers}*\mathrm{num\_directions}\times n\times p_\mathrm{hidden}\)</li>
+</ul>
+
+<p>输出：</p>
+
+<ul>
+<li><code>output</code>：维度\(L\times n\times \mathrm{num\_directions}*p_\mathrm{hidden}\)，可以使用<code>output.vew(L, n, num_directions, hidden_size)</code>来分离两个方向。如果<code>batch_first</code>，维度\(n\times L\times \mathrm{num\_directions}*p_\mathrm{hidden}\)</li>
+<li><code>h_n</code>, <code>c_n</code>：维度\(\mathrm{num\_layers}*\mathrm{num\_directions}\times n\times p_\mathrm{hidden}\)，可以使用<code>h_n.view(num_layers, num_directions, n, hidden_size)</code></li>
+</ul>
+
+<h2 id="toc_25">Loss</h2>
+
+<h3 id="toc_26">MSELoss</h3>
+
+<p><code>nn.MSELoss(x, y)</code>它的输入两个tensor，并且计算两个tensor之间的Mean Square Error，注意到这是一个可广播的运算，并且是从最后一个维度往前广播。</p>
+
+<p>它计算了：\(\frac{\sum(x_i - y_i)^2}{n}\)。</p>
+
+<p>可选参数：</p>
+
+<ul>
+<li><code>reduction=</code>：&#39;mean&#39;(Default)计算平均值，&#39;sum&#39;计算和，&#39;none&#39;等同于<code>(x-y) * (x-y)</code></li>
+</ul>
+
+<h3 id="toc_27">CrossEntropyLoss</h3>
+
+<p><code>torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction=&#39;mean&#39;)</code></p>
+
+<p>它的输入是两个矩阵，第一个矩阵\(x\)的维度需要是\(n\times c\)，其中\(n\)是batch_size, \(c\)是类别的个数，第二个矩阵\(y\)的维度是\(n\)，表示的是各个数据对应的标签。</p>
+
+<p>对于每个batch，loss值为：</p>
+
+<p>\[<br/>
+\ell = -\ln\frac{\exp(x_y)}{1^\top \exp(x)}<br/>
+\]</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.randn(10, 3)
+y = torch.randint(0, 4, (10,))
+torch.nn.CrossEntropyLoss()(x, y)
+# tensor(1.9090, grad_fn=&lt;NllLossBackward&gt;)
+one_vector = torch.ones(3, 1)
+exp_x = torch.exp(x)
+x_distribution = exp_x / torch.mm(exp_x, one_vector)
+ell = 0
+for k in range(10):
+    ell = ell - torch.log(x_distribution[k, y[k]])
+print(ell / 10)
+# tensor(1.9090, grad_fn=&lt;DivBackward0&gt;)
+</code></pre>
+
+<h2 id="toc_28">训练</h2>
+
+<h3 id="toc_29">Backward</h3>
+
+<p>对于一个值\(a\)是可以回传梯度的。这时候，对于<code>required_grad=True</code>的tensor就会有<code>grad</code>这个属性，保存了\((\frac{\partial a}{\partial W})_{1,1}\)</p>
+
+<p>需要注意的有亮点：</p>
+
+<p>1: 对于一个线性的计算图\(\ell = f_1f_2\dots f_n(A)\)，一旦我们得到了\(\frac{\partial \ell}{\partial A}\)，并且\(A = f(B)\)，那么根据链式法则：</p>
+
+<p>\[<br/>
+\frac{\partial \ell}{\partial B} = \frac{\partial \ell}{\partial A}\frac{\partial A}{\partial B}<br/>
+\]</p>
+
+<p>这样意味着在计算过程中是需要保存为了计算\(\frac{\partial A}{\partial B}\)相关的数据的，但是pytorch为了节省空间，在<code>backward</code>中会把这种中间变量删除，所以第二次运行<code>backward</code>时会报错。为了使得不删除这种中间数据，需要在<code>backward</code>时加入<code>retain_graph=True</code>参数。</p>
+
+<p>2: 如果调用了两个<code>backward</code>函数并且它们涉及到着公共的需要求梯度的tensor，梯度之间是相加的关系。</p>
+
+<h3 id="toc_30">优化</h3>
+
+<h4 id="toc_31">优化方法</h4>
+
+<p><code>optimizer = torch.optim.SGD()</code></p>
+
+<p>参数有：</p>
+
+<ul>
+<li><code>params</code>: 需要优化的参数</li>
+<li><code>lr</code>: 学习率</li>
+<li><code>momentum</code>: 动量参数</li>
+<li><code>weight_decay</code>: L2正则项</li>
+</ul>
+
+<p><code>optimizer.step()</code>：进行一步优化（并不包含<code>backward</code>操作）<br/>
+<code>optimizer.zero_grad()</code>：将模型中的参数的梯度设为0</p>
+
+<p>所以一般的流程是：</p>
+
+<pre class="line-numbers"><code class="language-python">for t in range(time_steps):
+    loss = criterion(pred, target)
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+</code></pre>
+
+<hr/>
+
+<p><code>optimizer = torch.optim.Adam(params, lr=1e-3)</code></p>
+
+<h4 id="toc_32">更新学习率</h4>
+
+<pre class="line-numbers"><code class="language-python">def update_lr(optimizer, lr):    
+    for param_group in optimizer.param_groups:
+        param_group[&#39;lr&#39;] = lr
+        
+update_lr(optimizer, new_lr)
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15568111388917.html" 
+          title="Previous Post: The Alias Method: Efficient Sampling with Many Discrete Outcomes">&laquo; The Alias Method: Efficient Sampling with Many Discrete Outcomes</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="15543921008119.html" 
+          title="Next Post: 信息论">信息论 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>张翼腾的博客</h1>
+                <div class="site-des">主要关注点在于自然语言处理领域，作者在学习的过程中分享自己学到的新的内</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="email" href="mailto:15307130114@fudan.edu.cn" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15568111388917.html">The Alias Method: Efficient Sampling with Many Discrete Outcomes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15556540091713.html">pytorch 入门</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15543921008119.html">信息论</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15541232015450.html">Noise Contrastive Estimation and Negative Sampling</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="15540423884690.html">Word2Vec入门</a>
+			      </li>
+		     
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137432635-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-137432635-1');
+</script>
+
+
+  </body>
+</html>

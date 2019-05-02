@@ -4,7 +4,7 @@
   <title><![CDATA[张翼腾的博客]]></title>
   <link href="https://sillybun.github.io/atom.xml" rel="self"/>
   <link href="https://sillybun.github.io/"/>
-  <updated>2019-04-09T18:03:43+08:00</updated>
+  <updated>2019-05-02T23:49:42+08:00</updated>
   <id>https://sillybun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,466 +13,604 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[矩阵微分计算]]></title>
-    <link href="https://sillybun.github.io/15547144642483.html"/>
-    <updated>2019-04-08T17:07:44+08:00</updated>
-    <id>https://sillybun.github.io/15547144642483.html</id>
+    <title type="html"><![CDATA[The Alias Method: Efficient Sampling with Many Discrete Outcomes]]></title>
+    <link href="https://sillybun.github.io/15568111388917.html"/>
+    <updated>2019-05-02T23:32:18+08:00</updated>
+    <id>https://sillybun.github.io/15568111388917.html</id>
     <content type="html"><![CDATA[
-<h2 id="toc_0">符号表示</h2>
+<p>在进行抽样时，我们经常遇到的一个问题是如何能够快速的通过概率分布来重复性的抽取独立离散样本。如果使用累计概率分布表再加上二分类查找能够得到\(O(\ln K)\)的复杂度。但是这是不够好的。事实上，我们可以把问题转化为一个\(1,2,\dots, K\)上的均匀分布和一个两点分布来解决这个问题，预处理的复杂度为\(O(K)\)，抽取一个样本的复杂度将为\(O(1)\)，空间复杂度为\(O(K)\)。</p>
 
-<p>若\(A\)和\(B\)都是\(n\times m\)的矩阵，那么：\(A\oplus B\)和\(A\otimes B\)都是\(n\times m\)的矩阵，它们第\((i,j)\)位置的元素值分别为：\(A_{i,j}+B_{i,j}\)和\(A_{i,j} \times B_{i,j}\)。</p>
+<span id="more"></span><!-- more -->
 
-<h2 id="toc_1">矩阵微分</h2>
+<p>我们用具体的例子来解释算法：</p>
 
-<p>为了引入矩阵微分的概念，如果这时候涉及到数值/向量/矩阵对数值/向量/矩阵的求导，若分别定义的话太过繁琐，我们下面把数值和向量均看成矩阵，数值是\(1\times 1\)的矩阵，而维度为\(n\)的向量是维度为\(n\times 1\)的矩阵。这样我们只要定义好矩阵对矩阵的导数，就包含了全部的情况。不过这样做后要对数乘做特殊的处理：若\(a\)是一个数值，\(A\)是一个\(n\times m\)的矩阵，我们用\(I^a_n\)表示对角线元素全部为\(a\)的对角矩阵。</p>
-
-<p>\[aA\mathop{=}\limits^{\Delta} I^a_n A\]</p>
-
-<p>\[Aa\mathop{=}\limits^{\Delta}A I^a_m\]</p>
-
-<p>下面定义矩阵对矩阵的微分：</p>
-
-<p>设\(A\)，\(B\)分别为维度为\(n\times m\)， \(p\times q\)的矩阵，我们定义\(\frac{\partial A}{\partial B}\)为一个以\(q\times p\)维度的矩阵为元素的维度为\(n\times m\)的矩阵。我们把这样的矩阵的维度表示为：\(n\times m\to q\times p\)，把这样的矩阵叫做四维矩阵，用一个大写字母上面标4表示它为四维矩阵比如\(\mathop{A}\limits^4\)。其中的第\((i,j)\)位置元素为：</p>
-
-<p>\[(\frac{\partial A}{\partial B})_{i,j} = \begin{bmatrix}<br/>
-    \frac{\partial A_{i,j}}{\partial B_{1,1}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,1}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{p,1}} \\<br/>
-    \frac{\partial A_{i,j}}{\partial B_{1,2}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,2}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{p,2}} \\<br/>
-    \vdots &amp; \vdots &amp;  \ddots &amp; \vdots \\<br/>
-    \frac{\partial A_{i,j}}{\partial B_{1,p}} &amp; \frac{\partial A_{i,j}}{\partial B_{2,p}} &amp;  \dots  &amp; \frac{\partial A_{i,j}}{\partial B_{q,p}}<br/>
-\end{bmatrix}\]</p>
-
-<h3 id="toc_2">运算规则</h3>
-
-<p>我们下面来定义涉及到这种以矩阵为元素的矩阵的运算。</p>
-
-<p>设\(\mathop{A}\limits^4\)，\(\mathop{B}\limits^4\)均为维度为\(n\times m\to p\times q\)的四维矩阵，那么：\(\mathop{A}\limits^4\pm \mathop{B}\limits^4\)是一个维度为\(n\times m\to p\times q\)的四维矩阵，其中的第\((i,j)\)位置的元素是\({\mathop{A}\limits^4}_{i,j}\pm {\mathop{B}\limits^4}_{i,j}\)。显然这样定义的加法和减法满足交换律、结合律。</p>
-
-<p>数乘运算：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(c\)是一个数，定义\(c\mathop{A}\limits^4 = (c{\mathop{A}\limits^4}_{i,j})_{n\times m\to p\times q}\)。数乘运算对四维矩阵加减法满足分配律。</p>
-
-<!--
-四维矩阵的迹：设$\mathop{A}\limits^4$为维度为$n\times n\to p\times q$的四维矩阵，那么它的迹是一个维度为$p\times q$的矩阵：$$\mathrm{tr}(\mathop{A}\limits^4) = \sum\limits_{i=1}^n {\mathop{A}\limits^4}_{i,i}$$
--->
-
-<p>四维矩阵的转置：设\(\mathop{A}\limits^4\)为维度为\(m\times n\to p\times q\)的四维矩阵，那么它的转置\({\mathop{A^\top}\limits^4}\)是一个维度为\(n\times m\to p\times q\)的四维矩阵，且其第\((i,j)\)位置的元素为：\(A_{j,i}\)。则：\({\mathop{A^\top}\limits^4} {\mathop{B^\top}\limits^4} = ({\mathop{B}\limits^4} {\mathop{A}\limits^4})^\top\)</p>
-
-<p>四维矩阵与二维矩阵之间的乘法：设\(\mathop{A}\limits^4\)为维度为\(n\times m\to p\times q\)的四维矩阵，\(B\)、\(C\)分别为维度为\(m\times r\)和\(s\times n\)的矩阵，那么：\(\mathop{A}\limits^4 B\)是一个维度为\(n\times r\to p\times q\)的四维矩阵，其中的第\((i,j)\)元素为：\((\mathop{A}\limits^4 B)_{i,j} = \sum\limits_{k=1}^m {\mathop{A}\limits^4}_{i,k}B_{k,j}\)；\(C \mathop{A}\limits^4\)是一个维度为\(s\times m\to p\times q\)的四维矩阵，其中的第\((i,j)\)元素为：\((C \mathop{A}\limits^4)_{i,j} = \sum\limits_{k=1}^n {C_{i,k} \mathop{A}\limits^4}_{k,j}\)。</p>
-
-<p>四维矩阵与四维矩阵之间的乘法：设\(\mathop{A}\limits^4\)，\(\mathop{B}\limits^4\)分别为维度为\(n\times m\to p\times q\)和\(q\times p\to r\times s\)的四维矩阵，那么我们定义\(\mathop{A}\limits^4\mathop{B}\limits^4\)是一个\(n\times m\to r\times s\)的四维矩阵，其中的第\((i,j)\)个元素为：<br/>
-\[(\mathop{A}\limits^4\mathop{B}\limits^4)_{i,j} = \mathrm{tr}({\mathop{A}\limits^4}_{i,j}\mathop{B}\limits^4) = \sum\limits_{k=1}^{p}\sum\limits_{l=1}^{q}(A_{i,j})_{k,l}B_{l,k}\]</p>
-
-<p>我们可以用下列式子来帮助理解：</p>
-
-<p>\[<br/>
-\begin{matrix}<br/>
-\mathop{A}\limits^4 &amp;B&amp;\longrightarrow &amp;\mathop{A}\limits^4 B\\<br/>
-m\times k\to p\times q&amp;k\times n&amp;\longrightarrow&amp; m\times n\to p\times q\\<br/>
-\end{matrix}<br/>
-\]</p>
-
-<p>\[<br/>
-\begin{matrix}<br/>
-C &amp; \mathop{A}\limits^4 &amp;\longrightarrow &amp; C \mathop{A}\limits^4\\<br/>
-m\times k&amp; k\times n\to p\times q&amp;\longrightarrow&amp; m\times n\to p\times q\\<br/>
-\end{matrix}<br/>
-\]</p>
-
-<p>\[<br/>
-\begin{matrix}<br/>
-\mathop{A}\limits^4 &amp; \mathop{B}\limits^4 &amp;\longrightarrow &amp;\mathop{A}\limits^4 \mathop{B}\limits^4\\<br/>
-n\times m\to p\times q&amp; q\times p\to r\times s &amp;\longrightarrow&amp; n\times m\to r\times s\\<br/>
-\end{matrix}<br/>
-\]</p>
-
-<p>这样的定义满足：</p>
+<p>比如概率分布为：\(\frac{1}{2}, \frac{1}{3}, \frac{1}{6}\)</p>
 
 <ol>
-<li>结合律：\((\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A}\limits^4 (\mathop{B}\limits^4 \mathop{C}\limits^4)\)，\((\mathop{A}\limits^4 B)C  = \mathop{A}\limits^4 (B C)\)，\((A \mathop{B}\limits^4)C = A (\mathop{B}\limits^4 C)\)，\((A B)\mathop{C}\limits^4 = A (B \mathop{C}\limits^4)\)，\((A \mathop{B}\limits^4)\mathop{C}\limits^4 = A(\mathop{B}\limits^4 \mathop{C}\limits^4)\)</li>
-<li>分配律：\((\mathop{A}\limits^4 + \mathop{B}\limits^4) \mathop{C}\limits^4 = \mathop{A}\limits^4 \mathop{C}\limits^4 + \mathop{B}\limits^4 \mathop{C}\limits^4\)，\(\mathop{C}\limits^4 (\mathop{A}\limits^4 + \mathop{B}\limits^4)  = \mathop{C}\limits^4 \mathop{A}\limits^4 + \mathop{C}\limits^4 \mathop{B}\limits^4\)，\((\mathop{A}\limits^4 + \mathop{B}\limits^4) C = \mathop{A}\limits^4 C + \mathop{B}\limits^4 C\)，\(C (\mathop{A}\limits^4 + \mathop{B}\limits^4)  = C \mathop{A}\limits^4 + C \mathop{B}\limits^4\)，\((A + B) \mathop{C}\limits^4 = A \mathop{C}\limits^4 + B \mathop{C}\limits^4\)，\(\mathop{C}\limits^4 (A + B)  = \mathop{C}\limits^4 A + \mathop{C}\limits^4 B\)</li>
-<li>\(c(\mathop{A}\limits^4 \mathop{B}\limits^4) = (c\mathop{A}\limits^4)\mathop{B}\limits^4 = \mathop{A}\limits^4(c\mathop{B}\limits^4)\)，\(c(A \mathop{B}\limits^4) = (cA)\mathop{B}\limits^4 = A(c\mathop{B}\limits^4)\)，\(c(\mathop{A}\limits^4 B) = (c\mathop{A}\limits^4)B = \mathop{A}\limits^4(cB)\)</li>
+<li>每个概率乘以\(K = 3\)，得到：\(\frac{3}{2}, 1, \frac{1}{2}\)</li>
+<li>我们由于\(\frac{3}{2}&gt;1&gt;\frac{1}{2}\)，我们将属于1的\(\frac{1}{2}\)的概率借给3。这样就得到了\(1,1,1\)</li>
+<li>但是借过去的\(0.5\)的概率还是属于1号分类的，所以我们就标记3号分类现在有\(0.5\)的概率实际上是1号样本，我们用\(((1,0), (1, 0), (0.5, 0.5:1))\)来表示三号样本中有\(0.5\)的可能性实际上是1号样本。</li>
+<li>这样我们在抽取的时候首先在\(1,2,3\)中均匀的抽取一个样本，如果抽取到的是1或者2那么就是抽取到的结果，但是如果抽取到的是3号样本的话</li>
 </ol>
-
-<!-- 
-，$(\mathop{A}\limits^4 \mathop{B}\limits^4)C  = \mathop{A}\limits^4 (\mathop{B}\limits^4 C)$，$(\mathop{A} \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A} (\mathop{B}\limits^4 \mathop{C}\limits^4)$，$(\mathop{A}\limits^4 B)\mathop{C}\limits^4 = \mathop{A}\limits^4 (B \mathop{C}\limits^4)$，$(\mathop{A}\limits^4 B)C  = \mathop{A}\limits^4 (B C)$，$(A \mathop{B}\limits^4)C = A (\mathop{B}\limits^4 C)$，$(A B)\mathop{C}\limits^4 = A (B \mathop{C}\limits^4)$
--->
-
-<p>证明：<br/>
-1）：<br/>
-设\(\mathop{A}\limits^4\)、\(\mathop{B}\limits^4\)、\(\mathop{C}\limits^4\)的维度分别为\(n\times m\to q\times p\)、\(p\times q\to s\times r\)、\(r\times s\to v\times u\)<br/>
-\[\begin{split}[(\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4]_{i,j} &amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r ((\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,j})_{a,b} C_{b,a}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r (\sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}{\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
-\end{split}\]</p>
-
-<p>\[\begin{split}[\mathop{A}\limits^4 (\mathop{B}\limits^4\mathop{C}\limits^4)]_{i,j} &amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p ({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{d,c}\\<br/>
-&amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p ({\mathop{A}\limits^4}_{i,j})_{c,d} [\sum\limits_{a=1}^s\sum\limits_{b=1}^r ({\mathop{B}\limits^4}_{d,c})_{a,b}{\mathop{C}\limits^4}_{b,a}]\\<br/>
-&amp;= \sum\limits_{c = 1}^q\sum\limits_{d=1}^p \sum\limits_{a=1}^s\sum\limits_{b=1}^r({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a = 1}^s\sum\limits_{b=1}^r \sum\limits_{c=1}^q\sum\limits_{d=1}^p({\mathop{A}\limits^4}_{i,j})_{c,d}({\mathop{B}\limits^4}_{d,c})_{a,b} {\mathop{C}\limits^4}_{b,a}\\<br/>
-\end{split}\]</p>
-
-<p>因此：\((\mathop{A}\limits^4 \mathop{B}\limits^4)\mathop{C}\limits^4 = \mathop{A}\limits^4 (\mathop{B}\limits^4 \mathop{C}\limits^4)\)</p>
-
-<p>剩下的三个结论可以根据矩阵乘法的结合律直接得到。</p>
-
-<p>对于最后一个结论：<br/>
-设\(A\)是一个维度为\(n\times p\)的矩阵。</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-(A({\mathop{B}\limits^4}{\mathop{C}\limits^4}))_{i,j} &amp;= \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}{\mathop{C}\limits^4})_{k,j}\\<br/>
-&amp;= \sum_{k=1}^{p}A_{i,k}\mathrm{tr}({\mathop{B}\limits^4}_{k,j}{\mathop{C}\limits^4})\\<br/>
-&amp;= \sum_{k=1}^{p}A_{i,k}\sum\limits_{a=1}^s\sum_{b=1}^r({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-((A{\mathop{B}\limits^4}){\mathop{C}\limits^4})_{i,j} &amp;= \mathrm{tr}((A{\mathop{B}\limits^4})_{i,j}{\mathop{C}\limits^4})\\<br/>
-&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r((A{\mathop{B}\limits^4})_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r(\sum_{k=1}^{p}A_{i,k}{\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;=\sum_{k=1}^{p} \sum\limits_{a=1}^s\sum_{b=1}^r A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum\limits_{a=1}^s\sum_{b=1}^r \sum_{k=1}^{p}A_{i,k}({\mathop{B}\limits^4}_{k,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= (A({\mathop{B}\limits^4}{\mathop{C}\limits^4}))_{i,j}\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>2）我们只证明前两条：<br/>
-设\(\mathop{A}\limits^4\)、\(\mathop{B}\limits^4\)、\(\mathop{C}\limits^4\)、\(\mathop{D}\limits^4\)的维度分别为\(n\times m\to q\times p\)、\(n\times m\to q\times p\)、\(p\times q\to s\times r\)、\(r\times s\to m\times n\)<br/>
-\[<br/>
-\begin{split}<br/>
-[(\mathop{A}\limits^4 + \mathop{B}\limits^4) \mathop{C}\limits^4]_{i,j} &amp;= \sum_{a=1}^{q}\sum_{b=1}^p [(\mathop{A}\limits^4 + \mathop{B}\limits^4)_{i,j}]_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum_{a=1}^{q}\sum_{b=1}^p [({\mathop{A}\limits^4}_{i,j})_{a,b} + ({\mathop{B}\limits^4}_{i,j})_{a,b}]{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= \sum_{a=1}^{q}\sum_{b=1}^p ({\mathop{A}\limits^4}_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a} + \sum_{a=1}^{q}\sum_{b=1}^p ({\mathop{B}\limits^4}_{i,j})_{a,b}{\mathop{C}\limits^4}_{b,a}\\<br/>
-&amp;= (\mathop{A}\limits^4 \mathop{C}\limits^4)_{i,j} + (\mathop{B}\limits^4 \mathop{C}\limits^4)_{i,j}\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-[\mathop{D}\limits^4(\mathop{A}\limits^4 + \mathop{B}\limits^4) ]_{i,j} &amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}(\mathop{A}\limits^4 + \mathop{B}\limits^4)_{b,a}\\<br/>
-&amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}({\mathop{A}\limits^4}_{b,a} + {\mathop{B}\limits^4}_{b,a})\\<br/>
-&amp;= \sum_{a=1}^{n}\sum_{b=1}^m [({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{A}\limits^4}_{b,a} + ({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{B}\limits^4}_{b,a}]\\<br/>
-&amp;= \sum_{a=1}^{n}\sum_{b=1}^m ({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{A}\limits^4}_{b,a} + \sum_{a=1}^{n}\sum_{b=1}^m({\mathop{D}\limits^4}_{i,j})_{a,b}{\mathop{B}\limits^4}_{b,a}\\<br/>
-&amp;= (\mathop{D}\limits^4\mathop{A}\limits^4)_{i,j} + (\mathop{D}\limits^4 \mathop{B}\limits^4) _{i,j} \\<br/>
-\end{split}<br/>
-\]</p>
-
-<!--
-再设$C$为$m\times u$的矩阵，
-
-$$
-\begin{split}
-[(\mathop{A}\limits^4 \mathop{B}\limits^4)C]_{i,j} &= \sum_{k=1}^{m}(\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,k}C_{k, j}\\
-&= \sum_{k=1}^{m}(\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a})C_{k, j}\\
-&= \sum_{k=1}^{m}\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a}C_{k, j}\\
-\end{split}
-$$
-
-$$
-\begin{split}
-[\mathop{A}\limits^4 (\mathop{B}\limits^4 C)]_{i,j} &= \sum_{k=1}^{m}(\mathop{A}\limits^4 \mathop{B}\limits^4)_{i,k}C_{k, j}\\
-&= \sum_{k=1}^{m}(\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a})C_{k, j}\\
-&= \sum_{k=1}^{m}\sum\limits_{a=1}^{q}\sum\limits_{b=1}^{p}({\mathop{A}\limits^4}_{i,j})_{a,b} {\mathop{B}\limits^4}_{b,a}C_{k, j}\\
-\end{split}
-$$
-
--->
-
-<!--
-
-我们定义了四种矩阵微分：
-
-第一种是矩阵对向量的微分：
-
-令$A = \varphi(x)$其中$x$是一个$l$维的向量，$A$是一个$n\times m$的矩阵，我们定义：$\frac{\partial A}{\partial x}$是一个张量矩阵，我们用大写字母上面标1（比如$\mathop{A}\limits^1$）表示一个矩阵是张量矩阵，也就是说，是一个$n\times m$的矩阵，其中的每个元素是一个$l$维向量的转置：
-
-$$(\frac{\partial A}{\partial x})_{i,j} = \frac{\partial  A_{i,j}}{\partial x}$$
-
-$$\frac{\partial A}{\partial x} = \begin{bmatrix}
-    \frac{\partial A_{1,1}}{\partial x} & \frac{\partial A_{1,2}}{\partial x_2} &  \dots  & \frac{\partial A_{1,n}}{\partial x_n} \\
-    \frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} &  \dots  & \frac{\partial y_2}{\partial x_n} \\
-    \vdots & \vdots &  \ddots & \vdots \\
-    \frac{\partial y_m}{\partial x_1} & \frac{\partial y_m}{\partial x_n} &  \dots  & \frac{\partial y_m}{\partial x_n}
-\end{bmatrix}$$
-
-我们用$n\times m\to l$表示上述张量矩阵的维度。
-
-我们定义张量矩阵的加法是平凡的：对于维度相同的张量矩阵，它们的加法是同样维度的张量矩阵，每个位置的元素值是原来两个矩阵对应位置元素的求和。
-
-同时我们要定义这种矩阵的乘法：
-
-对于一个$n\times m\to l$维的张量矩阵$\mathop{A}\limits^1$：
-
-- 若$a$是一个数值，$a\mathop{A}\limits^1 = \mathop{A}\limits^1 a$是一个张量矩阵，其中的第$(i,j)$个元素是原张量矩阵第$(i,j)$个元素的$a$倍。
-- 若$z$是一个$m$维的向量，$\mathop{A}\limits^1 \cdot z$是一个$n\times l$的矩阵，其中的第$(i,k)$位置的元素为：$\sum\limits_{j=1}^{m}(\mathop{A}\limits^1)_{i,j} z_j$。
-- 若$B$是一个$m\times p$的矩阵，$\mathop{A}\limits^1 \cdot B$是一个$n\times p\to l$维的张量矩阵，其中的第$(i,k)$位置的元素是一个向量的转置：$(\mathop{A}\limits^1\cdot B)_{i,k} = \sum\limits_{j=1}^{m}(\mathop{A}\limits^1)_{i,j} B_{j,k}$。
-
-第二种是数值对矩阵的微分：
-
-$\alpha = f(A)$，其中$A$是一个$m\times n$的矩阵，$\alpha$是一个数值，那么：$$\frac{\partial \alpha}{\partial A} = \begin{bmatrix}
-    \frac{\partial \alpha}{\partial A_{1,1}} & \frac{\partial \alpha}{\partial A_{2,1}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,1}} \\
-    \frac{\partial \alpha}{\partial A_{1,2}} & \frac{\partial \alpha}{\partial A_{2,2}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,2}} \\
-    \vdots & \vdots &  \ddots & \vdots \\
-    \frac{\partial \alpha}{\partial A_{1,n}} & \frac{\partial \alpha}{\partial A_{2,n}} &  \dots  & \frac{\partial \alpha}{\partial A_{m,n}}
-\end{bmatrix}$$
-
-这样：$\frac{\partial \alpha}{\partial A} = \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\frac{\partial \alpha}{\partial A_{i,j}}e_{j,i}$
-
-第三种是向量对矩阵的微分：
-
-设$x = f(A)$，其中$x$是一个$l$维的向量，$A$是一个$n\times m$的矩阵，$\frac{\partial x}{\partial A}$是一个矩阵向量：它是一个$l$维向量，每一个元素是一个$m\times n$的矩阵，它的第$i$个元素是$\frac{\partial x_i}{\partial A}$。它的维度定义为：$l\to m\times n$，用小写字母上面加上2来表示（比如$\mathop{x}\limits^2$）。
-
-$$
-\frac{\partial x}{\partial A} = \begin{bmatrix}\frac{\partial x_1}{\partial A}\\
-\frac{\partial x_2}{\partial A}\\
-\vdots\\
-\frac{\partial x_l}{\partial A}\\
-\end{bmatrix}
-$$
-
-我们需要定义矩阵向量的乘法：
-设$\mathop{x}\limits^{2}$是一个$l\to m\times n$的矩阵向量。
-
-- 若$a$是一个数值，$a\mathop{x}\limits^2 = \mathop{x}\limits^2 a$是一个向量矩阵，其中的第$i$个元素是原张量矩阵第$i$个元素的$a$倍。
-- 若$z$是一个$l$维的向量，$\mathop{x}\limits^2 \cdot z^\top$是一个$l\times l$的矩阵矩阵（维度为：$l\times l\to m\times n$），其中的第$(i,j)$位置的元素为：$ (\mathop{x}\limits^{2})_i z_j$。$z^\top \mathop{x}\limits^2 \cdot$是一个矩阵：$\sum\limits_{i=1}^l (\mathop{x}\limits^{2})_i z_i$
-- 若$A$是一个$p\times l$的矩阵，$A \cdot \mathop{x}\limits^2$是一个$p\to m\times n$维的矩阵向量，其中的第$i$位置的元素是一个矩阵：$(A \cdot \mathop{x}\limits^2)_i = \sum\limits_{j=1}^{l}A_{i,j}(\mathop{x}\limits^{2})_j$；
-
-最后：矩阵对矩阵的微分：
-
-$Y = f(A)$，其中$A$是一个$n\times m$的矩阵，$Y$是一个$p\times q$的矩阵，那么：$\frac{\partial Y}{\partial A}$是一个四维的结构，我们可以把它看成一个$p\times q$的矩阵，只是其中的第$(i,j)$个元素是一个矩阵：$\frac{\partial Y_{i,j}}{\partial A}$。我们叫它矩阵矩阵（用一个大写字母上面标2表示比如$\mathop{A}\limits^2$），定义它的维度为：$p\times q\to m\times n$。
-
-矩阵矩阵和普通矩阵的乘法和一般矩阵的乘法定义是一样的，只是要注意的是有的元素可能是一个矩阵。
-对于一个$p\times q\to m\times n$维的张量矩阵$\mathop{A}\limits^2$：
-
-- 若$a$是一个数值，$a\mathop{A}\limits^2 = \mathop{A}\limits^2 a$是一个矩阵矩阵，其中的第$(i,j)$个元素是原矩阵矩阵第$(i,j)$个元素的$a$倍。
-- 若$z$是一个$q$维的向量，$\mathop{A}\limits^2 \cdot z$是一个$p\to m\times n$的矩阵向量，其中的第$i$位置的元素为：$\sum\limits_{j=1}^{q}(\mathop{A}\limits^2)_{i,j} z_j$。
-- 若$B$是一个$q\times r$的矩阵，$\mathop{A}\limits^2 \cdot B$是一个$p\times r\to m\times n$维的矩阵矩阵，其中的第$(i,k)$位置的元素是一个矩阵：$(\mathop{A}\limits^2\cdot B)_{i,k} = \sum\limits_{j=1}^{q}(\mathop{A}\limits^2)_{i,j} B_{j,k}$；若$C$是一个$r\times p$的矩阵，$C\cdot \mathop{A}\limits^2$是一个$r\times q\to m\times n$维的矩阵矩阵，其中的第$(i,k)$位置的元素是一个矩阵：$(C\cdot \mathop{A}\limits^2)_{i,k} = \sum\limits_{j=1}^{p}C_{i,j}(\mathop{A}\limits^2)_{j,k} $。
-- 若$\mathop{B}\limits^2$是一个维度为$n\times m \to s\times r$的矩阵矩阵，那么$\mathop{A}\limits^2 \mathop{B}\limits^2$是一个维度为$p\times q\to s\times r$的矩阵矩阵，其中的第$(i,j)$个元素为$\mathrm{tr} [(\mathop{A}\limits^2)_{i,j} \mathop{B}\limits^2]$
-
- > 注意：这种定义的数值对矩阵的微分和我们定义的向量微分是不一致的，如果把向量当成一个一列的矩阵的话，数值对向量的微分应该是一个列向量，但是我们实际上数值对向量的微分是一个向量的转置。
--->
-
-<h2 id="toc_3">命题</h2>
-
-<p>命题1：\(y = f(A)\)是一个数值，\(\mathrm{d}y = \mathrm{tr}((\frac{\partial y}{\partial A})_{1,1}\mathrm{d}A)\)。其中\(\mathrm{d}A = (\mathrm{d}A_{i,j})_{i=1,2,\dots,m\colon j = 1,2,\dots, n}\)</p>
-
-<p>证明：<br/>
-\(\mathrm{d}y = \sum\limits_{i=1}^n \sum\limits_{j=1}^m \frac{\partial y}{\partial A_{i,j}}\mathrm{d}A_{i,j} = \mathrm{tr}((\frac{\partial y}{\partial A})_{1,1}\mathrm{d}A)\)</p>
-
-<p>命题2：\(A = f(B)\)，\(B=g(C)\)，\(A\),\(B\)，\(C\)分别为\(m\times n\)、\(p\times q\)、\(r\times s\)的矩阵，那么：\(\frac{\partial A}{\partial B} =\frac{\partial A}{\partial B} \frac{\partial B}{\partial C}\)</p>
-
-<p>证明：<br/>
-\[\begin{split}(\frac{\partial A}{\partial C})_{i,j} &amp;= \frac{\partial A_{i,j}}{\partial C}\\<br/>
-&amp;= \sum_{a=1}^p\sum_{b=1}^q \frac{\partial A_{i,j}}{\partial B_{a,b}}\frac{\partial B_{a,b}}{\partial C}\\<br/>
-&amp;= \sum_{a=1}^p\sum_{b=1}^q \frac{\partial A_{i,j}}{\partial B_{a,b}}\frac{\partial B_{a,b}}{\partial C}\\<br/>
-&amp;= \mathrm{tr} [(\frac{\partial A}{\partial B})_{i,j} \frac{\partial B}{\partial C}]\\<br/>
-&amp;= (\frac{\partial A}{\partial B} \frac{\partial B}{\partial C})_{i,j}<br/>
-\end{split}\]</p>
-
-<!--
-
-$\frac{\partial y}{\partial A} = \begin{bmatrix}\frac{\partial y}{\partial A_{1,1}} & \frac{\partial y}{\partial A_{2,1}} & \dots & \frac{\partial y}{\partial A_{n, 1}}\\\frac{\partial y}{\partial A_{1,2}} & \frac{\partial y}{\partial A_{2,2}}& \dots & \frac{\partial y}{\partial A_{n, 2}}\\ \vdots & \vdots & \ddots & \vdots\\\frac{\partial y}{\partial A_{1,m}} & \frac{\partial y}{\partial A_{2,m}}& \dots & \frac{\partial y}{\partial A_{n, m}}\end{bmatrix}$
-
-$\frac{\partial A}{\partial B} = \begin{bmatrix}\frac{\partial A_{1,1}}{\partial B} & \frac{\partial A_{1,2}}{\partial B} & \dots & \frac{\partial A_{1,m}}{\partial B}\\\frac{\partial A_{2,1}}{\partial B} & \frac{\partial A_{2,2}}{\partial B}& \dots & \frac{\partial A_{2,m}}{\partial B}\\ \vdots & \vdots & \ddots & \vdots\\\frac{\partial A_{n,1}}{\partial B} & \frac{\partial A_{n,2}}{\partial B}& \dots & \frac{\partial A_{n,m}}{\partial B}\end{bmatrix}$
-
-$\mathrm{tr}(\frac{\partial y}{\partial A} \frac{\partial A}{\partial B}) = \sum\limits_{i=1}^{n}\sum\limits_{j=1}^m\frac{\partial y}{\partial x_{i,j}}\frac{\partial x_{i,j}}{\partial B} = \frac{\partial y}{\partial B}$
-
-
-
-命题3：$a = f(A)$，$b = g(A)$，A是$n\times m$维的矩阵，$a,b\in\mathbb{R}$，那么：$\frac{\partial (ab)}{\partial A} = a\frac{\partial b}{\partial A} + b\frac{\partial a}{\partial A}$，$\frac{\partial (a+b)}{\partial A} = \frac{\partial a}{\partial A} + \frac{\partial b}{\partial A}$
-
--->
-
-<p>命题3：若\(A\)，\(B\)，\(C\)分别为\(n\times m\)、\(m\times p \)和\(r\times s\)的矩阵，那么\(\frac{\partial (A+B)}{\partial C}=\frac{\partial A}{\partial C} + \frac{\partial B}{\partial C}\)， \(\frac{\partial (AB)}{\partial C} = \frac{\partial A}{\partial C}B + A\frac{\partial B}{\partial C}\)。</p>
-
-<p>证明：</p>
-
-<p>\[\begin{split}<br/>
-[\frac{\partial (AB)}{\partial C})_{i,j}]_{k,l} &amp;= \frac{\partial (AB)_{i,k}}{\partial  C_{k,l}}\\<br/>
-&amp;= \frac{\partial \sum\limits_{a=1}^{m} A_{i,a}B_{a, j}}{\partial  C_{k,l}}\\<br/>
-&amp;= \sum\limits_{a=1}^{m}[\frac{\partial A_{i, a}}{\partial C_{k,l}}B_{a,j} + A_{i, a}\frac{\partial B_{a, j}}{\partial C_{k,l}}]\\<br/>
-&amp;= \sum\limits_{a=1}^{m}\frac{\partial A_{i, a}}{\partial C_{k,l}}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}\frac{\partial B_{a, j}}{\partial C_{k,l}}\\<br/>
-&amp;= \sum\limits_{a=1}^{m}[(\frac{\partial A}{\partial C})_{i,a}]_{k,l}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}[(\frac{\partial B}{\partial C})_{a, j}]_{k,l}\\<br/>
-&amp;= \sum\limits_{a=1}^{m}[(\frac{\partial A}{\partial C})_{i,a}]_{k,l}B_{a,j} + \sum\limits_{a=1}^{m} A_{i, a}[(\frac{\partial B}{\partial C})_{a, j}]_{k,l}\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>命题5：\(A = f(B)\)，\(B=g(C)\)，其中\(A\)，\(B\)，\(C\)分别为\(n\times m\)、\(p\times q \)和\(r\times s\)的矩阵。那么\(\frac{\partial A}{\partial C} = \frac{\partial A}{\partial B}\frac{\partial B}{\partial C}\)</p>
-
-<p>证明：<br/>
-\[\begin{split}(\frac{\partial A}{\partial C})_{i,j} &amp;= \frac{\partial A_{i,j}}{\partial  C}\\<br/>
-&amp;= \mathrm{tr}(\frac{\partial A_{i,j}}{\partial B}\frac{\partial B}{\partial C})\\<br/>
-&amp;= (\frac{\partial A}{\partial B}\frac{\partial B}{\partial C})_{i,j}<br/>
-\end{split}\]</p>
-
-<p>命题6：若\(f\colon \mathbb{R}\to \mathbb{R}\)，\[f(A)\mathop{=}\limits^\Delta \begin{bmatrix}<br/>
-    f(A_{11}) &amp; f(A_{12}) &amp; \dots  &amp; f(A_{1n}) \\<br/>
-    f(A_{21}) &amp; f(A_{22}) &amp; \dots  &amp; f(A_{2n}) \\<br/>
-    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
-    f(A_{n1}) &amp; f(A_{n2}) &amp; \dots  &amp; f(A_{mn})<br/>
-\end{bmatrix}\]，那么\(\frac{\partial f(A)}{\partial B} = f&#39;(A)\otimes \frac{\partial A}{\partial B}\)。</p>
-
-<p>证明：<br/>
-\(\frac{\partial f(A_{i,j})}{\partial B} = f&#39;(A_{i,j})\frac{\partial A_{i,j}}{\partial B}\)</p>
-
-<p>命题7：若\(X\)是一个\(n\times m\)维的矩阵，\(\frac{\partial X}{\partial X}\)是一个\(n\times m\to m\times n\)的矩阵矩阵，并且其第\((i,j)\)个元素是\(e_{j,i}\)，它是一个\(m\times n\)的矩阵，除第\((j,i)\)个元素为1外其余元素都为0。我们把这个矩阵命名为\(E_{n\times m}\)，它在我们矩阵求导中有非常重要的作用。</p>
-
-<p>命题8：若\({\mathop{A}\limits^4}\)是一个维度为\(m\times n\to q\times p\)的四维矩阵，那么：\({\mathop{A}\limits^4} E_{p\times q} = E_{n\times m} {\mathop{A}\limits^4} = {\mathop{A}\limits^4}\)</p>
-
-<p>证明：</p>
-
-<p>命题9：若\(A\)是一个维度为\(m\times n\)的矩阵，\(B\)是一个\(p\times q\)的矩阵，我们定义：\(A\times B \mathop{=}\limits^\Delta AE_{n,p}B\)，它是一个维度为：\(m\times q\to p\times n\)的四维矩阵，其中第\((i,j)\)个元素为：\(Be_{ji}A\)</p>
-
-<p>证明：</p>
-
-<p>\[<br/>
-\begin{split}<br/>
-(A\times B)_{i,j} &amp;= (AE_{n,p}B)_{i,j}\\<br/>
-&amp;= \sum_{a=1}^n\sum_{b=1}^p A_{i,a}e_{b,a}B_{b,j}\\<br/>
-&amp;= Be_{j,i}A\\<br/>
-\end{split}<br/>
-\]</p>
-
-<p>命题9推论：若\(a\)是一个\(n\)维的向量，\(b\)是一个\(m\)维的向量，那么\(a^\top E_{n, m}b = b a^\top\)。</p>
-
-<p>命题10：若\(a\)、\(b\)、\(c\)都是\(n\)维的向量，那么：\(a^\top (b\otimes c) = (a\otimes b)^\top c = (a\otimes c)^\top b\)，在其中有一个是矩阵向量时也是正确的。</p>
-
-<h2 id="toc_4">例子：</h2>
-
-<p>例1：Cross Entropy Loss：\(\ell = -y^\top \log \frac{\exp(Wx)}{\mathbb{1}^\top \exp(Wx)}\)，求\(\frac{\partial \ell}{\partial W}\)</p>
-
-<p>解：<br/>
-\(\ell = -y^\top \log\exp(Wx) + \log[1^T\exp(Wx)] = -y^\top Wx + \log[1^\top\exp(Wx)]\)<br/>
-\[\begin{split}<br/>
-\frac{\partial \ell}{\partial W} &amp;= - x y^\top + \frac{1^\top[\exp(Wx)\otimes (\frac{\partial W}{\partial W}x)]}{1^\top \exp(Wx)}\\<br/>
-&amp;= - x y^\top + \frac{[1\otimes \exp(Wx)]^\top(\frac{\partial W}{\partial W}x)}{1^\top \exp(Wx)}\\<br/>
-&amp;= - x y^\top + \frac{x\exp(Wx)^\top}{1^\top \exp(Wx)}\\<br/>
-&amp;= x(\mathrm{softmax}(Wx) - y)^\top<br/>
-\end{split}\]</p>
-
-<p>\(\ell = -y^\top \mathrm{softmax}(W_1\sigma(W_2X+b_2)+b_1)\)，求\(\frac{\partial \ell}{\partial W}\)</p>
 
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[向量微分计算]]></title>
-    <link href="https://sillybun.github.io/15546453666266.html"/>
-    <updated>2019-04-07T21:56:06+08:00</updated>
-    <id>https://sillybun.github.io/15546453666266.html</id>
+    <title type="html"><![CDATA[pytorch 入门]]></title>
+    <link href="https://sillybun.github.io/15556540091713.html"/>
+    <updated>2019-04-19T14:06:49+08:00</updated>
+    <id>https://sillybun.github.io/15556540091713.html</id>
     <content type="html"><![CDATA[
-<p>矩阵微分在神经网络中的应用及其广泛，这里总结了各种矩阵微分的处理方法。</p>
+<span id="more"></span><!-- more -->
 
-<h2 id="toc_0">符号表示</h2>
+<h2 id="toc_0">变量</h2>
 
-<p><strong>矩阵</strong>: \(a_{i,j}\in\mathbb{R}\quad i=1,2,\dots, m;j=1,2,\dots m\)\[A = \begin{bmatrix}<br/>
-    a_{11} &amp; a_{12} &amp; a_{13} &amp; \dots  &amp; a_{1n} \\<br/>
-    a_{21} &amp; a_{22} &amp; a_{23} &amp; \dots  &amp; a_{2n} \\<br/>
-    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
-    a_{m1} &amp; a_{m2} &amp; a_{m3} &amp; \dots  &amp; a_{mn}<br/>
-\end{bmatrix}\]是一个\(m\times n\)的矩阵。</p>
+<h3 id="toc_1">根据数据产生tensor</h3>
 
-<p><strong>向量</strong>：一个\(n\)维的向量是一个\(n\times 1\)的矩阵，也就是说所有的向量都是列向量。</p>
+<p>根据数值产生tensor⬇️：</p>
 
-<p>定义：若\(x\)是一个\(n\)维向量，\[\mathrm{diag}(x) = \begin{bmatrix}<br/>
-    x_1 &amp; 0 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
-    0 &amp; x_2 &amp; 0 &amp; \dots  &amp; 0 \\<br/>
-    0 &amp; 0 &amp; x_3 &amp; \dots  &amp; 0 \\<br/>
-    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br/>
-    0 &amp; 0 &amp; 0 &amp; \dots  &amp; x_n<br/>
-\end{bmatrix}\]</p>
+<pre class="line-numbers"><code class="language-python"> torch.tensor(1., requires_grad=True[False])
+</code></pre>
 
-<p>定义：若\(x\)是一个\(n\)维向量，\(y\)是一个\(n\)维向量，\[\begin{split}x\otimes y &amp;= [x_1y_1, x_2y_2,\dots, x_ny_n]^\top\\x\oplus y &amp;= [x_1+y_1, x_2+y_2,\dots, x_n+y_n]^\top\\\end{split}\]</p>
+<p>根据numpy产生tensor⬇️：</p>
 
-<h3 id="toc_1">向量微分</h3>
+<pre class="line-numbers"><code class="language-python"> torch.tensor(np.array([1., 2., 3.], dtype=np.float32), required_grad=True[False])
+</code></pre>
 
-<p>令\(y=\phi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，我们定义：\[\frac{\partial y}{\partial x} \mathop{=}\limits^\Delta \begin{bmatrix}<br/>
-    \frac{\partial y_1}{\partial x_1} &amp; \frac{\partial y_1}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_1}{\partial x_n} \\<br/>
-    \frac{\partial y_2}{\partial x_1} &amp; \frac{\partial y_2}{\partial x_2} &amp;  \dots  &amp; \frac{\partial y_2}{\partial x_n} \\<br/>
-    \vdots &amp; \vdots &amp;  \ddots &amp; \vdots \\<br/>
-    \frac{\partial y_m}{\partial x_1} &amp; \frac{\partial y_m}{\partial x_n} &amp;  \dots  &amp; \frac{\partial y_m}{\partial x_n}<br/>
-\end{bmatrix}\]</p>
+<p>还有一个函数是<code>torch.from_numpy()</code>，它们两者的区别在于：</p>
 
-<p>注意到如果\(x\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量；如果\(y\)是一个数值，那么\(\frac{\partial y}{\partial x}\)是一个向量的转置。</p>
+<ul>
+<li> <code>torch.tensor</code>会复制numpy数组数据，所以对新的拷贝进行任何改变并不会改变原来数据的数值；但是<code>torch.from_numpy()</code>共享内存并不会复制数据，对tensor进行的任何改变会对原有数据产生影响。</li>
+<li> <code>torch.from_numpy</code>没有<code>required_grad</code>参数，可以这样认为，pytorch并不赞同改变由<code>from_numpy</code>引入的数据。</li>
+</ul>
 
-<blockquote>
-<p>这样定义向量微分的原因是这种定义下有：\(\mathrm{d}y = \frac{\partial y}{\partial x}\mathrm{d}x\)。</p>
-</blockquote>
+<p>根据list产生tensor⬇️：</p>
 
-<h2 id="toc_2">命题 -- 向量微分</h2>
+<pre class="line-numbers"><code class="language-python"> torch.tensor([1., 2., 3.], required_grad=True[False])
+</code></pre>
 
-<p>定理1：（线性性）若\(a,b\in\mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(\phi\colon \mathbb{R}^n\to \mathbb{R}^m\)，\(\varphi\colon \mathbb{R}^n\to \mathbb{R}^m\)，那么\(\frac{\partial (a\phi(x)+ b\varphi(x))}{\partial x} = a\frac{\partial \phi(x)}{\partial x} + b\frac{\partial \varphi(x)}{\partial x}\)</p>
+<h3 id="toc_2">根据分布产生tensor</h3>
 
-<p>定理2：（链锁法则）若\(y = \phi(z)\)，\(z = \varphi(x)\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
+<p>0-1均匀分布⬇️：</p>
 
-<p>证明：<br/>
-\(\frac{\partial y_i}{\partial z_k} = \sum_{j=1}^{n}\frac{\partial y_i}{\partial x_j}\frac{\partial x_j}{\partial z_k}\)<br/>
-因此：\(\frac{\partial y}{\partial x} = \frac{\partial y}{\partial z}\frac{\partial z}{\partial x}\)</p>
+<pre class="line-numbers"><code class="language-python">torch.rand(3, 3)
+# random number of the same size:⬇️
+torch.rand_like({some tensor})
+</code></pre>
 
-<p>命题1：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(A\)与\(x\)无关，那么：\(\frac{\partial y}{\partial x} = A\)。</p>
+<p>正态分布⬇️：</p>
 
-<p>证明：<br/>
-\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
-\(\frac{\partial y_i}{\partial x_j} = A_{i,j}\)<br/>
-因此：\(\frac{\partial y}{\partial x} = A\)</p>
+<pre class="line-numbers"><code class="language-python">torch.randn(10, 3)
+torch.randn_lile({some tensor})
+</code></pre>
 
-<p>命题2：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，\(x\)是\(z\)的函数，那么\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)。</p>
+<p>单位矩阵⬇️：</p>
 
-<p>证明：<br/>
-\(y_i = \sum\limits_{k=1}^n A_{i,k}x_k\)<br/>
-\(\frac{\partial y_i}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}\frac{\partial x_k}{\partial z_j} = \sum\limits_{k=1}^{n}A_{i,k}(\frac{\partial x}{\partial z})_{k,j}\)<br/>
-因此：\(\frac{\partial y}{\partial z} = A\frac{\partial x}{\partial z}\)</p>
+<pre class="line-numbers"><code class="language-python">torch.eye(3)
+torch.eye(3,4)
+# tensor([[1., 0., 0., 0.],
+#         [0., 1., 0., 0.],
+#         [0., 0., 1., 0.]])
+</code></pre>
 
-<p>命题3：若\(\alpha = y^\top  A x\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(A\)与\(z\)无关，那么\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)。</p>
+<p>全0矩阵⬇️：</p>
 
-<p>证明：<br/>
-\(\alpha = \sum\limits_{i,k}y_i A_{i,k}x_k\)<br/>
-\[\begin{split}<br/>
-\frac{\partial \alpha}{\partial z_j} &amp;= \sum\limits_{i,k}(\frac{\partial y_i}{\partial z_j} A_{i,k}x_k + y_i A_{i,k}\frac{\partial x_k}{\partial z_j})\\<br/>
-&amp;= \sum\limits_{i=1}^{m}(x^\top A^\top )_i\frac{\partial y_i}{\partial z_j} + \sum\limits_{k=1}^{n}(y^\top A)_k\frac{\partial x_k}{\partial z_j}\\<br/>
-&amp;= (x^\top A^\top \frac{\partial y}{\partial z})_j + (y^\top A\frac{\partial x}{\partial z})_j<br/>
-\end{split}\]<br/>
-因此，\(\frac{\partial \alpha}{\partial z} = y^\top  A\frac{\partial x}{\partial x} + x^\top  A^\top  \frac{\partial y}{\partial z}\)</p>
+<pre class="line-numbers"><code class="language-python">x = torch.zeros(10,3)
+torch.zeros_like(x)
+</code></pre>
 
-<p>命题4 ：若\(f\colon \mathbb{R}\to \mathbb{R}\)，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(f(x) \mathop{=}\limits^\Delta [f(x_1),f(x_2),\dots, f(x_n)]^\top\)，那么：\(\frac{\partial f(x)}{\partial z} = \mathrm{diag}(f&#39;(x))\frac{\partial x}{\partial z}\)。注意到这个命题对\(x\)是一个数值同样是正确的。</p>
+<p>全1矩阵⬇️：</p>
 
-<p>证明：<br/>
-\(\frac{\partial f(x)_i}{\partial z_j} = f&#39;(x_i)\frac{\partial x_i}{\partial z_j}\)，这样就证明了结论。</p>
+<pre class="line-numbers"><code class="language-python">x = torch.ones(10,3)
+torch.ones_like(x)
+</code></pre>
 
-<p>命题5：若\(y = ax\)，其中\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，\(a\)是一个数值，那么：\(\frac{\partial y}{\partial z} = x \frac{\partial a}{\partial z} + a \frac{\partial x}{\partial z}\)</p>
+<h3 id="toc_3">引入数据</h3>
 
-<p>证明：<br/>
-\(\frac{\partial y_i}{\partial z_k} = a\frac{\partial x_i}{\partial  z_k} + \frac{\partial a}{\partial  z_k} x_i = (a\frac{\partial x}{\partial z})_{i, k}+ (x \frac{\partial a}{\partial  z})_{i, k}\\\)</p>
+<p><code>torch.utils.data.DataLoader</code>提供了对数据的引入：</p>
 
-<p>命题6：若\(y\)是一个\(n\)维的向量，\(x\)是一个\(n\)维的向量，\(z\)是一个\(l\)维的向量，那么：\[\begin{split}\frac{\partial (x\oplus y)}{\partial z} &amp;= \frac{\partial x}{\partial  z} + \frac{\partial y}{\partial  z}\\ \frac{\partial (x\otimes y)}{\partial z} &amp;= \mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}\\ \end{split}\]</p>
+<p>参数有：</p>
 
-<p>证明：<br/>
-\(\frac{\partial (x_i+y_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k} + \frac{\partial y_i}{\partial z_k}\)，这样就证明了第一个结论。</p>
+<ul>
+<li><code>dataset</code>：数据源</li>
+<li><code>batch_size</code>：batch_size，默认1</li>
+<li><code>shuffle</code>：如果为<code>True</code>：在每一次<code>epoch</code>便会打乱数据。默认<code>False</code></li>
+<li><code>drop_last</code>：如果为<code>True</code>：在数据量不能整除<code>batch_size</code>时，会舍弃掉最后一个不完整的batch。默认<code>False</code></li>
+</ul>
 
-<p>\(\frac{\partial (x_iy_i)}{\partial z_k} = \frac{\partial x_i}{\partial z_k}y_i + x_i\frac{\partial y_i}{\partial z_k} = [\mathrm{diag}(y)\frac{\partial x}{\partial  z} + \mathrm{diag}(x) \frac{\partial y}{\partial  z}]_{i,k}\)</p>
+<p><code>torch.utils.data.random_split</code>提供了对数据的分割：</p>
 
-<p>命题7：若\(y=Ax\)，其中\(y\)是一个\(m\)维的向量，\(x\)是一个\(n\)维的向量，那么\(\frac{\partial y}{\partial z} = A \frac{\partial x}{\partial z} + \frac{\partial A}{\partial z}x\)。</p>
+<p>参数有：</p>
 
-<p>证明：<br/>
-\(y_i = \sum\limits_{j=1}^{n}A_{i,j}x_j\)<br/>
-\(\frac{\partial y_i}{\partial z_k} = \sum\limits_{j=1}^{n}(\frac{\partial A_{i,j}}{\partial z_k}x_j + A_{i,j}\frac{\partial x_j}{\partial z_k}) =(\frac{\partial A}{\partial z}x)_{i, k} + (A\frac{\partial x}{\partial z})_{i,k}\)</p>
+<ul>
+<li><code>dataset</code>：数据源</li>
+<li><code>lengths</code>：分割出来的每一块的长度</li>
+</ul>
 
-<h2 id="toc_3">例子</h2>
+<h3 id="toc_4">DataSet</h3>
 
-<p>\(x\)是一个\(n\)维的向量，\(y=\mathrm{softmax}(x)\)，也就是\(y_i = \frac{\exp(x_i)}{\sum\limits_{j=1}^{n} \exp(x_j)}\)，求\(\frac{\partial y}{\partial x}\)。</p>
+<pre class="line-numbers"><code class="language-python">class Dataset(object):
 
-<p>解：<br/>
-我们令\(\mathbb{1}\)表示\(n\)维所有元素均为1的向量，则：<br/>
-\[\begin{split}y &amp;= \mathrm{softmax}(x)\\ &amp;= \frac{\exp(x)}{\sum\limits_{i=1}^{n} \exp(x_i)}\\ &amp;= \frac{\exp(x)}{\mathrm{1}^\top \exp(x)} \end{split}\]</p>
+    def __getitem__(self, index):
+        raise NotImplementedError
 
-<p>\[\begin{split}\frac{\partial y}{\partial x} &amp;= \exp(x)\frac{\partial \frac{1}{\mathbb{1}^\top \exp(x)}}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~5)\\ &amp;= \exp(x)[-\frac{1}{(\mathbb{1}^\top \exp(x))^2}]\frac{\partial [\mathbb{1}^\top \exp(x)]}{\partial  x} + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~4)\\<br/>
-&amp;= [-\frac{\exp(x)}{(\mathbb{1}^\top \exp(x))^2}]\mathbb{1}^\top \mathrm{diag}(\exp(x)) + \frac{1}{\mathbb{1}^\top \exp(x)}\frac{\partial \exp(x)}{\partial  x}\quad (proposition ~1, 4)\\<br/>
-&amp;= -\frac{\exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2} + \frac{1}{\mathbb{1}^\top \exp(x)}\mathrm{diag}(\exp(x))\quad (proposition ~4)\\<br/>
-&amp;= \frac{\mathbb{1}^\top \exp(x)\mathrm{diag}(\exp(x)) - \exp(x)\exp(x)^\top}{(\mathbb{1}^\top \exp(x))^2}\\<br/>
-&amp;= \mathbb{1}^\top y\mathrm{diag}(y) - yy^\top\\<br/>
-&amp;= \mathrm{diag}(y y^\top \mathbb{1}) - yy^\top\\ <br/>
-&amp;= \mathrm{diag}(y) - yy^\top\\<br/>
-\end{split}\]</p>
+    def __len__(self):
+        raise NotImplementedError
+
+    def __add__(self, other):
+        return ConcatDataset([self, other])
+</code></pre>
+
+<p>所以要自己生成dataset需要定义：</p>
+
+<pre class="line-numbers"><code class="language-python">class CustomDataset(torch.utils.data.Dataset):
+    def __init__(self):
+        # TODO
+        # 1. Initialize file paths or a list of file names. 
+        pass
+    def __getitem__(self, index):
+        # TODO
+        # 1. Read one data from file (e.g. using numpy.fromfile, PIL.Image.open).
+        # 2. Preprocess the data (e.g. torchvision.Transform).
+        # 3. Return a data pair (e.g. image and label).
+        pass
+    def __len__(self):
+        # 有 should change 0 to the total size of your dataset.
+        return 0 
+</code></pre>
+
+<p>dataset在使用DataLoader导入后会自动的变成tensor。</p>
+
+<pre class="line-numbers"><code class="language-python">train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+                                           batch_size=100, 
+                                           shuffle=True)
+total_step = len(train_loader)
+for epoch in range(num_epochs):
+    for i, (images, labels) in enumerate(train_loader):
+        # TODO
+        if (i+1) % 100 == 0:
+            print (&quot;Epoch [{}/{}], Step [{}/{}] Loss: {:.4f}&quot;
+                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+</code></pre>
+
+<h2 id="toc_5">操作</h2>
+
+<h3 id="toc_6">加减法</h3>
+
+<p>加减法可以在相同大小的tensor上进行，是元素的加减⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+y = torch.tensor([[0., 1., 2.], [1., 0., 3.]])
+x + y #⬇️
+# tensor([[1., 3., 5.],
+#         [3., 2., 5.]])
+</code></pre>
+
+<p>一个维度为\(1\times n\)的行向量可以和一个维度为\(m\times n\)的矩阵相加，其结果为矩阵的每行都加上<br/>
+行向量⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+z = torch.tensor([1., 2., 3.])
+x + z #⬇️
+# tensor([[2., 4., 6.],
+#         [3., 4., 5.]])
+</code></pre>
+
+<p>一个维度为\(m\times 1\)的列向量可以和一个维度为\(m\times n\)的行向量相加，其结果为矩阵的每一列都加上列向量⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [2., 2., 2.]])
+z = torch.tensor([[1.], [2.]])
+x + z #⬇️
+# tensor([[2., 3., 4.],
+#         [4., 4., 4.]])
+</code></pre>
+
+<p>加减法是自动广播的，两个维度为\(d_1\times d_2\times \dots\times d_{k_1}\)和\(d_1&#39;\times d_2&#39;\times \dots\times d_{k_n}&#39;\)的矩阵（不妨设\(k_1\leq k_2\)）在\((d_{k_1-i} - d_{k_2-i})(d_{k_1-i} - 1)(d_{k_2-i}-1) =0,\forall 0\leq i&lt;k_1\)时可以加减，相当于把每个矩阵的维度都广播为：\(d_1&#39;\times d_2&#39;\times \dots \times d_{k_2-k_1}&#39;\times \max(d_{1}, d_{k_2-k_1+1}&#39;)\times \max(d_{2}, d_{k_2-k_1+2}&#39;)\times \max(d_{k_1}, d_{k_2}&#39;)\)</p>
+
+<h3 id="toc_7">乘除法：</h3>
+
+<h4 id="toc_8">Hadamard Product（逐元素乘法）</h4>
+
+<p>两个维度相同的矩阵可以做乘法和除法，表示对应位置的乘法和除法⬇️：</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+y = torch.tensor([[1., 1., 1.], [2., 2., 2.]])
+x * y #⬇️
+# tensor([[ 1.,  2.,  3.],
+#        [ 8., 10., 12.]])
+x / y #⬇️
+# tensor([[1.0000, 2.0000, 3.0000],
+#        [2.0000, 2.5000, 3.0000]])
+</code></pre>
+
+<p>一个维度为\(1\times n\)的行向量可以和一个维度为\(m\times n\)的矩阵做乘法和除法运算，其含义是把矩阵中每一行与行向量做相应的运算⬇️。</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+z = torch.tensor([1., 2., 3.])
+x * z # ⬇️
+# tensor([[ 1.,  4.,  9.],
+#         [ 4., 10., 18.]])
+x / z # ⬇️
+# tensor([[1.0000, 1.0000, 1.0000],
+#         [4.0000, 2.5000, 2.0000]])
+z / x # ⬇️
+# tensor([[1.0000, 1.0000, 1.0000],
+#         [0.2500, 0.4000, 0.5000]])
+</code></pre>
+
+<p>一个维度为\(m\times 1\)的列向量可以和一个维度为\(m\times n\)的矩阵做乘法和除法运算，其含义是把矩阵中的每一列与列向量做相应的运算。</p>
+
+<p>乘法和除法是自动广播的，两个维度为\(d_1\times d_2\times \dots\times d_{k_1}\)和\(d_1&#39;\times d_2&#39;\times \dots\times d_{k_n}&#39;\)的矩阵（不妨设\(k_1\leq k_2\)）在\((d_{k_1-i} - d_{k_2-i})(d_{k_1-i} - 1)(d_{k_2-i}-1) =0,\forall 0\leq i&lt;k_1\)时可以加减，相当于把每个矩阵的维度都广播为：\(d_1&#39;\times d_2&#39;\times \dots \times d_{k_2-k_1}&#39;\times \max(d_{1}, d_{k_2-k_1+1}&#39;)\times \max(d_{2}, d_{k_2-k_1+2}&#39;)\times \max(d_{k_1}, d_{k_2}&#39;)\)</p>
+
+<h4 id="toc_9">矩阵乘法</h4>
+
+<p>一个维度为\(m\times n\)的矩阵\(A\)可以和维度为\(n\times p\)的矩阵\(B\)做矩阵乘法，得到维度为\(m\times p\)的矩阵。<strong>注意：pytorch中并不会把一个向量理解成一个矩阵</strong></p>
+
+<pre class="line-numbers"><code class="language-text">x = torch.tensor([[1., 2., 3.], [4., 5., 6.]])
+y = torch.tensor([[1., 2.], [3., 4.]])
+torch.mm(y, x) #⬇️
+# tensor([[ 9., 12., 15.],
+#         [19., 26., 33.]])
+w = torch.tensor([1., 2.])
+torch.mm(w, x) #❌
+torch.mm(w.reshape(1, 2), x) #⬇️
+# tensor([[ 9., 12., 15.]])
+z = torch.tensor([1., 2., 3.])
+torch.mm(x, z) #❌
+torch.mm(x, z.reshape(3, 1)) #⬇️
+# tensor([[14.],
+#         [32.]])
+</code></pre>
+
+<h4 id="toc_10">广播矩阵乘法</h4>
+
+<p>两个维度为\(n\)的向量\(a, b\)可以做广播矩阵乘法，得到了\(a\cdot b\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-text">w = torch.tensor([1., 2.])
+torch.matmul(w, w)
+# tensor(5.)
+</code></pre>
+
+<p>一个维度为\(m\)的向量\(v\)可以和一个维度为\(m\times n\)的矩阵\(A\)做广播矩阵乘法，得到了一个维度为\(n\)的向量\(v^\top A\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2.], [3., 4.]])
+w = torch.tensor([1., 2.])
+torch.matmul(w, x)
+# tensor([ 7., 10.])
+</code></pre>
+
+<p>一个维度为\(m\times n\)的矩阵\(A\)可以和维度为\(n\)的矩阵\(u\)做广播矩阵乘法，得到了一个维度为\(m\)的向量\(A u\)。⬇️</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.tensor([[1., 2.], [3., 4.]])
+w = torch.tensor([1., 2.])
+torch.matmul(x, w)
+# tensor([ 5., 11.])
+</code></pre>
+
+<p>对于两个矩阵之间，广播矩阵乘法等同于矩阵乘法。</p>
+
+<p>如果有某一个矩阵的维度超过2维，那么会把最后两维看作是矩阵，前面的维度都看成是batch被广播。</p>
+
+<p>分为两种情况：只有一个矩阵的维度超过2，对这个矩阵倒数第二个维度前面的所有维度都当成batch；另一种情况是两个矩阵的维度都超过2，那么这两个矩阵的batch必须要匹配：要么一个为1，要么两者都不为1但是一定要相同。比如batch的维度为\(5\times 1\times 3\)与\(1\times 4\times 1\)就是匹配的，两者都被广播成维度为\(5\times 4\times 3\)的batch。</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.ones([5, 1, 3, 3, 3])
+y = torch.ones([1, 4, 1, 3, 3])
+torch.matmul(x, y).shape
+# torch.Size([5, 4, 3, 3, 3])
+</code></pre>
+
+<h3 id="toc_11">改变矩阵的大小</h3>
+
+<pre class="line-numbers"><code class="language-python">reshape(*shape) → Tensor
+view(*shape) → Tensor
+</code></pre>
+
+<p>两者都能改变矩阵的大小，但是<code>view</code>保证了输入输出共享内存，但是这要求输入的内存是连续保存的，<code>reshape</code>无法保证这一点。</p>
+
+<h3 id="toc_12">转置</h3>
+
+<pre class="line-numbers"><code class="language-python">torch.transpose(input, dim0, dim1) → Tensor
+torch.t(input) → Tensor
+</code></pre>
+
+<p>第一个函数是交换矩阵中两个维度，输入矩阵的维度为\(d_1 \times d_2 \times \dots \times d_k\)，交换\(i, j\)，那么输出矩阵的维度为：\(d_1 \times d_2 \times \dots\times d_{i-1}\times d_{j}\times d_{i+1}\times  \dots d_{j-1}\times d_i\times d_{j+1}\times \dots \times d_k\)。</p>
+
+<p>第二个函数是<code>torch.transpose(input, 0, 1)</code>的简写，表现出来的就是矩阵的转置。</p>
+
+<h3 id="toc_13">堆叠</h3>
+
+<p><code>torch.stack(seq, dim=0, out=None)</code>：把一串矩阵（需要维度相同）合并成一个新的矩阵在一个新的维度上。</p>
+
+<h3 id="toc_14">合并</h3>
+
+<p><code>torch.cat(tensors, dim=0, out=None) → Tensor</code>：把一串矩阵合并成一个新的矩阵，除却合并的维度外，其他维度要一致。</p>
+
+<pre class="line-numbers"><code class="language-python">&gt;&gt;&gt; x = torch.randn(2, 3)
+&gt;&gt;&gt; x
+tensor([[ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497]])
+&gt;&gt;&gt; torch.cat((x, x, x), 0)
+tensor([[ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497],
+        [ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497],
+        [ 0.6580, -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497]])
+&gt;&gt;&gt; torch.cat((x, x, x), 1)
+tensor([[ 0.6580, -1.0969, -0.4614,  0.6580, -1.0969, -0.4614,  0.6580,
+         -1.0969, -0.4614],
+        [-0.1034, -0.5790,  0.1497, -0.1034, -0.5790,  0.1497, -0.1034,
+         -0.5790,  0.1497]])
+</code></pre>
+
+<h3 id="toc_15">Where</h3>
+
+<p><code>torch.where(condition, x, y) → Tensor</code></p>
+
+<h3 id="toc_16">Max</h3>
+
+<pre class="line-numbers"><code class="language-python">torch.max(input) → Tensor
+torch.max(input, dim, keepdim=False, out=None) -&gt; (Tensor, LongTensor)
+</code></pre>
+
+<p>如果只有一个输入，那么就输出矩阵的最大值</p>
+
+<p>如果指定了最大化的维度，那么输出的规则为：输入矩阵\(x\)的维度是\(d_1\times d_2\times \dots \times d_k\)，<code>dim</code>为l，那么输出的维度是：\(d_1\times d_2\times \dots \times d_{l-1}\times d_{l}\times \dots \times d_k\)，并且：\(\mathrm{output}_{i_1,i_2,\dots,i_{l-1},i_{l+1},\dots, i_k} = \max\limits_{0\leq j&lt;d_l}\mathrm{input}_{i_1,i_2,\dots,i_{l-1},j,i_{l+1},\dots, i_k}\)，并且会输出最大值取到的位置，维度是：\(d_1\times d_2\times \dots \times d_{l-1}\times d_{l}\times \dots \times d_k\)，并且：\(\mathrm{location}_{i_1,i_2,\dots,i_{l-1},i_{l+1},\dots, i_k} = \mathop{\arg\max}\limits_{0\leq j&lt;d_l}\mathrm{input}_{i_1,i_2,\dots,i_{l-1},j,i_{l+1},\dots, i_k}\)</p>
+
+<h2 id="toc_17">Layers</h2>
+
+<h3 id="toc_18">Module</h3>
+
+<p>Module是神经网络模块的基本类型，一个Module可以包含子Module，它需要实现初始化方法和<code>forward</code>方法。</p>
+
+<pre class="line-numbers"><code class="language-python">import torch.nn as nn
+import torch.nn.functional as F
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5)
+        self.conv2 = nn.Conv2d(20, 20, 5)
+
+    def forward(self, x):
+       x = F.relu(self.conv1(x))
+       return F.relu(self.conv2(x))
+</code></pre>
+
+<p>重要的函数有：</p>
+
+<p><code>apply(fn)</code>：为这个Module和所有的子Module执行<code>fn</code>函数，通常的用处是初始化函数。</p>
+
+<pre class="line-numbers"><code class="language-python">def init_weights(m):
+    print(m)
+    if type(m) == nn.Linear:
+        m.weight.data.fill_(1.0)
+        print(m.weight)
+
+net = nn.Sequential(nn.Linear(2, 2), nn.Linear(2, 2))
+net.apply(init_weights)
+</code></pre>
+
+<p><code>to()</code>：把这个Module放到cpu或者gpu中：</p>
+
+<pre class="line-numbers"><code class="language-python">device = torch.device(&#39;cuda&#39; if torch.cuda.is_available() else &#39;cpu&#39;)
+model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+</code></pre>
+
+<p><code>zero_grad</code>：把Module所有的grad设为0</p>
+
+<h3 id="toc_19">Linear layer</h3>
+
+<p>\[<br/>
+y = xA^\top + b<br/>
+\]</p>
+
+<p>对于由<code>nn.Linear(m, n)</code>生成的线形层，它的<code>weight</code>矩阵是一个大小为\(n\times m\)的矩阵，它会把输入的\(m\)个特征经过线性变换变成\(n\)个特征。\(x\)的最后一个维度是特征，其他前面的维度都可以理解为batch。也就是说，输入的大小为：\(b_1\times b_2\times \dots b_k\times m\)，输出的维度为：\(b_1\times b_2\times \dots b_k\times n\)</p>
+
+<pre class="line-numbers"><code class="language-python">linear = nn.Linear(3, 2)
+x = torch.randn(10, 3)
+pred = linear(x)
+</code></pre>
+
+<p>可选参数：</p>
+
+<ol>
+<li><code>bias</code>：如果这一项是<code>False</code>，那么不会有<code>bias</code>。</li>
+</ol>
+
+<p>注意：</p>
+
+<ol>
+<li><code>weight</code>和<code>bias</code>中的每一个元素都从\(U[-\frac{1}{\sqrt{m}}, \frac1{\sqrt{m}}]\)中初始化。</li>
+</ol>
+
+<h3 id="toc_20">Convolutional Layer</h3>
+
+<p>\[<br/>
+\mathrm{out}(i, j) = \mathrm{bias}^j + \sum\limits_{k=0}^{C_{in}-1}\mathrm{weight}_k^j \star \mathrm{input}(i, k), \forall 0\leq j&lt; C_{out},  0\leq i &lt; n<br/>
+\]</p>
+
+<p>输入矩阵的大小为 \(n\times C_{in}\times h_{in}\times w_{in}\)，输出矩阵的大小为\(n\times C_{out}\times h_{out}\times w_{out}\)。</p>
+
+<p>必须的参数有：</p>
+
+<ul>
+<li><code>in_channel</code>: \(C_{in}\)</li>
+<li><code>out_channel</code>: \(C_{out}\)</li>
+<li><code>kernel_size</code>: 卷积核也就是\(\mathrm{weight}\)的大小，提示：如果<code>group=1</code>，那么一共有\(C_{in}C_{out}\)个卷积核。</li>
+</ul>
+
+<p>可以选择的参数有：</p>
+
+<ul>
+<li><code>stride</code>：默认是1</li>
+<li><code>padding</code>：默认是0</li>
+<li><code>groups</code>：它必须同时被\(C_{in}, C_{out}\)整除，这时候将输入的channel分为group组，将输出的channel分为同样的组，输出的内容只由它对应组的输入决定。默认值为1</li>
+<li><code>bias</code>：默认是<code>True</code></li>
+</ul>
+
+<h3 id="toc_21">Max Pooling</h3>
+
+<p><code>torch.nn.MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)</code>：和卷积原理类似，只是不改变输出的channel，每个channel都独立计算最大值。</p>
+
+<p>注意，它一定不会把padding的0参与最大值的计算。</p>
+
+<h3 id="toc_22">Average Pooling</h3>
+
+<p><code>torch.nn.AvgPool2d(kernel_size, stride=None, padding=0, ceil_mode=False, count_include_pad=True)</code></p>
+
+<p>如果<code>count_include_pad</code>计算平均值不会涉及到padding的0。</p>
+
+<h3 id="toc_23">Batch Normlization</h3>
+
+<p><code>torch.nn.BatchNorm1d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</code></p>
+
+<p>\(\mathrm{out} = \frac{x - E[x]}{\sqrt{\mathrm{var}(x)+\mathrm{eps}}}\times \gamma + \beta\)</p>
+
+<p>这里需要注意的是输入的维度是两种情况\(n\times C\times L\)或者是\(n\times L\)，第一种情况下<code>num_features</code>应为\(C\)，归一化是对于\((\cdot, i, \cdot)\)进行；对于第二种情况下<code>num_features</code>应为\(L\)，归一化是对于\((\cdot, i)\)进行。其中保存了<code>num_features</code>个\(\gamma\)和\(\beta\)，并且记录了<code>num_features</code>个均值和方差。</p>
+
+<p>参数解释：</p>
+
+<ul>
+<li><code>momentum</code>：统计均值和方差的滑动平均值时的冲量参数，如果为<code>None</code>，那么便记录平均值。 </li>
+<li><code>affine</code>：如果为<code>False</code>：那么没有\(\gamma\)和\(\beta\)</li>
+<li><code>track_running_states</code>：如果为<code>False</code>，那么不记录均值和方差的均值，每次都现场计算。</li>
+</ul>
+
+<p>注意：在训练时会统计均值和方差，但是在评估时，应该调用<code>bn.eval()</code>函数来停止记忆均值和方差。</p>
+
+<p><code>torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</code>：和1d的模块基本一致，但是输入的维度为\(n\times C\times h\times w\)，归一化是针对\((\cdot, i, \cdot, \cdot)\)进行。</p>
+
+<p><code>num_features = C</code></p>
+
+<h4 id="toc_24">LSTM</h4>
+
+<p><code>torch.nn.LSTM(*args, **kwargs)</code></p>
+
+<p>参数：</p>
+
+<ul>
+<li><code>input_size</code>：输入的特征维数</li>
+<li><code>hidden_size</code>：隐藏层-输出的特征维数</li>
+<li><code>num_layers</code>：堆叠的层数</li>
+<li><code>bias</code>：默认<code>False</code></li>
+<li><code>batch_first</code>：如果为真，输入的维度为：\(n\times L\times p\)，其中\(L\)为输入长度，\(p\)为特征数，否则，输入的维度为：\(L\times n\times p\)。<strong>影响输出维度！！</strong></li>
+<li><code>drop_out</code>：如果为非零，在每一层上面加一层dropout层，概率为参数，默认值：0</li>
+<li><code>bidirectional</code>：若为<code>True</code>，是双向的LSTM，默认是<code>False</code></li>
+</ul>
+
+<p>输入：</p>
+
+<ul>
+<li><code>input</code>：维度\(L\times n\times p\)，如果<code>batch_first==False</code>；否则：\(n\times L\times p\)</li>
+<li><code>h_0</code>, <code>c_0</code>：维度\(\mathrm{num\_layers}*\mathrm{num\_directions}\times n\times p_\mathrm{hidden}\)</li>
+</ul>
+
+<p>输出：</p>
+
+<ul>
+<li><code>output</code>：维度\(L\times n\times \mathrm{num\_directions}*p_\mathrm{hidden}\)，可以使用<code>output.vew(L, n, num_directions, hidden_size)</code>来分离两个方向。如果<code>batch_first</code>，维度\(n\times L\times \mathrm{num\_directions}*p_\mathrm{hidden}\)</li>
+<li><code>h_n</code>, <code>c_n</code>：维度\(\mathrm{num\_layers}*\mathrm{num\_directions}\times n\times p_\mathrm{hidden}\)，可以使用<code>h_n.view(num_layers, num_directions, n, hidden_size)</code></li>
+</ul>
+
+<h2 id="toc_25">Loss</h2>
+
+<h3 id="toc_26">MSELoss</h3>
+
+<p><code>nn.MSELoss(x, y)</code>它的输入两个tensor，并且计算两个tensor之间的Mean Square Error，注意到这是一个可广播的运算，并且是从最后一个维度往前广播。</p>
+
+<p>它计算了：\(\frac{\sum(x_i - y_i)^2}{n}\)。</p>
+
+<p>可选参数：</p>
+
+<ul>
+<li><code>reduction=</code>：&#39;mean&#39;(Default)计算平均值，&#39;sum&#39;计算和，&#39;none&#39;等同于<code>(x-y) * (x-y)</code></li>
+</ul>
+
+<h3 id="toc_27">CrossEntropyLoss</h3>
+
+<p><code>torch.nn.CrossEntropyLoss(weight=None, size_average=None, ignore_index=-100, reduce=None, reduction=&#39;mean&#39;)</code></p>
+
+<p>它的输入是两个矩阵，第一个矩阵\(x\)的维度需要是\(n\times c\)，其中\(n\)是batch_size, \(c\)是类别的个数，第二个矩阵\(y\)的维度是\(n\)，表示的是各个数据对应的标签。</p>
+
+<p>对于每个batch，loss值为：</p>
+
+<p>\[<br/>
+\ell = -\ln\frac{\exp(x_y)}{1^\top \exp(x)}<br/>
+\]</p>
+
+<pre class="line-numbers"><code class="language-python">x = torch.randn(10, 3)
+y = torch.randint(0, 4, (10,))
+torch.nn.CrossEntropyLoss()(x, y)
+# tensor(1.9090, grad_fn=&lt;NllLossBackward&gt;)
+one_vector = torch.ones(3, 1)
+exp_x = torch.exp(x)
+x_distribution = exp_x / torch.mm(exp_x, one_vector)
+ell = 0
+for k in range(10):
+    ell = ell - torch.log(x_distribution[k, y[k]])
+print(ell / 10)
+# tensor(1.9090, grad_fn=&lt;DivBackward0&gt;)
+</code></pre>
+
+<h2 id="toc_28">训练</h2>
+
+<h3 id="toc_29">Backward</h3>
+
+<p>对于一个值\(a\)是可以回传梯度的。这时候，对于<code>required_grad=True</code>的tensor就会有<code>grad</code>这个属性，保存了\((\frac{\partial a}{\partial W})_{1,1}\)</p>
+
+<p>需要注意的有亮点：</p>
+
+<p>1: 对于一个线性的计算图\(\ell = f_1f_2\dots f_n(A)\)，一旦我们得到了\(\frac{\partial \ell}{\partial A}\)，并且\(A = f(B)\)，那么根据链式法则：</p>
+
+<p>\[<br/>
+\frac{\partial \ell}{\partial B} = \frac{\partial \ell}{\partial A}\frac{\partial A}{\partial B}<br/>
+\]</p>
+
+<p>这样意味着在计算过程中是需要保存为了计算\(\frac{\partial A}{\partial B}\)相关的数据的，但是pytorch为了节省空间，在<code>backward</code>中会把这种中间变量删除，所以第二次运行<code>backward</code>时会报错。为了使得不删除这种中间数据，需要在<code>backward</code>时加入<code>retain_graph=True</code>参数。</p>
+
+<p>2: 如果调用了两个<code>backward</code>函数并且它们涉及到着公共的需要求梯度的tensor，梯度之间是相加的关系。</p>
+
+<h3 id="toc_30">优化</h3>
+
+<h4 id="toc_31">优化方法</h4>
+
+<p><code>optimizer = torch.optim.SGD()</code></p>
+
+<p>参数有：</p>
+
+<ul>
+<li><code>params</code>: 需要优化的参数</li>
+<li><code>lr</code>: 学习率</li>
+<li><code>momentum</code>: 动量参数</li>
+<li><code>weight_decay</code>: L2正则项</li>
+</ul>
+
+<p><code>optimizer.step()</code>：进行一步优化（并不包含<code>backward</code>操作）<br/>
+<code>optimizer.zero_grad()</code>：将模型中的参数的梯度设为0</p>
+
+<p>所以一般的流程是：</p>
+
+<pre class="line-numbers"><code class="language-python">for t in range(time_steps):
+    loss = criterion(pred, target)
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+</code></pre>
+
+<hr/>
+
+<p><code>optimizer = torch.optim.Adam(params, lr=1e-3)</code></p>
+
+<h4 id="toc_32">更新学习率</h4>
+
+<pre class="line-numbers"><code class="language-python">def update_lr(optimizer, lr):    
+    for param_group in optimizer.param_groups:
+        param_group[&#39;lr&#39;] = lr
+        
+update_lr(optimizer, new_lr)
+</code></pre>
 
 ]]></content>
   </entry>
